@@ -4,10 +4,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,8 +22,15 @@ public class UserController
     }
 
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
-    public void addUser(@PathVariable User user)
+    public void addUser(@RequestBody User user)
     {
         userService.addUser(user);
     }
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    public User getUser(@PathVariable int id)
+    {
+        return userService.getUser(id);
+    }
+
 }
