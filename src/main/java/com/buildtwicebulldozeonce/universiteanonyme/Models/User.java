@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Log
-public class User implements HasPermission {
+public class User {
     @Id
     @Generated
     private int id;
