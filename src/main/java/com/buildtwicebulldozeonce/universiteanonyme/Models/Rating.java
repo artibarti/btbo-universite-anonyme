@@ -3,19 +3,24 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
-import org.hibernate.annotations.Any;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Log
 @Data
 @Entity
 @NoArgsConstructor
-public class Permissions {
+public class Rating {
     @Id
     private int id;
     @Column(nullable = false)
-    private double permissionStore;
+    private int value;
+
+    @ManyToOne
+    private User user;
+    @ManyToOne
+    private AnonUser anonUser;
 }

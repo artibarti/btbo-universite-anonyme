@@ -6,23 +6,29 @@ import lombok.extern.java.Log;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
-@Entity
-@Data
-@NoArgsConstructor
 @Log
+@Data
+@Entity
+@NoArgsConstructor
 public class Question {
     @Id
     private int id;
-    @OneToOne
-    private Session session;
-    @GeneratedValue
-    @Column(nullable = false)
-    private LocalDateTime timeStamp;
-    @OneToOne
-    private AnonUser anonUser;
     @Column
     private int rating;
     @Column(nullable = false)
     private String message;
+    @GeneratedValue
+    @Column(nullable = false)
+    private LocalDateTime timeStamp;
+    @Column
+    private String answer;
+
+    @ManyToOne
+    private Session session;
+    @ManyToOne
+    private AnonUser anonUser;
+    @OneToMany
+    private Set<Rating> ratings;
 }

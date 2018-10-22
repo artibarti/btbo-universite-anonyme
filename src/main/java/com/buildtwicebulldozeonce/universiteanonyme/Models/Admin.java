@@ -9,16 +9,17 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-@Entity
-@Data
-@NoArgsConstructor
 @Log
+@Data
+@Entity
+@NoArgsConstructor
 public class Admin {
     @Id
     private int id;
-    @OneToOne
+
+    @ManyToOne
     private User user;
-    @OneToOne
+    @ManyToOne
     private Course course;
     @OneToOne
     private Permissions permissions;

@@ -5,19 +5,23 @@ import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
+import java.util.Set;
 
-@Entity
-@Data
-@NoArgsConstructor
 @Log
+@Data
+@Entity
+@NoArgsConstructor
 public class Comment {
     @Id
     private int id;
-    @OneToOne
-    private AnonUser anonUser;
     @Column(nullable = false)
     private String message;
-    //rating
-    @OneToOne
+
+    @ManyToOne
+    private AnonUser anonUser;
+    @ManyToOne
     private User user;
+    @OneToMany
+    private Set<Rating> ratings;
+    //rating
 }

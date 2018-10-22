@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
+import java.util.Set;
 
-@Entity
-@Data
-@NoArgsConstructor
 @Log
+@Data
+@Entity
+@NoArgsConstructor
 public class Session {
     @Id
     private int id;
@@ -17,6 +18,11 @@ public class Session {
     private int counter;
     @Column(nullable = false)
     private boolean isActive;
-    @OneToOne
+
+    @ManyToOne
     private Course course;
+    @OneToMany
+    private Set<Question> questions;
+    @OneToMany
+    private Set<Rating> ratings;
 }

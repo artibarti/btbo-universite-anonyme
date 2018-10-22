@@ -7,16 +7,18 @@ import lombok.extern.java.Log;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Data
-@NoArgsConstructor
 @Log
+@Data
+@Entity
+@NoArgsConstructor
 public class CourseSubs {
     @Id
     private int id;
+    @Column
+    private LocalDateTime bannedUntil;
+
     @OneToOne
     private Course course;
     @OneToOne
     private AnonUser anonUser;
-    private LocalDateTime bannedUntil;
 }
