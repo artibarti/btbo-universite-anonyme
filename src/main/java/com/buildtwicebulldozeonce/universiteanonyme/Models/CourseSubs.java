@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 public class CourseSubs {
     @Id
     private int id;
-    @ManyToOne
+    @OneToOne
     private Course course;
-    @ManyToOne
+    @OneToOne
     private AnonUser anonUser;
     private LocalDateTime bannedUntil;
 }

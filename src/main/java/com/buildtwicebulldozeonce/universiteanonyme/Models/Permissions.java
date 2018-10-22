@@ -11,9 +11,5 @@ public class Permissions {
     @Id
     private int id;
     @Column(nullable = false)
-    private String permissionType;
-    @Column(nullable = false)
-    private int permissionForeignKey;
-    @Column(nullable = false)
     private double permissionStore;
 }

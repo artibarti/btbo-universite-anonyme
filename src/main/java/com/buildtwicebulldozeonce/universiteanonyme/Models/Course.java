@@ -14,7 +14,7 @@ import java.util.List;
 public class Course {
     @Id
     private int id;
-    @ManyToOne
+    @OneToOne
     private User owner;
     @Column(nullable = false, unique = true)
     private String inviteCode;

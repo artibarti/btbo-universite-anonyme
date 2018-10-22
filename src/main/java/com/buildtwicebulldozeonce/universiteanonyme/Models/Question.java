@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 public class Question {
     @Id
     private int id;
-    @ManyToOne
+    @OneToOne
     private Session session;
     @GeneratedValue
     @Column(nullable = false)
     private LocalDateTime timeStamp;
-    @ManyToOne
+    @OneToOne
     private AnonUser anonUser;
     @Column
     private int rating;

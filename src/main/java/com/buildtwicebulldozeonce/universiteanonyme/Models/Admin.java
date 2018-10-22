@@ -16,9 +16,9 @@ import javax.persistence.OneToOne;
 public class Admin {
     @Id
     private int id;
-    @ManyToOne
+    @OneToOne
     private User user;
-    @ManyToOne
+    @OneToOne
     private Course course;
     @OneToOne
     private Permissions permissions;
