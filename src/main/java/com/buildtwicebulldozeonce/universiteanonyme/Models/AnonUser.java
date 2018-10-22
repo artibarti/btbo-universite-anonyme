@@ -4,9 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,6 +18,8 @@ public class AnonUser {
     private String anonName;
     @Column(nullable = false)
     private String hashedPassword;
+    @OneToMany
+    private List<CourseSubs> courses;
     //rating
     //picture
 }
