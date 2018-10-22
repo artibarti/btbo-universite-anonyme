@@ -19,7 +19,7 @@ public class User implements HasPermission {
     private String email;
     private String doubleHashedPassword;
     @OneToOne
-    private Permissions permissions;
+    private Permissions permissiołns;
 
     @Transient
     private AnonUser anonym_id;
