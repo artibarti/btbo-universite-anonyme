@@ -23,6 +23,7 @@ public class TestDataController {
         Course course = new Course();
         course.setOwner(user);
         course.setName("TestCourse0");
+        course.setInviteCode("VLBIA5");
 
         userService.addUser(user);
         courseService.addCourse(course);
