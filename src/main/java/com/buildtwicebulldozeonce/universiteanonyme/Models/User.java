@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Log
-public class User {
+public class User implements HasPermission {
     @Id
     @Generated
     private int id;
@@ -19,7 +19,7 @@ public class User {
     private String email;
     private String doubleHashedPassword;
     @OneToOne
-    private Permissions<User> permissions;
+    private Permissions permissions;
 
     @Transient
     private AnonUser anonym_id;
