@@ -23,17 +23,17 @@ public class User {
 
     @OneToOne
     private Permissions permissions;
-    @OneToMany
-    private Set<Admin> adminRoles;
-    @OneToMany
-    private Set<Comment> comments;
-    @OneToMany
-    private Set<Course> createdCourses;
-    @OneToMany
-    private Set<Question> questions;
-    @OneToMany
-    private Set<Rating> ratings;
 
+    @Transient
+    private Set<Admin> adminRoles;
+    @Transient
+    private Set<Comment> comments;
+    @Transient
+    private Set<Course> createdCourses;
+    @Transient
+    private Set<Question> questions;
+    @Transient
+    private Set<Rating> ratings;
     @Transient
     private AnonUser anonUser;
 

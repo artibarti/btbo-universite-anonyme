@@ -21,7 +21,8 @@ public class Comment {
     private AnonUser anonUser;
     @ManyToOne
     private User user;
-    @OneToMany
+
+    @Transient
     private Set<Rating> ratings;
     //rating
 }

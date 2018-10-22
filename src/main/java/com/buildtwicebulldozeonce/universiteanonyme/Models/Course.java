@@ -22,15 +22,16 @@ public class Course {
 
     @ManyToOne
     private User owner;
-    @OneToMany
+    
+    @Transient
     private Set<Admin> admins;
-    @OneToMany
+    @Transient
     private Set<CourseSubs> courseSubs;
-    @OneToMany
+    @Transient
     private Set<CourseRoom> courseRooms;
-    @OneToMany
+    @Transient
     private Set<Rating> ratings;
-    @OneToMany
+    @Transient
     private Set<Session> sessions;
 }
 

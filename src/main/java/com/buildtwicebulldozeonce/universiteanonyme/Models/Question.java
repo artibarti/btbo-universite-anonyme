@@ -29,6 +29,7 @@ public class Question {
     private Session session;
     @ManyToOne
     private AnonUser anonUser;
-    @OneToMany
+
+    @Transient
     private Set<Rating> ratings;
 }

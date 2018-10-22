@@ -19,6 +19,7 @@ public class CourseRoom {
 
     @ManyToOne
     private Course course;
-    @OneToMany
+
+    @Transient
     private Set<Comment> comments;
 }

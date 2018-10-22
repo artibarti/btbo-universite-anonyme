@@ -20,13 +20,12 @@ public class AnonUser {
     @Column(nullable = false)
     private String hashedPassword;
 
-    @OneToMany
+    @Transient
     private Set<CourseSubs> courses;
-    @OneToMany
+    @Transient
     private Set<Comment> comments;
-    @OneToMany
+    @Transient
     private Set<Question> questions;
-
     @Transient
     private User user;
     //rating

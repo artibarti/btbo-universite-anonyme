@@ -21,8 +21,9 @@ public class Session {
 
     @ManyToOne
     private Course course;
-    @OneToMany
+
+    @Transient
     private Set<Question> questions;
-    @OneToMany
+    @Transient
     private Set<Rating> ratings;
 }
