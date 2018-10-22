@@ -21,5 +21,5 @@ public class Course {
     @Column(nullable = false)
     private String name;
     @OneToMany
-    private List sessions;
+    private List<Session> sessions;
 }
