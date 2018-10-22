@@ -5,9 +5,7 @@ import lombok.Generated;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -17,18 +15,15 @@ public class User {
     @Id
     @Generated
     private int id;
-    @Column
-    private String email;
-    @Column
-    private String doubleHashedPassword;
-    @Column
-    private int anonym_id;
-    @Column
     private String name;
+    private String email;
+    private String doubleHashedPassword;
+    @OneToOne
+    private Permissions<User> permissions;
+
+    @Transient
+    private AnonUser anonym_id;
+
     // picture
     // permission
-
-
-
-
 }

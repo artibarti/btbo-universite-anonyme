@@ -6,7 +6,7 @@ import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
-public interface UserRepository extends CrudRepository<User, Integer>
+public interface UserRepository extends GenericRepository<User>
 {
 
 }
