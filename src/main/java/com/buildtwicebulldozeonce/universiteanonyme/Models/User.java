@@ -37,5 +37,5 @@ public class User {
     @Transient
     private AnonUser anonUser;
 
-    // picture
+    //TODO: picture
 }
