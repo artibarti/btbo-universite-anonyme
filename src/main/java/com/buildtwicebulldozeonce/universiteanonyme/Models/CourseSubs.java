@@ -4,10 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,6 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Log
 public class CourseSubs {
+    @Id
+    private int id;
     @ManyToOne
     private Course course;
     @OneToOne
