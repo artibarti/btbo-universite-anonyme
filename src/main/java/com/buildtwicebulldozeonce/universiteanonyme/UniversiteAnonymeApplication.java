@@ -14,7 +14,6 @@ public class UniversiteAnonymeApplication {
 		SpringApplication.run(UniversiteAnonymeApplication.class, args);
 
 		User user = new User();
-
 		user.setName("TestUser0");
 
         Course course = new Course();
@@ -22,7 +21,7 @@ public class UniversiteAnonymeApplication {
         course.setName("TestCourse0");
 
         UserService userService = new UserService();
-        userService.addUser(new User());
+        userService.addUser(user);
         CourseService courseService = new CourseService();
         courseService.addCourse(course);
 	}
