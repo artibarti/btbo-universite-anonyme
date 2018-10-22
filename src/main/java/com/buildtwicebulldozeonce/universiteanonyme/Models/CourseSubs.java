@@ -18,7 +18,6 @@ public class CourseSubs {
     private Course course;
     @OneToOne
     private AnonUser anonUser;
-    @Column(nullable = true)
     private LocalDateTime bannedUntil;
 
 }
