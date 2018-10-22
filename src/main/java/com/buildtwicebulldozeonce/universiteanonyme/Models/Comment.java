@@ -4,13 +4,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
-@Data
-@NoArgsConstructor
+import javax.persistence.*;
+import java.util.Set;
+
 @Log
+@Data
+@Entity
+@NoArgsConstructor
 public class Comment {
+    @Id
     private int id;
-    private AnonUser anonUser;
+    @Column(nullable = false)
     private String message;
-    //rating
+
+    @ManyToOne
+    private AnonUser anonUser;
+    @ManyToOne
     private User user;
+
+    @Transient
+    private Set<Rating> ratings;
+    //rating
 }

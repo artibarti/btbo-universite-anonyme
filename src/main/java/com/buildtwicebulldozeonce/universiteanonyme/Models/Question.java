@@ -4,16 +4,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
-@Data
-@NoArgsConstructor
 @Log
+@Data
+@Entity
+@NoArgsConstructor
 public class Question {
-    private Session session;
+    @Id
     private int id;
-    private LocalDateTime timeStamp;
-    private AnonUser anonUser;
+    @Column
     private int rating;
+    @Column(nullable = false)
     private String message;
+    @GeneratedValue
+    @Column(nullable = false)
+    private LocalDateTime timeStamp;
+    @Column
+    private String answer;
+
+    @ManyToOne
+    private Session session;
+    @ManyToOne
+    private AnonUser anonUser;
+
+    @Transient
+    private Set<Rating> ratings;
 }

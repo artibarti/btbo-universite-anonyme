@@ -3,23 +3,19 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
+import org.hibernate.annotations.Any;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Log
 @Data
 @Entity
 @NoArgsConstructor
-public class CourseRoom {
+public class Permissions {
     @Id
     private int id;
     @Column(nullable = false)
-    private String name;
-
-    @ManyToOne
-    private Course course;
-
-    @Transient
-    private Set<Comment> comments;
+    private double permissionStore;
 }

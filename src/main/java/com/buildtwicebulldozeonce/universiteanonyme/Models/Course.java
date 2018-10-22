@@ -4,16 +4,37 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
-@Data
-@NoArgsConstructor
 @Log
+@Data
+@Entity
+@NoArgsConstructor
 public class Course {
+    @Id
     private int id;
-    private User owner;
-    private String inviteCode;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false, unique = true)
+    private String inviteCode;
 
-    private List<Session> sessions;
+    @ManyToOne
+    private User owner;
+    
+    @Transient
+    private Set<Admin> admins;
+    @Transient
+    private Set<CourseSubs> courseSubs;
+    @Transient
+    private Set<CourseRoom> courseRooms;
+    @Transient
+    private Set<Rating> ratings;
+    @Transient
+    private Set<Session> sessions;
 }
+
+
+
+

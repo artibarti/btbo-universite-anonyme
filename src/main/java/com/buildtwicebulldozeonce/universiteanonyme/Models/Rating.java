@@ -4,22 +4,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Log
 @Data
 @Entity
 @NoArgsConstructor
-public class CourseRoom {
+public class Rating {
     @Id
     private int id;
     @Column(nullable = false)
-    private String name;
+    private int value;
 
     @ManyToOne
-    private Course course;
-
-    @Transient
-    private Set<Comment> comments;
+    private User user;
+    @ManyToOne
+    private AnonUser anonUser;
 }
