@@ -12,7 +12,6 @@ public class Permissions {
     @Id
     private int id;
     @OneToOne
-    @Column(nullable = false)
     private HasPermission permissionType;
     @Column(nullable = false)
     private double permissionStore;
