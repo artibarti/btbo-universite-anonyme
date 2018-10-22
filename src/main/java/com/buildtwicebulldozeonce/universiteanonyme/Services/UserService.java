@@ -11,18 +11,12 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
-    public List<User> getAllUser() {
+    public List<User> getAllUsers() {
         List<User> allUsers = new ArrayList<>();
-        userRepository.findAll()
-                .forEach(allUsers::add);
-
+        userRepository.findAll().forEach(allUsers::add);
         return allUsers;
     }
 
