@@ -18,8 +18,6 @@ public class AnonUser {
     private String anonName;
     @Column(nullable = false)
     private String hashedPassword;
-    @OneToMany
-    private List<CourseSubs> courses;
     //rating
     //picture
 }

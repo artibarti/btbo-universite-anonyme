@@ -20,6 +20,4 @@ public class Course {
     private String inviteCode;
     @Column(nullable = false)
     private String name;
-    @OneToMany
-    private List<Session> sessions;
 }

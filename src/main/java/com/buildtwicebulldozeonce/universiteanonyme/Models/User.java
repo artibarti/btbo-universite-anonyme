@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data

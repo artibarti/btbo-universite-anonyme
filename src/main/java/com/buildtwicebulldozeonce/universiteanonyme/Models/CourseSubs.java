@@ -16,8 +16,7 @@ public class CourseSubs {
     private int id;
     @ManyToOne
     private Course course;
-    @OneToOne
+    @ManyToOne
     private AnonUser anonUser;
     private LocalDateTime bannedUntil;
-
 }
