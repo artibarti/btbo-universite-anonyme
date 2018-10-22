@@ -2,13 +2,11 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
 import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.UserRepository;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -21,7 +19,11 @@ public class UserService {
     }
 
     public List<User> getAllUser() {
-        return new ArrayList<>(userRepository.findAll());
+        List<User> allUsers = new ArrayList<>();
+        userRepository.findAll()
+                .forEach(allUsers::add);
+
+        return allUsers;
     }
 
     public User getUser(int id) {
