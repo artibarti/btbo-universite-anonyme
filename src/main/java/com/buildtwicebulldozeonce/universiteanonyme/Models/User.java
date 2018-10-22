@@ -19,7 +19,7 @@ public class User {
     private String email;
     private String doubleHashedPassword;
     @OneToOne
-    private Permissions permissiołns;
+    private Permissions permissions;
 
     @Transient
     private AnonUser anonym_id;
