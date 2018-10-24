@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestDataController {
+    private final UserService userService;
+    private final CourseService courseService;
+
     @Autowired
-    private UserService userService;
-    @Autowired
-    private CourseService courseService;
+    public TestDataController(UserService userService, CourseService courseService) {
+        this.userService = userService;
+        this.courseService = courseService;
+    }
 
     @RequestMapping(value = "/createTestData")
     public void createTestData() {
