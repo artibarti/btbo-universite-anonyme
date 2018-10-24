@@ -19,7 +19,7 @@ public class AdminService {
         this.adminRepository = adminRepository;
     }
 
-    public List<Admin> GetAllAdmins() {
+    public List<Admin> getAllAdmins() {
         return Lists.newArrayList(adminRepository.findAll());
     }
 
