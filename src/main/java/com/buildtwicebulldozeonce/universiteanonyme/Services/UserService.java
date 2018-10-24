@@ -2,6 +2,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
 import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.UserRepository;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public List<User> getAllUsers() {
-        List<User> allUsers = new ArrayList<>();
+        var allUsers = new ArrayList<>();
         userRepository.findAll().forEach(allUsers::add);
         return allUsers;
     }

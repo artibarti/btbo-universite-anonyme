@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Log
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 public class Session {
     @Id
