@@ -14,7 +14,6 @@ import javax.persistence.OneToOne;
 @Data
 @Entity
 @Builder
-@NoArgsConstructor
 public class Admin {
     @Id
     private int id;
