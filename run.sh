@@ -6,7 +6,7 @@ git_pull()
         git init .
         git remote add origin https://github.com/artibarti/btbo-universite-anonyme.git
     fi
-    git pull origin ${1:-master}
+    git pull origin ${1:-$(git rev-parse --abbrev-ref HEAD)}
 }
 
 maven_package()
