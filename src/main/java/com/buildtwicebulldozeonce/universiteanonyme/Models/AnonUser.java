@@ -13,7 +13,6 @@ import java.util.Set;
 @Data
 @Entity
 @Builder
-@NoArgsConstructor
 public class AnonUser {
     @Id
     private int id;

@@ -14,7 +14,6 @@ import javax.persistence.Id;
 @Data
 @Entity
 @Builder
-@NoArgsConstructor
 public class Permissions {
     @Id
     private int id;

@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 @Data
 @Entity
 @Builder
-@NoArgsConstructor
 public class Rating {
     @Id
     private int id;

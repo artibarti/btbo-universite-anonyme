@@ -12,7 +12,6 @@ import java.util.Set;
 @Data
 @Entity
 @Builder
-@NoArgsConstructor
 public class Session {
     @Id
     private int id;

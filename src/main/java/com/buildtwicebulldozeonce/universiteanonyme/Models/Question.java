@@ -13,7 +13,6 @@ import java.util.Set;
 @Data
 @Entity
 @Builder
-@NoArgsConstructor
 public class Question {
     @Id
     private int id;

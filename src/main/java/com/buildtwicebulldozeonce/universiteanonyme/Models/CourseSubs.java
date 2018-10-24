@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Builder
-@NoArgsConstructor
 public class CourseSubs {
     @Id
     private int id;
