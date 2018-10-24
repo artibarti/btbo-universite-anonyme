@@ -20,8 +20,6 @@ docker-machine start &
 git_pull &&
 maven_package &
 
-echo "Start"
-
 wait
 
 docker-compose down &
