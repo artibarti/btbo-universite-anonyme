@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
@@ -12,7 +13,7 @@ import javax.persistence.OneToOne;
 @Log
 @Data
 @Entity
-@NoArgsConstructor
+@Builder
 public class Admin {
     @Id
     private int id;

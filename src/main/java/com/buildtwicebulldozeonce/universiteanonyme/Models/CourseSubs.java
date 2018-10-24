@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Log
 @Data
 @Entity
-@NoArgsConstructor
+@Builder
 public class CourseSubs {
     @Id
     private int id;

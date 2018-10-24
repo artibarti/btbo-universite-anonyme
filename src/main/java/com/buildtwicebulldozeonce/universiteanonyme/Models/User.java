@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Log
 @Data
 @Entity
-@NoArgsConstructor
+@Builder
 public class User {
     @Id
     @Generated
