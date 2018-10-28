@@ -65,9 +65,9 @@ INSERT INTO `permissions`(`id`, `permission_store`) VALUES (108, 156);
 
 
 /* add admins */
-INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (101, 1001, 102, 101);
-INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (102, 1002, 102, 101);
-INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (103, 1003, 105, 102);
+INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (101, 101, 102, 101);
+INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (102, 102, 102, 101);
+INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (103, 103, 105, 102);
 
 /* add comments */
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (101, "Lol", 0, 101);
