@@ -50,8 +50,8 @@ INSERT INTO `course`(`id`, `invite_code`, `name`, `owner_id`) VALUES (106, "AcBD
 INSERT INTO `course`(`id`, `invite_code`, `name`, `owner_id`) VALUES (107, "Ssq23", "Automataelméleti alkalmazások", 104);
 
 /* add sessions */
-INSERT INTO `session`(`id`, `counter`, `is_active`, `course_id`) VALUES (1010, 10, true, 101);
-INSERT INTO `session`(`id`, `counter`, `is_active`, `course_id`) VALUES (1011, 20, false, 101);
+INSERT INTO `session`(`id`, `counter`, `is_active`, `course_id`) VALUES (101, 10, true, 101);
+INSERT INTO `session`(`id`, `counter`, `is_active`, `course_id`) VALUES (102, 20, false, 101);
 
 /* add permissions */
 INSERT INTO `permissions`(`id`, `permission_store`) VALUES (101, 123456);
@@ -88,6 +88,6 @@ INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`) VALUES (105, 5, 0
 /* add questions */
 
 INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `time_stamp`, `anon_user_id`, `session_id`) 
-  VALUES (101, "baby dont hurt me", "What is love?", 30, CURRENT_TIMESTAMP, 0, 1010);
+  VALUES (101, "baby dont hurt me", "What is love?", 30, CURRENT_TIMESTAMP, 0, 101);
 
 COMMIT;
