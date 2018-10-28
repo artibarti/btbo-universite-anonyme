@@ -11,6 +11,7 @@ import java.util.Set;
 
 @RestController
 public class UserController {
+
     private final UserService userService;
 
     @Autowired
@@ -24,7 +25,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @RequestMapping(value = "/users/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
     public void addUser(@RequestBody User user)
     {
         userService.addUser(user);
@@ -34,6 +35,18 @@ public class UserController {
     public User getUser(@PathVariable int id)
     {
         return userService.getUser(id);
+    }
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
+    public void deleteUser(@PathVariable int id)
+    {
+        userService.deleteUser(id);
+    }
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
+    public void updateUser(@RequestBody User user)
+    {
+        userService.updateUser(user);
     }
 
     @RequestMapping(value = "/users/{id}/adminroles", method = RequestMethod.GET)

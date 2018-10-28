@@ -59,4 +59,15 @@ public class UserService {
     {
         return userRepository.getAllRatingsFromUser(id);
     }
+
+    public void deleteUser(int id)
+    {
+        userRepository.deleteById(id);
+    }
+
+    public void updateUser(User user)
+    {
+        if (userRepository.existsById(user.getId()))
+            userRepository.save(user);
+    }
 }
