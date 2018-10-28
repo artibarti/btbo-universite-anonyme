@@ -36,37 +36,27 @@ public class UserService {
 
     public Set<Admin> getAdminRolesForUser(int id)
     {
-        Set<Admin> result = new HashSet<>();
-        userRepository.getAdminRolesForUser(id).forEach(result::add);
-        return result;
+        return userRepository.getAdminRolesForUser(id);
     }
 
     public Set<Comment> getAllCommentsFromUser(int id)
     {
-        Set<Comment> result = new HashSet<>();
-        userRepository.getAllCommentsFromUser(id).forEach(result::add);
-        return result;
+        return userRepository.getAllCommentsFromUser(id);
     }
 
     public Set<Course> getCoursesCreatedByUser(int id)
     {
-        Set<Course> result = new HashSet<>();
-        userRepository.getCoursesCreatedByUser(id).forEach(result::add);
-        return result;
+        return userRepository.getCoursesCreatedByUser(id);
     }
 
     public Set<Question> getAllQuestionsFromUser(int id)
     {
-        Set<Question> result = new HashSet<>();
         // int anonID = getAnonIDForUser(id);
-        userRepository.getAllQuestionsFromUser(id).forEach(result::add);
-        return result;
+        return userRepository.getAllQuestionsFromUser(id);
     }
 
     public Set<Rating> getAllRatingsFromUser(int id)
     {
-        Set<Rating> result = new HashSet<>();
-        userRepository.getAllRatingsFromUser(id).forEach(result::add);
-        return result;
+        return userRepository.getAllRatingsFromUser(id);
     }
 }
