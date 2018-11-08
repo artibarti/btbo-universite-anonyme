@@ -52,7 +52,7 @@ public class SessionController
         sessionService.updateSession(session);
     }
 
-    @RequestMapping(value = "/courses/{id}/ratings", method = RequestMethod.GET)
+    @RequestMapping(value = "/courses/{courseiID}/sessions/{id}/ratings", method = RequestMethod.GET)
     public Set<Rating> getRatingsForSession(@PathVariable("id") int id)
     {
         return sessionService.getRatingsForSession(id);

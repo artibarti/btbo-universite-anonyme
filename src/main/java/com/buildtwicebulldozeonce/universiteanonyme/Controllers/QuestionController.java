@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Session;
@@ -7,14 +8,11 @@ import com.buildtwicebulldozeonce.universiteanonyme.Services.QuestionService;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-@Controller
+@RestController
 public class QuestionController
 {
     private final QuestionService questionService;
@@ -37,14 +35,26 @@ public class QuestionController
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}", method = RequestMethod.PUT)
-    public void updateSession(@RequestBody Question question)
+    public void updateQuestion(@RequestBody Question question)
     {
         questionService.updateQuestion(question);
+    }
+
+    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/", method = RequestMethod.POST)
+    public void addQuestion(@RequestBody Question question)
+    {
+        questionService.addQuestion(question);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/ratings", method = RequestMethod.GET)
     public Set<Rating> getRatingsForQuestion(@PathVariable("id") int id)
     {
         return questionService.getRatingsForQuestion(id);
+    }
+
+    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/comments", method = RequestMethod.GET)
+    public Set<Comment> getCommentsForQuestion(@PathVariable("id") int id)
+    {
+        return questionService.getCommentsForQuestion(id);
     }
 }

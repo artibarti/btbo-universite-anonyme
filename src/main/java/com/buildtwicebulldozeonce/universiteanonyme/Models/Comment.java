@@ -19,6 +19,9 @@ public class Comment {
     private String message;
 
     @ManyToOne
+    private Question question;
+
+    @ManyToOne
     private AnonUser anonUser;
     @ManyToOne
     private User user;

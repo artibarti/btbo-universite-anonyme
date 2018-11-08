@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
@@ -46,6 +47,11 @@ public class QuestionService {
     public Set<Rating> getRatingsForQuestion(int id)
     {
         return questionRepository.getRatingsForQuestion(id, Rating.RatingType.QuestionRating);
+    }
+
+    public Set<Comment> getCommentsForQuestion(int id)
+    {
+        return questionRepository.getCommentsForQuestion(id);
     }
 
 }

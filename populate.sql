@@ -69,14 +69,18 @@ INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (101,
 INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (102, 102, 102, 101);
 INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (103, 103, 105, 102);
 
+/* add questions */
+INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `time_stamp`, `anon_user_id`, `session_id`)
+  VALUES (101, "baby dont hurt me", "What is love?", 30, CURRENT_TIMESTAMP, 0, 101);
+
 /* add comments */
-INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (101, "Lol", 0, 101);
-INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (102, "idk man", 0, 101);
-INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (103, "What does x stand for?", 0, 102);
-INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (104, "still darkness", 0, 102);
-INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (105, "i just wanna go home", 0, 103);
-INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (106, "thats kinda interesting man", 0, 103);
-INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (107, "this girl hot af", 0, 101);
+INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `question_id`) VALUES (101, "Lol", 0, 101, 101);
+INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `question_id`) VALUES (102, "idk man", 0, 101, 101);
+INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `question_id`) VALUES (103, "What does x stand for?", 0, 102, 101);
+INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `question_id`) VALUES (104, "still darkness", 0, 102, 101);
+INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `question_id`) VALUES (105, "i just wanna go home", 0, 103, 101);
+INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `question_id`) VALUES (106, "thats kinda interesting man", 0, 103, 101);
+INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `question_id`) VALUES (107, "this girl hot af", 0, 101, 101);
 
 /* add ratings */
 INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (101, 5, 0, 101,101,"CommentRating");
@@ -84,10 +88,5 @@ INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) 
 INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (103, 2, 0, 103,101,"CommentRating");
 INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (104, 4, 0, 101,101,"CommentRating");
 INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (105, 5, 0, 109,101,"CommentRating");
-
-/* add questions */
-
-INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `time_stamp`, `anon_user_id`, `session_id`) 
-  VALUES (101, "baby dont hurt me", "What is love?", 30, CURRENT_TIMESTAMP, 0, 101);
 
 COMMIT;
