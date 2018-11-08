@@ -64,7 +64,9 @@ public class CourseService {
         return courseRepository.getSessionsForCourse(id);
     }
 
-    // TODO: getRatingsForCourse
-
+    public Set<Rating> getRatingsForCourse(int id)
+    {
+        return courseRepository.getRatingsForCourse(id, Rating.RatingType.CourseRating);
+    }
 
 }

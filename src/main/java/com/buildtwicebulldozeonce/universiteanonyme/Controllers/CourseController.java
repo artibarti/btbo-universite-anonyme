@@ -72,5 +72,9 @@ public class CourseController
         return courseService.getSessionsForCourse(id);
     }
 
-    // TODO: getRatingsForCourse
+    @RequestMapping(value = "/courses/{id}/ratings", method = RequestMethod.GET)
+    public Set<Rating> getRatingsForCourse(@PathVariable("id") int id)
+    {
+        return courseService.getRatingsForCourse(id);
+    }
 }

@@ -29,7 +29,7 @@ public class SessionController
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{id}/questions", method = RequestMethod.GET)
-    public Set<Question> getQuestionssForSession(@PathVariable("courseID") int courseID, @PathVariable("id") int id)
+    public Set<Question> getQuestionsForSession(@PathVariable("courseID") int courseID, @PathVariable("id") int id)
     {
         return sessionService.getQuestionsForSession(id);
     }
@@ -52,6 +52,10 @@ public class SessionController
         sessionService.updateSession(session);
     }
 
-    // TODO: getRatingsForSession
+    @RequestMapping(value = "/courses/{id}/ratings", method = RequestMethod.GET)
+    public Set<Rating> getRatingsForSession(@PathVariable("id") int id)
+    {
+        return sessionService.getRatingsForSession(id);
+    }
 
 }

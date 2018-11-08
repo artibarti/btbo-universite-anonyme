@@ -53,6 +53,9 @@ public class SessionService {
             sessionRepository.save(session);
     }
 
-    // TODO: getRatingsForSession
+    public Set<Rating> getRatingsForSession(int id)
+    {
+        return sessionRepository.getRatingsForSession(id, Rating.RatingType.SessionRating);
+    }
 
 }

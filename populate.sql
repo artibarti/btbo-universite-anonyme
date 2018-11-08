@@ -79,11 +79,11 @@ INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (106, "
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`) VALUES (107, "this girl hot af", 0, 101);
 
 /* add ratings */
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`) VALUES (101, 5, 0, 101);
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`) VALUES (102, 1, 0, 102);
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`) VALUES (103, 2, 0, 103);
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`) VALUES (104, 4, 0, 101);
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`) VALUES (105, 5, 0, 109);
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (101, 5, 0, 101,101,"CommentRating");
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (102, 1, 0, 102,101,"CommentRating");
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (103, 2, 0, 103,101,"CommentRating");
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (104, 4, 0, 101,101,"CommentRating");
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (105, 5, 0, 109,101,"CommentRating");
 
 /* add questions */
 

@@ -22,6 +22,7 @@ public interface CourseRepository extends CrudRepository<Course, Integer>
     @Query("SELECT s FROM Session as s JOIN s.course as c WHERE c.id = :id")
     Set<Session> getSessionsForCourse(@Param("id") int id);
 
-    // TODO: getRatingsForCourse
+    @Query("SELECT r FROM Rating as r WHERE r.refID = :id AND r.type = :type")
+    Set<Rating> getRatingsForCourse(@Param("id") int id, @Param("type") Rating.RatingType type);
 
 }
