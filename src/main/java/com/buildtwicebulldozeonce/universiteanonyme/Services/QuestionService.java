@@ -44,14 +44,14 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public Set<Rating> getRatingsForQuestion(int id)
+    public Set<Rating> getRatings(int id)
     {
-        return questionRepository.getRatingsForQuestion(id, Rating.RatingType.QuestionRating);
+        return questionRepository.getRatings(id, Rating.RatingType.QuestionRating);
     }
 
-    public Set<Comment> getCommentsForQuestion(int id)
+    public Set<Comment> getComments(int id)
     {
-        return questionRepository.getCommentsForQuestion(id);
+        return questionRepository.getComments(id, Comment.CommentType.QuestionComment);
     }
 
 }

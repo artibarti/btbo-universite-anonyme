@@ -49,12 +49,12 @@ public class QuestionController
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/ratings", method = RequestMethod.GET)
     public Set<Rating> getRatingsForQuestion(@PathVariable("id") int id)
     {
-        return questionService.getRatingsForQuestion(id);
+        return questionService.getRatings(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/comments", method = RequestMethod.GET)
     public Set<Comment> getCommentsForQuestion(@PathVariable("id") int id)
     {
-        return questionService.getCommentsForQuestion(id);
+        return questionService.getComments(id);
     }
 }

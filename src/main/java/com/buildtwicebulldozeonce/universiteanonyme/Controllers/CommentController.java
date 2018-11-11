@@ -15,8 +15,8 @@ public class CommentController
     private final CommentService commentService;
 
     @Autowired
-    public CommentController(CommentService questionService) {
-        this.commentService = questionService;
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}", method = RequestMethod.GET)

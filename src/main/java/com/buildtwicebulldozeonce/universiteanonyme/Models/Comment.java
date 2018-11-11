@@ -13,13 +13,13 @@ import java.util.Set;
 @Entity
 @Builder
 public class Comment {
+
+    public enum CommentType {CourseRoomComment, QuestionComment}
+
     @Id
     private int id;
     @Column(nullable = false)
     private String message;
-
-    @ManyToOne
-    private Question question;
 
     @ManyToOne
     private AnonUser anonUser;
@@ -28,5 +28,10 @@ public class Comment {
 
     @Transient
     private Set<Rating> ratings;
-    //rating
+
+    @Column(nullable = false)
+    private int refID;
+    @Enumerated(EnumType.STRING)
+    private CommentType type;
+
 }

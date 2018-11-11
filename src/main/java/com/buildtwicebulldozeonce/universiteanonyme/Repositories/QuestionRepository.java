@@ -12,8 +12,8 @@ import java.util.Set;
 public interface QuestionRepository extends CrudRepository<Question, Integer>
 {
     @Query("SELECT r FROM Rating as r WHERE r.refID = :id AND r.type = :type")
-    Set<Rating> getRatingsForQuestion(@Param("id") int id, @Param("type") Rating.RatingType type);
+    Set<Rating> getRatings(@Param("id") int id, @Param("type") Rating.RatingType type);
 
-    @Query("SELECT c FROM Comment as c JOIN c.question as q WHERE q.id = :id")
-    Set<Comment> getCommentsForQuestion(@Param("id") int id);
+    @Query("SELECT m FROM Comment as m WHERE m.refID = :id AND m.type = :type")
+    Set<Comment> getComments(@Param("id") int id, @Param("type") Comment.CommentType type);
 }
