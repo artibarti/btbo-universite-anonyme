@@ -13,6 +13,9 @@ import java.util.Set;
 @Entity
 @Builder
 public class Comment {
+
+    public enum CommentType {CourseRoomComment, QuestionComment}
+
     @Id
     private int id;
     @Column(nullable = false)
@@ -25,5 +28,10 @@ public class Comment {
 
     @Transient
     private Set<Rating> ratings;
-    //rating
+
+    @Column(nullable = false)
+    private int refID;
+    @Enumerated(EnumType.STRING)
+    private CommentType type;
+
 }

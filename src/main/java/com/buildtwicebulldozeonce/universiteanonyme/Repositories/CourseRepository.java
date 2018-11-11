@@ -1,7 +1,28 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Repositories;
 
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Course;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
-public interface CourseRepository extends CrudRepository<Course, Integer> {
+import java.util.Set;
+
+public interface CourseRepository extends CrudRepository<Course, Integer>
+{
+
+    @Query(value = "SELECT a FROM Admin as a JOIN a.course as c WHERE c.id = :id")
+    Set<Admin> getCourseAdmins(@Param("id") int id);
+
+    @Query(value = "SELECT cs FROM CourseSubs as cs JOIN cs.course as c WHERE c.id = :id")
+    Set<CourseSubs> getCourseSubs(@Param("id") int id);
+
+    @Query(value = "SELECT cr FROM CourseRoom as cr JOIN cr.course as c WHERE c.id = :id")
+    Set<CourseRoom> getCourseRooms(@Param("id") int id);
+
+    @Query("SELECT s FROM Session as s JOIN s.course as c WHERE c.id = :id")
+    Set<Session> getSessionsForCourse(@Param("id") int id);
+
+    @Query("SELECT r FROM Rating as r WHERE r.refID = :id AND r.type = :type")
+    Set<Rating> getRatingsForCourse(@Param("id") int id, @Param("type") Rating.RatingType type);
+
 }

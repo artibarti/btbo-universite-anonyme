@@ -5,16 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Log
 @Data
 @Entity
 @Builder
 public class Rating {
+
+    public enum RatingType {CommentRating, CourseRating, QuestionRating, SessionRating}
+
     @Id
     private int id;
     @Column(nullable = false)
@@ -24,4 +24,8 @@ public class Rating {
     private User user;
     @ManyToOne
     private AnonUser anonUser;
+    @Column(nullable = false)
+    private int refID;
+    @Enumerated(EnumType.STRING)
+    private RatingType type;
 }

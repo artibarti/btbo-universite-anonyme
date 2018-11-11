@@ -1,6 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Course;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CourseRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CourseService {
@@ -31,4 +32,41 @@ public class CourseService {
     public void addCourse(@NonNull Course course) {
         courseRepository.save(course);
     }
+
+    public void updateCourse(Course course)
+    {
+        if (courseRepository.existsById(course.getId()))
+            courseRepository.save(course);
+    }
+
+    public void deleteCourse(int id)
+    {
+        courseRepository.deleteById(id);
+    }
+
+    public Set<Admin> getCourseAdmins(int id)
+    {
+        return courseRepository.getCourseAdmins(id);
+    }
+
+    public Set<CourseSubs> getCourseSubs(int id)
+    {
+        return courseRepository.getCourseSubs(id);
+    }
+
+    public Set<CourseRoom> getCourseRooms(int id)
+    {
+        return courseRepository.getCourseRooms(id);
+    }
+
+    public Set<Session> getSessionsForCourse(int id)
+    {
+        return courseRepository.getSessionsForCourse(id);
+    }
+
+    public Set<Rating> getRatingsForCourse(int id)
+    {
+        return courseRepository.getRatingsForCourse(id, Rating.RatingType.CourseRating);
+    }
+
 }
