@@ -2,10 +2,13 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.UserRepository;
+import com.buildtwicebulldozeonce.universiteanonyme.Validators.UserValidator;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,6 +34,8 @@ public class UserService {
     }
 
     public void addUser(@NonNull User user) {
+        //UserValidator validator = new UserValidator();
+        //validator.validate(user,errors);
         userRepository.save(user);
     }
 
