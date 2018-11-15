@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 public class CourseController
@@ -19,9 +21,12 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses", method = RequestMethod.GET)
-    public List<Course> getAllCourses()
+    public List<CourseDTO> getAllCourses()
     {
-        return courseService.getAllCourses();
+        return courseService.getAllCourses()
+                .stream()
+                .map(Course::convertToDTO)
+                .collect(Collectors.toList()) ;
     }
 
     @RequestMapping(value = "/courses", method = RequestMethod.POST)

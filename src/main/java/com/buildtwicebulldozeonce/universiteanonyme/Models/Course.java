@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,11 @@ public class Course {
     private Set<Rating> ratings;
     @Transient
     private Set<Session> sessions;
+
+    public CourseDTO convertToDTO()
+    {
+        return new CourseDTO(this.id, this.name);
+    }
 }
 
 
