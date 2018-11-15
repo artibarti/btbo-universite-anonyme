@@ -6,9 +6,11 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.Session;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Set;
 
+@CrossOrigin(origins = "http://localhost:4200")
 public interface SessionRepository extends CrudRepository<Session, Integer>
 {
     @Query("SELECT q FROM Question as q JOIN q.session as s WHERE s.id = :id")
