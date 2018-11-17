@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login")
-    public User login(@RequestHeader HttpHeaders headers)
+    public UserDTO login(@RequestHeader HttpHeaders headers)
     {
-        User user = userService.authenticateUser(headers.getFirst("username"), headers.getFirst("password"));
-        return user;
+        String username = headers.getFirst("username");
+        String password = headers.getFirst("password");
+
+        User user = userService.authenticateUser(username, password);
+        return user.convertToDTO();
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)

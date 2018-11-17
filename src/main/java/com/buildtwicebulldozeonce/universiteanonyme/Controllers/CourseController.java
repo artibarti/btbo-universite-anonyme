@@ -27,7 +27,7 @@ public class CourseController
         return courseService.getAllCourses()
                 .stream()
                 .map(Course::convertToDTO)
-                .collect(Collectors.toList()) ;
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/courses", method = RequestMethod.POST)

@@ -1,13 +1,12 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Generated;
-import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Log
@@ -39,4 +38,8 @@ public class User {
     private AnonUser anonUser;
 
     //TODO: picture
+
+    public UserDTO convertToDTO() {
+        return new UserDTO(this.id, this.name, this.email);
+    }
 }
