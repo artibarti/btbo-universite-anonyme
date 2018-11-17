@@ -3,7 +3,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +18,13 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @RequestMapping(value = "/login")
+    public User login(@RequestHeader HttpHeaders headers)
+    {
+        User user = userService.authenticateUser(headers.getFirst("username"), headers.getFirst("password"));
+        return user;
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)

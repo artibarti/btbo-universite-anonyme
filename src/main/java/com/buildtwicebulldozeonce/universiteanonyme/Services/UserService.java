@@ -70,4 +70,11 @@ public class UserService {
         if (userRepository.existsById(user.getId()))
             userRepository.save(user);
     }
+
+    public User authenticateUser(String username, String doubleHashedPassword)
+    {
+        User user = userRepository.findByEmailAndDoubleHashedPassword(username, doubleHashedPassword);
+        System.out.println("trying to authenticate user with username: " + username + " and password: " + doubleHashedPassword);
+        return user;
+    }
 }
