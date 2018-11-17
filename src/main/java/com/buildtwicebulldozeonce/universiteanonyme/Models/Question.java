@@ -2,7 +2,6 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
@@ -33,4 +32,21 @@ public class Question {
 
     @Transient
     private Set<Rating> ratings;
+
+    public boolean isValid() {
+        StringBuilder errors = new StringBuilder();
+        if (!anonUser.isValid())
+            errors.append("Invalid user,");
+        if ("".equals(answer))
+            errors.append("Invalid answer,");
+        if (!session.isValid())
+            errors.append("Invalid session");
+
+            if (errors.toString().isEmpty()) {
+                return true;
+            } else {
+                log.warning(errors.toString());
+                return false;
+            }
+    }
 }

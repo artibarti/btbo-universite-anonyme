@@ -2,11 +2,9 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Log
@@ -23,7 +21,7 @@ public class Course {
 
     @ManyToOne
     private User owner;
-    
+
     @Transient
     private Set<Admin> admins;
     @Transient
@@ -34,6 +32,23 @@ public class Course {
     private Set<Rating> ratings;
     @Transient
     private Set<Session> sessions;
+
+    public boolean isValid() {
+        StringBuilder errors = new StringBuilder();
+        if (!owner.isValid())
+            errors.append("Invalid owner,");
+        if ("".equals(name))
+            errors.append("Invalid coursename,");
+        if ("".equals(inviteCode))
+            errors.append("Invalid invitecode,");
+
+        if (errors.toString().isEmpty()) {
+            return true;
+        } else {
+            log.warning(errors.toString());
+            return false;
+        }
+    }
 }
 
 

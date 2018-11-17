@@ -28,4 +28,24 @@ public class Rating {
     private int refID;
     @Enumerated(EnumType.STRING)
     private RatingType type;
+
+    public boolean isValid()
+    {
+        StringBuilder errors = new StringBuilder();
+        if (value < 0 || value > 5)
+        {
+            errors.append("Invalid rating value, ");
+        }
+        if (!(user.isValid() || anonUser.isValid()))
+        {
+            errors.append("Invalid user, ");
+        }
+
+        if (errors.toString().isEmpty()) {
+            return true;
+        } else {
+            log.warning(errors.toString());
+            return false;
+        }
+    }
 }

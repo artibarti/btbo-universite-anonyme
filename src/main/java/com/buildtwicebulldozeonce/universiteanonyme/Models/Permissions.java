@@ -19,4 +19,9 @@ public class Permissions {
     private int id;
     @Column(nullable = false)
     private double permissionStore;
+
+    public boolean isValid()
+    {
+        return true;
+    }
 }

@@ -24,4 +24,22 @@ public class Admin {
     private Course course;
     @OneToOne
     private Permissions permissions;
+
+    public boolean isValid() {
+        StringBuilder errors = new StringBuilder();
+        if (!user.isValid())
+            errors.append("Invalid user,");
+        if (!course.isValid())
+            errors.append("invalid course,");
+
+        if (errors.toString().isEmpty())
+        {
+            return true;
+        }
+        else
+        {
+            log.warning(errors.toString());
+            return false;
+        }
+    }
 }

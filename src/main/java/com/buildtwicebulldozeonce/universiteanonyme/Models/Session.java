@@ -27,4 +27,24 @@ public class Session {
     private Set<Question> questions;
     @Transient
     private Set<Rating> ratings;
+
+    public boolean isValid()
+    {
+        StringBuilder errors = new StringBuilder();
+        if (!course.isValid())
+        {
+            errors.append("Invalid course, ");
+        }
+
+
+        if (errors.toString().isEmpty())
+        {
+            return true;
+        }
+        else
+        {
+            log.warning(errors.toString());
+            return false;
+        }
+    }
 }

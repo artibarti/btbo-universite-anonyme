@@ -31,4 +31,15 @@ public class AnonUser {
     private User user;
     //rating
     //picture
+
+    public boolean isValid()
+    {
+        if ("".equals(anonName))
+            return false;
+        if ("".equals(hashedPassword))
+            return false;
+        if (!user.isValid())
+            return false;
+        return true;
+    }
 }

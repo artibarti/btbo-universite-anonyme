@@ -34,4 +34,28 @@ public class Comment {
     @Enumerated(EnumType.STRING)
     private CommentType type;
 
+    public boolean isValid()
+    {
+        StringBuilder errors = new StringBuilder();
+        if ("".equals(message))
+        {
+            errors.append("Invalid message");
+        }
+
+        if (!(user.isValid() || anonUser.isValid()))
+        {
+            errors.append("Invalid user");
+        }
+
+        if (errors.toString().isEmpty())
+        {
+            return true;
+        }
+        else
+        {
+            log.warning(errors.toString());
+            return false;
+        }
+    }
+
 }

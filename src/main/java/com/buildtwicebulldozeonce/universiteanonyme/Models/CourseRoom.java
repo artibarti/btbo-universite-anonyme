@@ -23,4 +23,19 @@ public class CourseRoom {
 
     @Transient
     private Set<Comment> comments;
+
+    public boolean isValid() {
+        StringBuilder errors = new StringBuilder();
+        if (!course.isValid())
+            errors.append("Invalid course,");
+        if ("".equals(name))
+            errors.append("Invalid courseRoomName,");
+
+        if (errors.toString().isEmpty()) {
+            return true;
+        } else {
+            log.warning(errors.toString());
+            return false;
+        }
+    }
 }

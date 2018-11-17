@@ -22,4 +22,20 @@ public class CourseSubs {
     private Course course;
     @OneToOne
     private AnonUser anonUser;
+
+    public boolean isValid()
+    {
+        StringBuilder errors = new StringBuilder();
+        if (!course.isValid())
+            errors.append("Invalid course,");
+        if (!anonUser.isValid())
+            errors.append("Invalid user");
+
+        if (errors.toString().isEmpty()) {
+            return true;
+        } else {
+            log.warning(errors.toString());
+            return false;
+        }
+    }
 }
