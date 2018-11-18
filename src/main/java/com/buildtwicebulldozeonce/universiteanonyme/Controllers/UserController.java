@@ -3,6 +3,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +22,46 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public UserDTO login(@RequestHeader HttpHeaders headers)
     {
-        String username = headers.getFirst("username");
+        String email = headers.getFirst("email");
         String password = headers.getFirst("password");
 
-        User user = userService.authenticateUser(username, password);
-        return user.convertToDTO();
+        User user = userService.authenticateUser(email, password);
+        if (user != null)
+        {
+            return user.convertToDTO();
+        }
+        else
+        {
+            UserDTO empty = new UserDTO();
+            return empty;
+        }
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public UserDTO register(@RequestHeader HttpHeaders headers)
+    {
+        String email = headers.getFirst("email");
+        String password = headers.getFirst("password");
+        String name = headers.getFirst("name");
+
+        if (userService.checkIfUserExists(email))
+        {
+            UserDTO result = new UserDTO();
+            return result;
+        }
+        else
+        {
+            User user = new User();
+            user.setEmail(email);
+            user.setName(name);
+            user.setDoubleHashedPassword(password);
+
+            userService.addUser(user);
+            return user.convertToDTO();
+        }
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)

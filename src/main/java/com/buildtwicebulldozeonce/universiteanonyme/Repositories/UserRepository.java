@@ -27,6 +27,6 @@ public interface UserRepository extends CrudRepository<User, Integer>
     @Query(value = "SELECT r FROM Rating as r JOIN r.user as u WHERE u.id = :userID")
     Set<Rating> getAllRatingsFromUser(@Param("userID") int userID);
 
-    User findByEmailAndDoubleHashedPassword(String name, String password);
-
+    User findByEmailAndDoubleHashedPassword(String email, String password);
+    User findByEmail(String email);
 }

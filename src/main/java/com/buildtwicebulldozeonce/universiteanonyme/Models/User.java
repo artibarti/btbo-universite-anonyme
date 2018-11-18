@@ -1,9 +1,7 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Generated;
+import lombok.*;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
@@ -13,6 +11,8 @@ import java.util.Set;
 @Data
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @Generated

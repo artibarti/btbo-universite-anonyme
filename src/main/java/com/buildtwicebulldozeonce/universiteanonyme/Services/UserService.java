@@ -4,6 +4,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.UserRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Log
 @Service
 public class UserService {
 
@@ -71,10 +73,17 @@ public class UserService {
             userRepository.save(user);
     }
 
-    public User authenticateUser(String username, String doubleHashedPassword)
+    public boolean checkIfUserExists(String email)
     {
-        User user = userRepository.findByEmailAndDoubleHashedPassword(username, doubleHashedPassword);
-        System.out.println("trying to authenticate user with username: " + username + " and password: " + doubleHashedPassword);
+        return userRepository.findByEmail(email) != null;
+    }
+
+    public User authenticateUser(String email, String doubleHashedPassword)
+    {
+        log.info("authenticate user with email: " + email + " and passord: " + doubleHashedPassword);
+
+        User user = userRepository.findByEmailAndDoubleHashedPassword(email, doubleHashedPassword);
+        System.out.println("trying to authenticate user with username: " + email + " and password: " + doubleHashedPassword);
         return user;
     }
 }
