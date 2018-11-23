@@ -15,6 +15,7 @@ import java.util.Set;
 @Builder
 public class AnonUser {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false, unique = true)
     private String anonName;

@@ -16,6 +16,7 @@ public class Rating {
     public enum RatingType {CommentRating, CourseRating, QuestionRating, SessionRating}
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
     private int value;

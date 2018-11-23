@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class CourseSubs {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
     private LocalDateTime bannedUntil;

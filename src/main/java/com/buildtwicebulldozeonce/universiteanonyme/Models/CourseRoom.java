@@ -14,6 +14,7 @@ import java.util.Set;
 @Builder
 public class CourseRoom {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
     private String name;

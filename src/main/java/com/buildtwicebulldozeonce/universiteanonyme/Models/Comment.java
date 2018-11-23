@@ -17,6 +17,7 @@ public class Comment {
     public enum CommentType {CourseRoomComment, QuestionComment}
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
     private String message;

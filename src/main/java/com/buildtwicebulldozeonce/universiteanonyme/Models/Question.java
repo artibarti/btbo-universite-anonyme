@@ -15,6 +15,7 @@ import java.util.Set;
 @Builder
 public class Question {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
     private int rating;

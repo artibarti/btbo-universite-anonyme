@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import org.hibernate.annotations.Any;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Log
 @Data
@@ -16,6 +14,7 @@ import javax.persistence.Id;
 @Builder
 public class Permissions {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
     private double permissionStore;

@@ -28,6 +28,10 @@ public class TestDataController {
                 .name("TestUser0")
                 .build();
 
+        var user2 = User.builder()
+                .name("TestUser2")
+                .build();
+
         var course = Course.builder()
                 .name("TestCourse0")
                 .owner(user)
@@ -35,6 +39,7 @@ public class TestDataController {
                 .build();
 
         userService.addUser(user);
+        userService.addUser(user2);
         courseService.addCourse(course);
     }
 }

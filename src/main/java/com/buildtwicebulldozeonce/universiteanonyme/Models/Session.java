@@ -14,6 +14,7 @@ import java.util.Set;
 @Builder
 public class Session {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false, unique = true)
     private int counter;
