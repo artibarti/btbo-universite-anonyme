@@ -8,10 +8,9 @@ import com.buildtwicebulldozeonce.universiteanonyme.Repositories.UserRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.util.function.Tuple2;
-import reactor.util.function.Tuple3;
 
 import java.util.*;
 
@@ -19,7 +18,7 @@ import java.util.*;
 @Service
 public class UserService {
 
-    private List<Tuple3<String, User, AnonUser>> loggedInUsers = new ArrayList<>();
+    private List<Triplet<String, User, AnonUser>> loggedInUsers = new ArrayList<Triplet<String, User, AnonUser>>();
 
     private final UserRepository userRepository;
     private final AnonUserRepository anonUserRepository;
@@ -86,7 +85,7 @@ public class UserService {
 
     public User authenticateUser(String anonName, String hashedPassword)
     {
-        log.info("authenticate user with email: " + email + " and password: " + doubleHashedPassword);
+        log.info("authenticate user with email: " + anonName + " and password: " + hashedPassword);
 
         AnonUser anonUser = anonUserRepository.findByAnonNameAndHashedPassword(anonName,hashedPassword);
 
@@ -99,9 +98,9 @@ public class UserService {
 
         String token = TokenHelper.generateToken();
 
-        loggedInUsers.add(new Tuple3<>(token,user,anonUser));
+        loggedInUsers.add(new Triplet<String,User,AnonUser>(token,user,anonUser));
 
-        System.out.println("trying to authenticate user with username: " + email + " and password: " + doubleHashedPassword);
+        System.out.println("trying to authenticate user with username: " + anonName + " and password: " + doubleHashedPassword);
         return user;
     }
 }
