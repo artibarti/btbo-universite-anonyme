@@ -1,27 +1,33 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.PasswordHelper;
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.TokenHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.AnonUserRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.UserRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuple3;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Log
 @Service
 public class UserService {
 
+    private List<Tuple3<String, User, AnonUser>> loggedInUsers = new ArrayList<>();
+
     private final UserRepository userRepository;
+    private final AnonUserRepository anonUserRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AnonUserRepository anonUserRepository) {
         this.userRepository = userRepository;
+        this.anonUserRepository = anonUserRepository;
     }
 
     public List<User> getAllUsers() {
@@ -78,11 +84,23 @@ public class UserService {
         return userRepository.findByEmail(email) != null;
     }
 
-    public User authenticateUser(String email, String doubleHashedPassword)
+    public User authenticateUser(String anonName, String hashedPassword)
     {
-        log.info("authenticate user with email: " + email + " and passord: " + doubleHashedPassword);
+        log.info("authenticate user with email: " + email + " and password: " + doubleHashedPassword);
 
-        User user = userRepository.findByEmailAndDoubleHashedPassword(email, doubleHashedPassword);
+        AnonUser anonUser = anonUserRepository.findByAnonNameAndHashedPassword(anonName,hashedPassword);
+
+        if(anonUser == null) return null;
+
+        String doubleHashedPassword = PasswordHelper.hashString(hashedPassword);
+        User user = userRepository.findByDoubleHashedPassword(doubleHashedPassword);
+
+        if(user == null) return null;
+
+        String token = TokenHelper.generateToken();
+
+        loggedInUsers.add(new Tuple3<>(token,user,anonUser));
+
         System.out.println("trying to authenticate user with username: " + email + " and password: " + doubleHashedPassword);
         return user;
     }

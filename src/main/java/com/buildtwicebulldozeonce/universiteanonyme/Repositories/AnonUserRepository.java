@@ -23,4 +23,5 @@ public interface AnonUserRepository extends CrudRepository<AnonUser, Integer>
     @Query(value = "SELECT q FROM Question as q JOIN q.anonUser as au WHERE au.id = :id")
     Set<Question> getAllQuestionsFromAnonUser(@Param("id") int anonID);
 
+    AnonUser findByAnonNameAndHashedPassword(String anonName, String hashedPassword);
 }

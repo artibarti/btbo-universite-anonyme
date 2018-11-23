@@ -28,5 +28,6 @@ public interface UserRepository extends CrudRepository<User, Integer>
     Set<Rating> getAllRatingsFromUser(@Param("userID") int userID);
 
     User findByEmailAndDoubleHashedPassword(String email, String password);
+    User findByDoubleHashedPassword(String doubleHashedPassword);
     User findByEmail(String email);
 }
