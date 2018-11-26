@@ -47,4 +47,8 @@ public class AnonUserService {
     {
         return anonUserRepository.getCourseSubsForAnonUser(id);
     }
+
+    public boolean isUserNameAlreadyTaken(String userName) {
+        return anonUserRepository.findByAnonName(userName) != null;
+    }
 }
