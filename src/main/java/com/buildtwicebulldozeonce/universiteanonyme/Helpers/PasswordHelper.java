@@ -19,7 +19,7 @@ public class PasswordHelper {
      */
     public static boolean comparePassword(String hash, String password) {
         String salt = hash.substring(hash.lastIndexOf("#") + 1);
-        String hashedPassword = hashPassword(password, salt);
+        String hashedPassword = hashPassword(password, salt)+ "#" + salt;
         return hash.equals(hashedPassword);
     }
 
@@ -32,17 +32,25 @@ public class PasswordHelper {
      * @return Returns the hashed password.
      */
     public static String hashPassword(String password, String salt) {
+        String randomSalt = "";
         if (salt.isEmpty())
-            salt = UUID.randomUUID().toString().subSequence(0, 8).toString();
+            randomSalt = UUID.randomUUID().toString().subSequence(0, 8).toString();
         MessageDigest digest = null;
         try {
             digest = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
             log.warning("Can't create SHA-256 algorithm");
         }
-        byte[] hash = digest.digest((password + salt).getBytes(StandardCharsets.UTF_8));
-        String encoded = Base64.getEncoder().encodeToString(hash);
-        return encoded + "#" + salt;
+
+        if (!randomSalt.isEmpty()) {
+            byte[] hash = digest.digest((password + randomSalt).getBytes(StandardCharsets.UTF_8));
+            String encoded = Base64.getEncoder().encodeToString(hash);
+            return encoded + "#" + randomSalt;
+        } else {
+            byte[] hash = digest.digest((password + salt).getBytes(StandardCharsets.UTF_8));
+            String encoded = Base64.getEncoder().encodeToString(hash);
+            return encoded;
+        }
     }
 }
 

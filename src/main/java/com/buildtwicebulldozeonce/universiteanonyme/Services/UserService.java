@@ -76,22 +76,24 @@ public class UserService {
         return userRepository.findByEmail(email) != null;
     }
 
-    public User authenticateUser(String anonName, String hashedPassword) {
-        log.info("authenticate user with email: " + anonName + " and password: " + hashedPassword);
+    public User authenticateUser(String anonName, String password) {
+        log.info("authenticate user with email: " + anonName + " and password: " + password);
 
         AnonUser anonUser = anonUserRepository.findByAnonName(anonName);
 
 
-        if (anonUser == null || !PasswordHelper.comparePassword(anonUser.getHashedPassword(), hashedPassword)) {
+        if (anonUser == null || !PasswordHelper.comparePassword(anonUser.getHashedPassword(), password)) {
             log.warning("no anonuser found");
+            log.warning(anonUser.getHashedPassword());
+            log.warning(password);
             return null;
         }
         //TODO salt
-        String doubleHashedPassword = PasswordHelper.hashPassword(hashedPassword, "");
+        String doubleHashedPassword = PasswordHelper.hashPassword(anonUser.getHashedPassword(), password);
         User user = userRepository.findByDoubleHashedPassword(doubleHashedPassword);
 
         if (user == null) {
-            log.warning("no user found");
+            log.warning("no user found with :" + doubleHashedPassword +" doubleHashedPassword");
             return null;
         }
 
