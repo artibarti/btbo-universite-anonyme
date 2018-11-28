@@ -47,5 +47,4 @@ public class CommentService {
     {
         return commentRepository.getRatingsForComment(id, Rating.RatingType.CommentRating);
     }
-
 }

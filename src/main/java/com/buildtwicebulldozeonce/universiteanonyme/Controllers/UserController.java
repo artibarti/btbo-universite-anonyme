@@ -1,7 +1,9 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.PasswordHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.AnonUserService;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,22 +15,25 @@ import java.util.Set;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
+@Log
 public class UserController {
 
     private final UserService userService;
+    private final AnonUserService anonUserService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AnonUserService anonUserService) {
         this.userService = userService;
+        this.anonUserService = anonUserService;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public UserDTO login(@RequestHeader HttpHeaders headers)
     {
-        String email = headers.getFirst("email");
+        String userName = headers.getFirst("username");
         String password = headers.getFirst("password");
-
-        User user = userService.authenticateUser(email, password);
+        log.info(String.format("username %s, password: %s",userName,password));
+        User user = userService.authenticateUser(userName, password);
         if (user != null)
         {
             return user.convertToDTO();
@@ -45,20 +50,28 @@ public class UserController {
     {
         String email = headers.getFirst("email");
         String password = headers.getFirst("password");
-        String name = headers.getFirst("name");
+        String firstName = headers.getFirst("firstname");
+        String lastName = headers.getFirst("lastname");
+        String userName = headers.getFirst("username");
 
-        if (userService.checkIfUserExists(email))
+        if (userService.checkIfUserExists(email) || anonUserService.isUserNameAlreadyTaken(userName) || password == null)
         {
             UserDTO result = new UserDTO();
             return result;
         }
         else
         {
-            User user = new User();
-            user.setEmail(email);
-            user.setName(name);
-            user.setDoubleHashedPassword(password);
+            AnonUser anonUser = AnonUser.builder()
+                    .anonName(userName)
+                    .hashedPassword(PasswordHelper.hashPassword(password,""))
+                    .build();
+            User user = User.builder()
+                    .name(firstName + " " + lastName)
+                    .doubleHashedPassword(PasswordHelper.hashPassword(anonUser.getHashedPassword(),password))
+                    .email(email)
+                    .build();
 
+            anonUserService.addAnonUser(anonUser);
             userService.addUser(user);
             return user.convertToDTO();
         }

@@ -2,10 +2,10 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Log
@@ -34,5 +34,7 @@ public class Comment {
     private int refID;
     @Enumerated(EnumType.STRING)
     private CommentType type;
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
 
 }

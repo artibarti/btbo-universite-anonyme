@@ -24,4 +24,6 @@ public interface AnonUserRepository extends CrudRepository<AnonUser, Integer>
     Set<Question> getAllQuestionsFromAnonUser(@Param("id") int anonID);
 
     AnonUser findByAnonNameAndHashedPassword(String anonName, String hashedPassword);
+
+    AnonUser findByAnonName(String anonName);
 }
