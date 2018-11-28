@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class Question {
     private String message;
     @GeneratedValue
     @Column(nullable = false)
-    private LocalDateTime timeStamp;
+    private LocalDateTime timestamp;
     @Column
     private String answer;
 
