@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Log
 @Data
@@ -29,4 +30,7 @@ public class Rating {
     private int refID;
     @Enumerated(EnumType.STRING)
     private RatingType type;
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
+
 }
