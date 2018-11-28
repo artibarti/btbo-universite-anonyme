@@ -3,8 +3,10 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.News;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +18,25 @@ public class NewsFeedService
 {
     private final CommentRepository commentRepository;
     private final QuestionRepository questionRepository;
+    private final RatingRepository ratingRepository;
 
     @Autowired
-    public NewsFeedService(CommentRepository commentRepository, QuestionRepository questionRepository)
+    public NewsFeedService(CommentRepository commentRepository, QuestionRepository questionRepository, RatingRepository ratingRepository)
     {
         this.commentRepository = commentRepository;
         this.questionRepository = questionRepository;
+        this.ratingRepository = ratingRepository;
+    }
+
+    private News convertRatingToNews(Rating rating)
+    {
+        News news = new News();
+        news.setRefID(rating.getRefID());
+        news.setRefName("");
+        news.setAnonUserName(rating.getAnonUser().getAnonName());
+        news.setType("Rating");
+        news.setTimestamp(rating.getTimestamp());
+        return news;
     }
 
     private News convertCommentToNews(Comment comment)
@@ -32,7 +47,6 @@ public class NewsFeedService
         news.setAnonUserName(comment.getAnonUser().getAnonName());
         news.setContent(comment.getMessage());
         news.setRefID(comment.getRefID());
-        System.out.println(news);
         return news;
     }
 
@@ -45,20 +59,23 @@ public class NewsFeedService
         news.setContent(question.getMessage());
         news.setRefID(question.getSession().getId());
         news.setRefName(question.getSession().getCourse().getName());
-        System.out.println(news);
         return news;
     }
 
     public List<News> getNewsFeedForUser(int id)
     {
         List<News> news = new ArrayList<>();
+
         Set<Comment> comments = commentRepository.getNewsFeedCommentsForUser(id);
         Set<Question> questions = questionRepository.getNewsFeedQuestionsForUser(id);
+        Set<Rating> ratings = ratingRepository.getNewsFeedRatingsForUser(id, Rating.RatingType.CourseRating, Rating.RatingType.CommentRating, Rating.RatingType.QuestionRating);
 
         comments.stream()
             .forEach(p -> news.add(convertCommentToNews(p)));
         questions.stream()
             .forEach(p -> news.add(convertQuestionToNews(p)));
+        ratings.stream()
+            .forEach(p -> news.add(convertRatingToNews(p)));
 
         return news.stream()
             .sorted(Comparator.comparing(News::getTimestamp))
