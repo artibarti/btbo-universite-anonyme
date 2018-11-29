@@ -1,14 +1,12 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
-import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -23,9 +21,9 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses/{id}", method = RequestMethod.GET)
-    public Course getCourse(@PathVariable("id") int id)
+    public CourseFatDTO getCourse(@PathVariable("id") int id)
     {
-        return courseService.getCourse(id);
+        return courseService.getCourse(id).convertToFatDTO();
     }
 
     @RequestMapping(value = "/courses/add", method = RequestMethod.POST)

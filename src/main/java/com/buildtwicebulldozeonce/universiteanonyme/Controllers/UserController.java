@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.PasswordHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -100,9 +102,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{id}/adminroles", method = RequestMethod.GET)
-    public Set<Course> getAdminRolesForUser(@PathVariable int id)
+    public Set<CourseSlimDTO> getAdminRolesForUser(@PathVariable int id)
     {
-        return userService.getCoursesAdminedByUser(id);
+        return userService.getCoursesAdminedByUser(id).stream()
+                .map(Course::convertToSlimDTO)
+                .collect(Collectors.toSet());
     }
 
 }

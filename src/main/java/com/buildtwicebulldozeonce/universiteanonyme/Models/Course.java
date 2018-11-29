@@ -1,13 +1,12 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
-import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseSlimDTO;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Log
@@ -20,6 +19,8 @@ public class Course {
     private int id;
     @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
+    private String description;
     @Column(nullable = false, unique = true)
     private String inviteCode;
 
@@ -37,9 +38,15 @@ public class Course {
     @Transient
     private Set<Session> sessions;
 
-    public CourseDTO convertToDTO()
+
+    public CourseSlimDTO convertToSlimDTO()
     {
-        return new CourseDTO(this.id, this.name);
+        return new CourseSlimDTO(this.id, this.name);
+    }
+
+    public CourseFatDTO convertToFatDTO()
+    {
+        return new CourseFatDTO(this.id, this.name, this.description);
     }
 }
 

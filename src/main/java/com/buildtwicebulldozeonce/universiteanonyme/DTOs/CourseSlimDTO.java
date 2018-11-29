@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CourseDTO
+public class CourseSlimDTO
 {
     int id;
     String name;
