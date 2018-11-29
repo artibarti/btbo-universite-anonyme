@@ -17,8 +17,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String email;
     private String doubleHashedPassword;
 
@@ -41,6 +41,6 @@ public class User {
     //TODO: picture
 
     public UserDTO convertToDTO() {
-        return new UserDTO(this.id, this.firstname, this.lastname, this.email);
+        return new UserDTO(this.id, this.firstName, this.lastName, this.email);
     }
 }

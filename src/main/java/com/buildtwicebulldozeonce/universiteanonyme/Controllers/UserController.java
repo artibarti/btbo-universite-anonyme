@@ -66,8 +66,8 @@ public class UserController {
                     .hashedPassword(PasswordHelper.hashPassword(password,""))
                     .build();
             User user = User.builder()
-                    .firstname(firstName)
-                    .lastname(lastName)
+                    .firstName(firstName)
+                    .lastName(lastName)
                     .doubleHashedPassword(PasswordHelper.hashPassword(anonUser.getHashedPassword(),password))
                     .email(email)
                     .build();
