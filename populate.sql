@@ -76,7 +76,7 @@ INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (103,
 
 /* add questions */
 INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `timestamp`, `anon_user_id`, `session_id`)
-  VALUES (101, "baby dont hurt me", "What is love?", 30, CURRENT_TIMESTAMP, 0, 101);
+  VALUES (101, "baby dont hurt me", "What is love?", 30, CURRENT_TIMESTAMP, 1, 101);
 
 /* add comments */
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (101, "Lol", 1, 101, 101, "CourseRoomComment", CURRENT_TIMESTAMP);
@@ -88,10 +88,10 @@ INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (103, "What does x stand for?", 1, 102, 101, "CourseRoomComment", '2018-11-02 00:00:00');
 
 /* add ratings */
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (101, 5, 0, 101,101,"CommentRating");
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (102, 1, 0, 102,101,"CommentRating");
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (103, 2, 0, 103,101,"CommentRating");
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (104, 4, 0, 101,101,"CommentRating");
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`) VALUES (105, 5, 0, 109,101,"CommentRating");
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (102, 1, 1, 102,101,"CommentRating",'2018-11-02 00:00:00');
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (103, 2, 1, 103,101,"CommentRating",'2018-11-02 00:00:00');
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (101, 5, 1, 101,101,"CommentRating",CURRENT_TIMESTAMP );
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (104, 4, 1, 101,101,"CommentRating",CURRENT_TIMESTAMP );
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (105, 5, 1, 109,101,"CommentRating",'2018-11-02 00:00:00');
 
 COMMIT;

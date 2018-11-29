@@ -25,28 +25,28 @@ public class CourseRoomController
         return courseRoomService.getCourseRoom(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/courserooms", method = RequestMethod.POST)
+    @RequestMapping(value = "/courses/{courseID}/courserooms/add", method = RequestMethod.POST)
     public void addCourseRoom(@RequestBody CourseRoom courseRoom)
     {
         courseRoomService.addCourseRoom(courseRoom);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/courserooms/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/courses/{courseID}/courserooms/{id}/delete", method = RequestMethod.DELETE)
     public void deleteCourseRoom(@PathVariable("id") int id)
     {
         courseRoomService.deleteCourseRoom(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/courserooms/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/courses/{courseID}/courserooms/{id}/put", method = RequestMethod.PUT)
     public void updateCourseRoom(@RequestBody CourseRoom courseRoom)
     {
         courseRoomService.updateCourseRoom(courseRoom);
     }
 
     @RequestMapping(value = "/courses/{courseID}/courserooms/{id}/comments", method = RequestMethod.GET)
-    public Set<Comment> getComments(@PathVariable("id") int id)
+    public Set<Comment> getCommentsForCourseRoom(@PathVariable("id") int id)
     {
-        return courseRoomService.getComments(id);
+        return courseRoomService.getCommentsForCourseRoom(id);
     }
 
 }

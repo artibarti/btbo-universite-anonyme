@@ -13,11 +13,8 @@ import java.util.Set;
 @CrossOrigin(origins = "http://localhost:4200")
 public interface QuestionRepository extends CrudRepository<Question, Integer>
 {
-    @Query("SELECT r FROM Rating as r WHERE r.refID = :id AND r.type = :type")
-    Set<Rating> getRatings(@Param("id") int id, @Param("type") Rating.RatingType type);
-
-    @Query("SELECT m FROM Comment as m WHERE m.refID = :id AND m.type = :type")
-    Set<Comment> getComments(@Param("id") int id, @Param("type") Comment.CommentType type);
+    @Query("SELECT q FROM Question as q JOIN q.session as s WHERE s.id = :id")
+    Set<Question> getQuestionsForSession(@Param("id") int id);
 
     String newsFeedQuestionsQuery =
             "SELECT * from question q " +

@@ -3,7 +3,9 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,16 @@ import java.util.Set;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final RatingRepository ratingRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository, RatingRepository ratingRepository,
+                           CommentRepository commentRepository)
+    {
         this.questionRepository = questionRepository;
+        this.ratingRepository = ratingRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<Question> getAllQuestions() {
@@ -30,8 +38,9 @@ public class QuestionService {
         return questionRepository.findById(id).orElse(null);
     }
 
-    public void addQuestion(@NonNull Question question) {
-        questionRepository.save(question);
+    public void addQuestionForSession(int id, @NonNull Question question)
+    {
+
     }
 
     public void deleteQuestion(int id)
@@ -44,14 +53,14 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public Set<Rating> getRatings(int id)
+    public Set<Rating> getRatingsForQuestion(int id)
     {
-        return questionRepository.getRatings(id, Rating.RatingType.QuestionRating);
+        return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.QuestionRating);
     }
 
-    public Set<Comment> getComments(int id)
+    public Set<Comment> getCommentsForQuestion(int id)
     {
-        return questionRepository.getComments(id, Comment.CommentType.QuestionComment);
+        return commentRepository.getCommentByTypeAndID(id, Comment.CommentType.QuestionComment);
     }
 
 }

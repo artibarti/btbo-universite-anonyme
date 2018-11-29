@@ -13,8 +13,8 @@ import java.util.Set;
 public interface CommentRepository extends CrudRepository<Comment, Integer>
 {
 
-    @Query("SELECT r FROM Rating as r WHERE r.refID = :id AND r.type = :type")
-    Set<Rating> getRatingsForComment(@Param("id") int id, @Param("type") Rating.RatingType type);
+    @Query("SELECT c FROM Comment as c WHERE c.refID = :id AND c.type = :type")
+    Set<Comment> getCommentByTypeAndID(@Param("id") int id, @Param("type") Comment.CommentType type);
 
     String newsFeedCommentsQuery =
             "SELECT * FROM comment c WHERE c.refid IN (" +

@@ -17,35 +17,9 @@ public class CourseController
     private final CourseService courseService;
 
     @Autowired
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService)
+    {
         this.courseService = courseService;
-    }
-
-    @RequestMapping(value = "/courses", method = RequestMethod.GET)
-    public List<CourseDTO> getAllCourses()
-    {
-        return courseService.getAllCourses()
-                .stream()
-                .map(Course::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    @RequestMapping(value = "/courses", method = RequestMethod.POST)
-    public void addCourse(@RequestBody Course course)
-    {
-        courseService.addCourse(course);
-    }
-
-    @RequestMapping(value = "/courses/{id}", method = RequestMethod.PUT)
-    public void updateCourse(@RequestBody Course course)
-    {
-        courseService.updateCourse(course);
-    }
-
-    @RequestMapping(value = "/courses/{id}", method = RequestMethod.DELETE)
-    public void deleteCourse(@PathVariable("id") int id)
-    {
-        courseService.deleteCourse(id);
     }
 
     @RequestMapping(value = "/courses/{id}", method = RequestMethod.GET)
@@ -54,20 +28,38 @@ public class CourseController
         return courseService.getCourse(id);
     }
 
+    @RequestMapping(value = "/courses/add", method = RequestMethod.POST)
+    public void addCourse(@RequestBody Course course)
+    {
+        courseService.addCourse(course);
+    }
+
+    @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.PUT)
+    public void updateCourse(@RequestBody Course course)
+    {
+        courseService.updateCourse(course);
+    }
+
+    @RequestMapping(value = "/courses/{id}/delete", method = RequestMethod.DELETE)
+    public void deleteCourse(@PathVariable("id") int id)
+    {
+        courseService.deleteCourse(id);
+    }
+
     @RequestMapping(value = "/courses/{id}/admins", method = RequestMethod.GET)
-    public Set<Admin> getCourseAdmins(@PathVariable("id") int id)
+    public Set<User> getCourseAdminsForCourse(@PathVariable("id") int id)
     {
         return courseService.getCourseAdmins(id);
     }
 
     @RequestMapping(value = "/courses/{id}/subs", method = RequestMethod.GET)
-    public Set<CourseSubs> getCourseSubs(@PathVariable("id") int id)
+    public Set<CourseSubs> getCourseSubsForCourse(@PathVariable("id") int id)
     {
         return courseService.getCourseSubs(id);
     }
 
     @RequestMapping(value = "/courses/{id}/rooms", method = RequestMethod.GET)
-    public Set<CourseRoom> getCourseRooms(@PathVariable("id") int id)
+    public Set<CourseRoom> getCourseRoomsForCourse(@PathVariable("id") int id)
     {
         return courseService.getCourseRooms(id);
     }

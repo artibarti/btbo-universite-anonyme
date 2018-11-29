@@ -3,6 +3,8 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Session;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.SessionRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
@@ -16,16 +18,21 @@ import java.util.Set;
 public class SessionService {
 
     private final SessionRepository sessionRepository;
+    private final RatingRepository ratingRepository;
+    private final QuestionRepository questionRepository;
 
     @Autowired
-    public SessionService(SessionRepository sessionRepository)
+    public SessionService(SessionRepository sessionRepository, RatingRepository ratingRepository,
+                          QuestionRepository questionRepository)
     {
         this.sessionRepository = sessionRepository;
+        this.ratingRepository = ratingRepository;
+        this.questionRepository = questionRepository;
     }
 
-    public List<Session> getAllSessions()
+    public Set<Session> getAllSessionsForCourse(int id)
     {
-        return Lists.newArrayList(sessionRepository.findAll());
+        return sessionRepository.getSessionsForCourse(id);
     }
 
     public Session getSession(int id)
@@ -33,13 +40,9 @@ public class SessionService {
         return sessionRepository.findById(id).orElse(null);
     }
 
-    public void addSession(@NonNull Session session) {
-        sessionRepository.save(session);
-    }
-
-    public Set<Question> getQuestionsForSession(int id)
+    public void addSession(int courseID, @NonNull Session session)
     {
-        return sessionRepository.getQuestionsForSession(id);
+
     }
 
     public void deleteSession(int id)
@@ -53,9 +56,14 @@ public class SessionService {
             sessionRepository.save(session);
     }
 
+    public Set<Question> getQuestionsForSession(int id)
+    {
+        return questionRepository.getQuestionsForSession(id);
+    }
+
     public Set<Rating> getRatingsForSession(int id)
     {
-        return sessionRepository.getRatingsForSession(id, Rating.RatingType.SessionRating);
+        return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.SessionRating);
     }
 
 }

@@ -13,10 +13,7 @@ import java.util.Set;
 @CrossOrigin(origins = "http://localhost:4200")
 public interface SessionRepository extends CrudRepository<Session, Integer>
 {
-    @Query("SELECT q FROM Question as q JOIN q.session as s WHERE s.id = :id")
-    Set<Question> getQuestionsForSession(@Param("id") int id);
-
-    @Query("SELECT r FROM Rating as r WHERE r.refID = :id AND r.type = :type")
-    Set<Rating> getRatingsForSession(@Param("id") int id, @Param("type") Rating.RatingType type);
+    @Query("SELECT s FROM Session as s JOIN s.course as c WHERE c.id = :id")
+    Set<Session> getSessionsForCourse(@Param("id") int id);
 
 }

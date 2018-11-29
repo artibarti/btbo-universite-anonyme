@@ -19,7 +19,8 @@ public class QuestionController
     private final QuestionService questionService;
 
     @Autowired
-    public QuestionController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService)
+    {
         this.questionService = questionService;
     }
 
@@ -29,33 +30,33 @@ public class QuestionController
         return questionService.getQuestion(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/add", method = RequestMethod.POST)
+    public void addQuestionForSession(@PathVariable("sessionID") int sessionID, @RequestBody Question question)
+    {
+        questionService.addQuestionForSession(sessionID, question);
+    }
+
+    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/delete", method = RequestMethod.DELETE)
     public void deleteQuestion(@PathVariable("id") int id)
     {
         questionService.deleteQuestion(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/update", method = RequestMethod.PUT)
     public void updateQuestion(@RequestBody Question question)
     {
         questionService.updateQuestion(question);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/", method = RequestMethod.POST)
-    public void addQuestion(@RequestBody Question question)
-    {
-        questionService.addQuestion(question);
-    }
-
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/ratings", method = RequestMethod.GET)
     public Set<Rating> getRatingsForQuestion(@PathVariable("id") int id)
     {
-        return questionService.getRatings(id);
+        return questionService.getRatingsForQuestion(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/comments", method = RequestMethod.GET)
     public Set<Comment> getCommentsForQuestion(@PathVariable("id") int id)
     {
-        return questionService.getComments(id);
+        return questionService.getCommentsForQuestion(id);
     }
 }

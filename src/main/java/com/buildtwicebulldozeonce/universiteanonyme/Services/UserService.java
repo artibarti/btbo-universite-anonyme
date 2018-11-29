@@ -3,8 +3,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.PasswordHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.TokenHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
-import com.buildtwicebulldozeonce.universiteanonyme.Repositories.AnonUserRepository;
-import com.buildtwicebulldozeonce.universiteanonyme.Repositories.UserRepository;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -22,16 +21,17 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AnonUserRepository anonUserRepository;
+    private final CourseRepository courseRepository;
+    private  final RatingRepository ratingRepository;
     private List<Triplet<String, User, AnonUser>> loggedInUsers = new ArrayList<Triplet<String, User, AnonUser>>();
 
     @Autowired
-    public UserService(UserRepository userRepository, AnonUserRepository anonUserRepository) {
+    public UserService(UserRepository userRepository, AnonUserRepository anonUserRepository,
+                       CourseRepository courseRepository, RatingRepository ratingRepository) {
         this.userRepository = userRepository;
         this.anonUserRepository = anonUserRepository;
-    }
-
-    public List<User> getAllUsers() {
-        return Lists.newArrayList(userRepository.findAll());
+        this.courseRepository = courseRepository;
+        this.ratingRepository = ratingRepository;
     }
 
     public User getUser(int id) {
@@ -42,41 +42,31 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Set<Admin> getAdminRolesForUser(int id) {
-        return userRepository.getAdminRolesForUser(id);
-    }
-
-    public Set<Comment> getAllCommentsFromUser(int id) {
-        return userRepository.getAllCommentsFromUser(id);
-    }
-
-    public Set<Course> getCoursesCreatedByUser(int id) {
-        return userRepository.getCoursesCreatedByUser(id);
-    }
-
-    public Set<Question> getAllQuestionsFromUser(int id) {
-        // int anonID = getAnonIDForUser(id);
-        return userRepository.getAllQuestionsFromUser(id);
-    }
-
-    public Set<Rating> getAllRatingsFromUser(int id) {
-        return userRepository.getAllRatingsFromUser(id);
+    public void addAnonUser(@NonNull AnonUser anonUser) {
+        anonUserRepository.save(anonUser);
     }
 
     public void deleteUser(int id) {
         userRepository.deleteById(id);
     }
 
-    public void updateUser(User user) {
+    public Set<Course> getCoursesAdminedByUser(int id) {
+        return courseRepository.getCoursesAdminedByUser(id);
+    }
+
+    public void updateUser(User user)
+    {
         if (userRepository.existsById(user.getId()))
             userRepository.save(user);
     }
 
-    public boolean checkIfUserExists(String email) {
-        return userRepository.findByEmail(email) != null;
+    public boolean isUserNameAlreadyTaken(String userName)
+    {
+        return anonUserRepository.findByAnonName(userName) != null;
     }
 
-    public User authenticateUser(String anonName, String password) {
+    public User authenticateUser(String anonName, String password)
+    {
         log.info("authenticate user with email: " + anonName + " and password: " + password);
 
         AnonUser anonUser = anonUserRepository.findByAnonName(anonName);
@@ -103,7 +93,12 @@ public class UserService {
 
         loggedInUsers.add(new Triplet<>(token, user, anonUser));
 
-        System.out.println("trying to authenticate user with username: " + anonName + " and password: " + doubleHashedPassword);
+        log.info("trying to authenticate user with username: " + anonName + " and password: " + doubleHashedPassword);
         return user;
+    }
+
+    public boolean checkIfEmailIsUsed(String email)
+    {
+        return userRepository.findByEmail(email) != null;
     }
 }

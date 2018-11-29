@@ -1,7 +1,7 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
-import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CourseRepository;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +15,32 @@ import java.util.Set;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final RatingRepository ratingRepository;
+    private final UserRepository userRepository;
+    private final CourseSubsRepository courseSubsRepository;
+    private final CourseRoomRepository courseRoomRepository;
+    private final SessionRepository sessionRepository;
 
     @Autowired
-    public CourseService(CourseRepository courseRepository) {
+    public CourseService(CourseRepository courseRepository, RatingRepository ratingRepository,
+                         UserRepository userRepository, CourseSubsRepository courseSubsRepository,
+                         CourseRoomRepository courseRoomRepository, SessionRepository sessionRepository)
+    {
         this.courseRepository = courseRepository;
+        this.ratingRepository = ratingRepository;
+        this.userRepository = userRepository;
+        this.courseSubsRepository = courseSubsRepository;
+        this.courseRoomRepository = courseRoomRepository;
+        this.sessionRepository = sessionRepository;
     }
 
-    public List<Course> getAllCourses() {
-        return Lists.newArrayList(courseRepository.findAll());
-    }
-
-    public Course getCourse(int id) {
+    public Course getCourse(int id)
+    {
         return courseRepository.findById(id).orElse(null);
     }
 
-    public void addCourse(@NonNull Course course) {
+    public void addCourse(@NonNull Course course)
+    {
         courseRepository.save(course);
     }
 
@@ -44,29 +55,29 @@ public class CourseService {
         courseRepository.deleteById(id);
     }
 
-    public Set<Admin> getCourseAdmins(int id)
+    public Set<User> getCourseAdmins(int id)
     {
-        return courseRepository.getCourseAdmins(id);
+        return userRepository.getCourseAdmins(id);
     }
 
     public Set<CourseSubs> getCourseSubs(int id)
     {
-        return courseRepository.getCourseSubs(id);
+        return courseSubsRepository.getCourseSubsForCourse(id);
     }
 
     public Set<CourseRoom> getCourseRooms(int id)
     {
-        return courseRepository.getCourseRooms(id);
+        return courseRoomRepository.getCourseRoomsForCourse(id);
     }
 
     public Set<Session> getSessionsForCourse(int id)
     {
-        return courseRepository.getSessionsForCourse(id);
+        return sessionRepository.getSessionsForCourse(id);
     }
 
     public Set<Rating> getRatingsForCourse(int id)
     {
-        return courseRepository.getRatingsForCourse(id, Rating.RatingType.CourseRating);
+        return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CourseRating);
     }
 
 }

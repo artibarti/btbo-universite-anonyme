@@ -2,6 +2,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.CourseRoom;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CourseRoomRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
@@ -15,27 +16,27 @@ import java.util.Set;
 public class CourseRoomService {
 
     private final CourseRoomRepository courseRoomRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public CourseRoomService(CourseRoomRepository courseRoomRepository) {
+    public CourseRoomService(CourseRoomRepository courseRoomRepository, CommentRepository commentRepository) {
         this.courseRoomRepository = courseRoomRepository;
+        this.commentRepository = commentRepository;
     }
 
-    public List<CourseRoom> getAllCourseRooms() {
-        return Lists.newArrayList(courseRoomRepository.findAll());
-    }
-
-    public CourseRoom getCourseRoom(int id) {
+    public CourseRoom getCourseRoom(int id)
+    {
         return courseRoomRepository.findById(id).orElse(null);
     }
 
-    public void addCourseRoom(@NonNull CourseRoom courseRoom) {
+    public void addCourseRoom(@NonNull CourseRoom courseRoom)
+    {
         courseRoomRepository.save(courseRoom);
     }
 
-    public Set<Comment> getComments(int id)
+    public Set<Comment> getCommentsForCourseRoom(int id)
     {
-        return courseRoomRepository.getComments(id, Comment.CommentType.CourseRoomComment);
+        return commentRepository.getCommentByTypeAndID(id, Comment.CommentType.CourseRoomComment);
     }
 
     public void updateCourseRoom(CourseRoom courseRoom)

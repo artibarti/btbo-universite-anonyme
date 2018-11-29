@@ -3,6 +3,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +16,21 @@ import java.util.Set;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final RatingRepository ratingRepository;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository) {
+    public CommentService(CommentRepository commentRepository, RatingRepository ratingRepository) {
         this.commentRepository = commentRepository;
+        this.ratingRepository = ratingRepository;
     }
 
-    public List<Comment> getAllComments() {
-        return Lists.newArrayList(commentRepository.findAll());
-    }
-
-    public Comment getComment(int id) {
+    public Comment getComment(int id)
+    {
         return commentRepository.findById(id).orElse(null);
     }
 
-    public void addComment(@NonNull Comment comment) {
+    public void addComment(@NonNull Comment comment)
+    {
         commentRepository.save(comment);
     }
 
@@ -45,6 +46,6 @@ public class CommentService {
 
     public Set<Rating> getRatingsForComment(int id)
     {
-        return commentRepository.getRatingsForComment(id, Rating.RatingType.CommentRating);
+        return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CommentRating);
     }
 }

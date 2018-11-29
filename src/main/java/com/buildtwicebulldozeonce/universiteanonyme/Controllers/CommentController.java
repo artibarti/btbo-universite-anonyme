@@ -26,19 +26,19 @@ public class CommentController
         return commentService.getComment(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments", method = RequestMethod.POST)
+    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/add", method = RequestMethod.POST)
     public void addComment(@RequestBody Comment comment)
     {
         commentService.addComment(comment);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}/delete", method = RequestMethod.DELETE)
     public void deleteComment(@PathVariable("id") int id)
     {
         commentService.deleteComment(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}/update", method = RequestMethod.PUT)
     public void updateComment(@RequestBody Comment comment)
     {
         commentService.updateComment(comment);

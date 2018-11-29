@@ -29,6 +29,12 @@ public class SessionController
         return sessionService.getSession(id);
     }
 
+    @RequestMapping(value = "/courses/{courseID}/sessions", method = RequestMethod.GET)
+    public Set<Session> getAllSessionsForCourse(@PathVariable("courseID") int courseID)
+    {
+        return sessionService.getAllSessionsForCourse(courseID);
+    }
+
     @RequestMapping(value = "/courses/{courseID}/sessions/{id}/questions", method = RequestMethod.GET)
     public Set<Question> getQuestionsForSession(@PathVariable("courseID") int courseID, @PathVariable("id") int id)
     {
@@ -36,18 +42,18 @@ public class SessionController
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/", method = RequestMethod.POST)
-    public void addSessionForCourse(@RequestBody Session session)
+    public void addSession(@PathVariable("courseID") int courseID, @RequestBody Session session)
     {
-        sessionService.addSession(session);
+        sessionService.addSession(courseID, session);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{id}", method = RequestMethod.DELETE)
-    public void deleteSessionFromCourse(@PathVariable("id") int id)
+    @RequestMapping(value = "/courses/{courseID}/sessions/{id}/delete", method = RequestMethod.DELETE)
+    public void deleteSession(@PathVariable("id") int id)
     {
         sessionService.deleteSession(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/courses/{courseID}/sessions/{id}/update", method = RequestMethod.PUT)
     public void updateSession(@RequestBody Session session)
     {
         sessionService.updateSession(session);
