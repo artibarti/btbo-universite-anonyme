@@ -71,7 +71,7 @@ public class NewsFeedService
 
         Set<Comment> comments = commentRepository.getNewsFeedCommentsForUser(id);
         Set<Question> questions = questionRepository.getNewsFeedQuestionsForUser(id);
-        Set<Rating> ratings = ratingRepository.getNewsFeedRatingsForUser(id, Rating.RatingType.CourseRating, Rating.RatingType.CommentRating, Rating.RatingType.QuestionRating);
+        Set<Rating> ratings = ratingRepository.getNewsFeedRatingsForUser(id);
 
         comments.stream()
             .forEach(p -> news.add(convertCommentToNews(p)));
