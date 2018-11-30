@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Set;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public interface QuestionRepository extends CrudRepository<Question, Integer>
 {
     @Query("SELECT q FROM Question as q JOIN q.session as s WHERE s.id = :id")

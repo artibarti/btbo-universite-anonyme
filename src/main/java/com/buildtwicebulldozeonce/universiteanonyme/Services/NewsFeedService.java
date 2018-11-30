@@ -5,6 +5,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.News;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
+import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CourseRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +20,24 @@ public class NewsFeedService
     private final CommentRepository commentRepository;
     private final QuestionRepository questionRepository;
     private final RatingRepository ratingRepository;
+    private final CourseRepository courseRepository;
 
     @Autowired
-    public NewsFeedService(CommentRepository commentRepository, QuestionRepository questionRepository, RatingRepository ratingRepository)
+    public NewsFeedService(CommentRepository commentRepository, QuestionRepository questionRepository,
+                           RatingRepository ratingRepository, CourseRepository courseRepository)
     {
         this.commentRepository = commentRepository;
         this.questionRepository = questionRepository;
         this.ratingRepository = ratingRepository;
+        this.courseRepository = courseRepository;
     }
 
     private News convertRatingToNews(Rating rating)
     {
         News news = new News();
         news.setRefID(rating.getRefID());
-        news.setRefName("");
         news.setAnonUserName(rating.getAnonUser().getAnonName());
-        news.setType("Rating");
+        news.setType(rating.getType().toString());
         news.setTimestamp(rating.getTimestamp());
         return news;
     }
@@ -78,7 +81,7 @@ public class NewsFeedService
             .forEach(p -> news.add(convertRatingToNews(p)));
 
         return news.stream()
-            .sorted(Comparator.comparing(News::getTimestamp))
+            .sorted(Comparator.comparing(News::getTimestamp).reversed())
             .collect(Collectors.toList());
     }
 

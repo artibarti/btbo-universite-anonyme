@@ -38,9 +38,8 @@ public class User {
     @Transient
     private AnonUser anonUser;
 
-    //TODO: picture
-
-    public UserDTO convertToDTO() {
+    public UserDTO convertToDTO()
+    {
         return new UserDTO(this.id, this.firstName, this.lastName, this.email);
     }
 }

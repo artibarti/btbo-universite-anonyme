@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -101,4 +102,10 @@ public class UserService {
     {
         return userRepository.findByEmail(email) != null;
     }
+
+    public Set<Course> getSubscribtionsForUser(int id)
+    {
+        return this.courseRepository.getSubscribtionsForUser(id);
+    }
+
 }

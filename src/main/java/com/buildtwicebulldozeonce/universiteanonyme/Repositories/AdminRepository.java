@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Set;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public interface AdminRepository extends CrudRepository<Admin, Integer>
 {
     @Query(value = "SELECT a FROM Admin as a JOIN a.user as u WHERE u.id = :userID")

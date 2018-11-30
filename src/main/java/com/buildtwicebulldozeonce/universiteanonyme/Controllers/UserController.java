@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @Log
 public class UserController {
@@ -79,9 +79,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
-    public void addUser(@RequestBody User user)
+    public void addUser(@RequestBody UserDTO user)
     {
-        userService.addUser(user);
+        log.info("/users/add endpoint reached");
+        // userService.addUser(user);
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
@@ -97,15 +98,32 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{id}/update", method = RequestMethod.PUT)
-    public void updateUser(@RequestBody User user)
+    public void updateUser(@PathVariable int id, @RequestBody UserDTO user)
     {
-        userService.updateUser(user);
+        log.info("/users/" + id + "/update endpoint reached");
+        log.info("Reading request body...");
+        log.info("user.firstname: " + user.getFirstName());
+        log.info("user.lastname: " + user.getLastName());
+        log.info("user.email: " + user.getEmail());
+        // userService.updateUser(user);
     }
 
     @RequestMapping(value = "/users/{id}/adminroles", method = RequestMethod.GET)
     public Set<CourseSlimDTO> getAdminRolesForUser(@PathVariable int id)
     {
+        log.info("/users/" + id + "/adminroles endpoint reached");
+
         return userService.getCoursesAdminedByUser(id).stream()
+                .map(Course::convertToSlimDTO)
+                .collect(Collectors.toSet());
+    }
+
+    @RequestMapping(value = "/users/{id}/subs", method = RequestMethod.GET)
+    public Set<CourseSlimDTO> getSubscribtions(@PathVariable int id)
+    {
+        log.info("/users/" + id + "/subs endpoint reached");
+
+        return userService.getSubscribtionsForUser(id).stream()
                 .map(Course::convertToSlimDTO)
                 .collect(Collectors.toSet());
     }

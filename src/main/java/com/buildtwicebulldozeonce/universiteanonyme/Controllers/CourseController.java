@@ -3,13 +3,15 @@ package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
+@Log
 public class CourseController
 {
     private final CourseService courseService;
@@ -27,9 +29,13 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses/add", method = RequestMethod.POST)
-    public void addCourse(@RequestBody Course course)
+    public void addCourse(@RequestBody CourseFatDTO course)
     {
-        courseService.addCourse(course);
+        log.info("/courses/add endpoint reached");
+        log.info("Reading request body...");
+        log.info("course.name: " + course.getName());
+        log.info("course.description" + course.getDescription());
+        // courseService.addCourse(course);
     }
 
     @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.PUT)

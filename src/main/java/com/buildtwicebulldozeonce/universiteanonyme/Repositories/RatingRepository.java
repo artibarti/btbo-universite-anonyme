@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Set;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public interface RatingRepository extends CrudRepository<Rating, Integer>
 {
     @Query(value = "SELECT r FROM Rating as r JOIN r.user as u WHERE u.id = :id")

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Set;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public interface UserRepository extends CrudRepository<User, Integer>
 {
     User findByDoubleHashedPassword(String doubleHashedPassword);
