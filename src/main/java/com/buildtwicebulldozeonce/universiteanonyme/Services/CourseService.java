@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
 import com.google.common.collect.Lists;
@@ -78,6 +79,19 @@ public class CourseService {
     public Set<Rating> getRatingsForCourse(int id)
     {
         return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CourseRating);
+    }
+
+    public CourseRatingDTO getRatingSumForCourse(int id)
+    {
+        Set<Rating> ratings = ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CourseRating);
+        CourseRatingDTO courseRatingDTO = new CourseRatingDTO();
+        courseRatingDTO.setNumberOfRatings(ratings.size());
+        if (ratings.size() != 0)
+            courseRatingDTO.setSum(ratings.stream().mapToInt(Rating::getValue).sum() / ratings.size());
+        else
+            courseRatingDTO.setSum(0);
+
+        return courseRatingDTO;
     }
 
 }

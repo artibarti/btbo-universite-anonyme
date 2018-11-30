@@ -1,6 +1,7 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
 import lombok.extern.java.Log;
@@ -78,5 +79,11 @@ public class CourseController
     public Set<Rating> getRatingsForCourse(@PathVariable("id") int id)
     {
         return courseService.getRatingsForCourse(id);
+    }
+
+    @RequestMapping(value = "/courses/{id}/ratings/sum", method = RequestMethod.GET)
+    public CourseRatingDTO getRatingSumForCourse(@PathVariable("id") int id)
+    {
+        return courseService.getRatingSumForCourse(id);
     }
 }
