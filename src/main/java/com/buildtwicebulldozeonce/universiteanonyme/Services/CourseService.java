@@ -5,14 +5,20 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Log
 public class CourseService {
 
     private final CourseRepository courseRepository;
@@ -21,11 +27,14 @@ public class CourseService {
     private final CourseSubsRepository courseSubsRepository;
     private final CourseRoomRepository courseRoomRepository;
     private final SessionRepository sessionRepository;
+    private final CommentRepository commentRepository;
+    private final QuestionRepository questionRepository;
 
     @Autowired
     public CourseService(CourseRepository courseRepository, RatingRepository ratingRepository,
                          UserRepository userRepository, CourseSubsRepository courseSubsRepository,
-                         CourseRoomRepository courseRoomRepository, SessionRepository sessionRepository)
+                         CourseRoomRepository courseRoomRepository, SessionRepository sessionRepository,
+                         CommentRepository commentRepository, QuestionRepository questionRepository)
     {
         this.courseRepository = courseRepository;
         this.ratingRepository = ratingRepository;
@@ -33,6 +42,8 @@ public class CourseService {
         this.courseSubsRepository = courseSubsRepository;
         this.courseRoomRepository = courseRoomRepository;
         this.sessionRepository = sessionRepository;
+        this.commentRepository = commentRepository;
+        this.questionRepository = questionRepository;
     }
 
     public Course getCourse(int id)
@@ -94,4 +105,38 @@ public class CourseService {
         return courseRatingDTO;
     }
 
+    public List<Integer> getPulseForCourse(int id)
+    {
+        List<Integer> dailyPulseOnTheLast7Days = new ArrayList<>();
+        LocalTime midnight = LocalTime.MIDNIGHT;
+        LocalDate today = LocalDate.now();
+        LocalDateTime todayMidnight = LocalDateTime.of(today, midnight).plusDays(1);
+
+        Set<Comment> comments = commentRepository.getCommentsForCourse(id);
+        Set<Question> questions = questionRepository.getQuestionsForCourse(id);
+
+        for (int i = 0; i<7; i++)
+        {
+            // make it useable in filtering
+            final int static_i = i;
+
+            int numberOfComments;
+            int numberOfQuestions;
+
+            numberOfComments = (int)
+                    comments.stream()
+                    .filter(p -> p.getTimestamp().isBefore(todayMidnight.minusDays(static_i)))
+                    .filter(p -> p.getTimestamp().isAfter(todayMidnight.minusDays(static_i + 1)))
+                    .count();
+            numberOfQuestions = (int)
+                    questions.stream()
+                    .filter(p -> p.getTimestamp().isBefore(todayMidnight.minusDays(static_i)))
+                    .filter(p -> p.getTimestamp().isAfter(todayMidnight.minusDays(static_i + 1)))
+                    .count();
+
+            dailyPulseOnTheLast7Days.add(numberOfComments + numberOfQuestions);
+            log.info("minusdays: " + i + " " + numberOfComments + " " + numberOfQuestions);
+        }
+        return dailyPulseOnTheLast7Days;
+    }
 }

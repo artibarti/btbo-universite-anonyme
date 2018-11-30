@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @CrossOrigin(origins = "*")
@@ -29,4 +30,15 @@ public interface CommentRepository extends CrudRepository<Comment, Integer>
                     "LIMIT 20";
     @Query(value = newsFeedCommentsQuery, nativeQuery = true)
     Set<Comment> getNewsFeedCommentsForUser(@Param("id") int id);
+
+
+    String commentsForCourseQuery =
+            "SELECT * FROM comment c WHERE c.refid IN (" +
+                    "SELECT cr.id from course_room cr " +
+                    "WHERE cr.course_id = :id UNION " +
+                    "SELECT q.id from question q " +
+                    "WHERE q.session_id IN (SELECT s.id FROM session s " +
+                    "WHERE s.course_id = :id))";
+    @Query(value = commentsForCourseQuery, nativeQuery = true)
+    Set<Comment> getCommentsForCourse(@Param("id") int id);
 }

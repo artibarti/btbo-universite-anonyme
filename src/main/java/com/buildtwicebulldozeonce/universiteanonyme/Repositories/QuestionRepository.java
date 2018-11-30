@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @CrossOrigin(origins = "*")
@@ -25,4 +26,12 @@ public interface QuestionRepository extends CrudRepository<Question, Integer>
                     "LIMIT 20";
     @Query(value = newsFeedQuestionsQuery, nativeQuery = true)
     Set<Question> getNewsFeedQuestionsForUser(@Param("id") int id);
+
+    String questionsForCourseQuery =
+            "SELECT * from question q " +
+                    "WHERE q.session_id IN (" +
+                    "SELECT s.id FROM session s " +
+                    "WHERE s.course_id = :id)";
+    @Query(value = questionsForCourseQuery, nativeQuery = true)
+    Set<Question> getQuestionsForCourse(@Param("id") int id);
 }

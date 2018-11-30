@@ -8,6 +8,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @CrossOrigin(origins = "*")
@@ -85,5 +86,11 @@ public class CourseController
     public CourseRatingDTO getRatingSumForCourse(@PathVariable("id") int id)
     {
         return courseService.getRatingSumForCourse(id);
+    }
+
+    @RequestMapping(value = "/courses/{id}/pulse", method = RequestMethod.GET)
+    public List<Integer> getPulseForCourse(@PathVariable("id") int id)
+    {
+        return courseService.getPulseForCourse(id);
     }
 }
