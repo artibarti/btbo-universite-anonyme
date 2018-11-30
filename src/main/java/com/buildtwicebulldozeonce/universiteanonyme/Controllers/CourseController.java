@@ -64,6 +64,12 @@ public class CourseController
         return courseService.getCourseSubs(id);
     }
 
+    @RequestMapping(value = "/courses/{id}/subs/sum", method = RequestMethod.GET)
+    public Integer getCourseSubsSumForCourse(@PathVariable("id") int id)
+    {
+        return courseService.getCourseSubs(id).size();
+    }
+
     @RequestMapping(value = "/courses/{id}/rooms", method = RequestMethod.GET)
     public Set<CourseRoom> getCourseRoomsForCourse(@PathVariable("id") int id)
     {
