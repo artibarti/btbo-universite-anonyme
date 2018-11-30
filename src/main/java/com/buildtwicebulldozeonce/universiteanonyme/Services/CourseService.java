@@ -135,7 +135,6 @@ public class CourseService {
                     .count();
 
             dailyPulseOnTheLast7Days.add(numberOfComments + numberOfQuestions);
-            log.info("minusdays: " + i + " " + numberOfComments + " " + numberOfQuestions);
         }
         return dailyPulseOnTheLast7Days;
     }
