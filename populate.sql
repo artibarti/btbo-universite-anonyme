@@ -27,16 +27,16 @@ DELETE FROM `anon_user`;
 COMMIT;
 
 /* add users */
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (101,"hashedpwd","kistetu123@gmail.com","Kiss Tetu");
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (102,"hashedpwd2","adamkovacs@gmail.com","Tibódi Purk");
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (103,"hashedpwd2","kisskarola@gmail.com","Rejszting Ádám");
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (104,"hashedpwd2","nemazalany@gmail.com","Horvát Lót");
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (105,"hashedpwd2","deftones34@gmail.com","Kovács Aranka");
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (106,"hashedpwd2","kisfiu@gmail.com","Kiss Fia");
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (107,"hashedpwd2","kislany@gmail.com","Kiss Lany");
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (108,"hashedpwd2","anya@gmail.com","Anya");
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (109,"hashedpwd2","Lanadelraj@gmail.com","Hesteg Tchaj");
-INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `name`) VALUES (110,"hashedpwd2","vonattamas@gmail.com","Vonat Tamás");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (101,"hashedpwd","kistetu123@gmail.com","Kiss", "Tetu");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (102,"hashedpwd2","adamkovacs@gmail.com","Tibódi", "Purk");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (103,"hashedpwd2","kisskarola@gmail.com","Rejszting", "Ádám");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (104,"hashedpwd2","nemazalany@gmail.com","Horvát", "Lót");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (105,"hashedpwd2","deftones34@gmail.com","Kovács", "Aranka");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (106,"hashedpwd2","kisfiu@gmail.com","Kiss", "Fia");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (107,"hashedpwd2","kislany@gmail.com","Kiss", "Lany");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (108,"hashedpwd2","anya@gmail.com","An", "ya");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (109,"hashedpwd2","Lanadelraj@gmail.com","Hesteg", "Tchaj");
+INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (110,"hashedpwd2","vonattamas@gmail.com","Vonat", "Tamás");
 
 /* add anon user */
 INSERT INTO `anon_user`(`id`, `anon_name`, `hashed_password`) VALUES (1, "anonymous", "hashdpwd");

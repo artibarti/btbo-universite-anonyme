@@ -24,15 +24,15 @@ public class TestDataController {
 
     @RequestMapping(value = "/createTestData")
     public void createTestData() {
-        var user = User.builder()
-                .name("TestUser0")
+        User user = User.builder()
+                .firstName("TestUser0")
                 .build();
 
-        var user2 = User.builder()
-                .name("TestUser2")
+        User user2 = User.builder()
+                .firstName("TestUser2")
                 .build();
 
-        var course = Course.builder()
+        Course course = Course.builder()
                 .name("TestCourse0")
                 .owner(user)
                 .inviteCode("VLBIA5")

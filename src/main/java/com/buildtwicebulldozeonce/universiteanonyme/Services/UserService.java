@@ -66,25 +66,23 @@ public class UserService {
         return anonUserRepository.findByAnonName(userName) != null;
     }
 
-    public User authenticateUser(String anonName, String password)
+    public User authenticateUser(String anonName, String hashedPassword)
     {
-        log.info("authenticate user with email: " + anonName + " and password: " + password);
+        log.info("authenticate user with email: " + anonName + " and hashedPassword: " + hashedPassword);
 
         AnonUser anonUser = anonUserRepository.findByAnonName(anonName);
 
 
-        if (anonUser == null || !PasswordHelper.comparePassword(anonUser.getHashedPassword(), password)) {
-            log.warning("no anonuser found");
-            log.warning(anonUser.getHashedPassword());
-            log.warning(password);
+        if (anonUser == null || !anonUser.getHashedPassword().equals(hashedPassword)) {
+            log.warning("No AnonUser found with username: " + anonName);
             return null;
         }
-        //TODO salt
-        String doubleHashedPassword = PasswordHelper.hashPassword(anonUser.getHashedPassword(), password);
+
+        String doubleHashedPassword = PasswordHelper.hashPassword(anonUser.getHashedPassword(), hashedPassword);
         User user = userRepository.findByDoubleHashedPassword(doubleHashedPassword);
 
         if (user == null) {
-            log.warning("no user found with :" + doubleHashedPassword +" doubleHashedPassword");
+            log.warning("No user found by doubleHashedPassword :" + doubleHashedPassword);
             return null;
         }
 
@@ -94,7 +92,7 @@ public class UserService {
 
         loggedInUsers.add(new Triplet<>(token, user, anonUser));
 
-        log.info("trying to authenticate user with username: " + anonName + " and password: " + doubleHashedPassword);
+        log.info("Successfully authenticated user with username: " + anonName + " and hashedPassword: " + doubleHashedPassword);
         return user;
     }
 
@@ -108,4 +106,8 @@ public class UserService {
         return this.courseRepository.getSubscribtionsForUser(id);
     }
 
+    public AnonUser getAnonUserByUserName(String userName)
+    {
+        return anonUserRepository.findByAnonName(userName);
+    }
 }

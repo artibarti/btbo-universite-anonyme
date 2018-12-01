@@ -63,7 +63,7 @@ public class UserController {
         {
             AnonUser anonUser = AnonUser.builder()
                     .anonName(userName)
-                    .hashedPassword(PasswordHelper.hashPassword(password,""))
+                    .hashedPassword(password)
                     .build();
             User user = User.builder()
                     .firstName(firstName)
