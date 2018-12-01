@@ -24,7 +24,7 @@ public class UserService {
     private final AnonUserRepository anonUserRepository;
     private final CourseRepository courseRepository;
     private  final RatingRepository ratingRepository;
-    private List<Triplet<String, User, AnonUser>> loggedInUsers = new ArrayList<Triplet<String, User, AnonUser>>();
+    private List<Triplet<String, User, AnonUser>> loggedInUsers = new ArrayList<>();
 
     @Autowired
     public UserService(UserRepository userRepository, AnonUserRepository anonUserRepository,
@@ -89,7 +89,7 @@ public class UserService {
         anonUser.setUser(user);
         user.setAnonUser(anonUser);
         String token = TokenHelper.generateToken();
-
+        user.setToken(token);
         loggedInUsers.add(new Triplet<>(token, user, anonUser));
 
         log.info("Successfully authenticated user with username: " + anonName + " and hashedPassword: " + doubleHashedPassword);
@@ -109,5 +109,32 @@ public class UserService {
     public AnonUser getAnonUserByUserName(String userName)
     {
         return anonUserRepository.findByAnonName(userName);
+    }
+
+    public Triplet<String, User, AnonUser> getLoggedInUser(String token)
+    {
+        return loggedInUsers
+                .stream()
+                .filter(triplet -> triplet.getValue0().equals(token))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Triplet<String, User, AnonUser> getLoggedInUserByUserId(int userId)
+    {
+        return loggedInUsers
+                .stream()
+                .filter(triplet -> triplet.getValue1().getId() == userId)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Triplet<String, User, AnonUser> getLoggedInUserByAnonUserId(int anonUserId)
+    {
+        return loggedInUsers
+                .stream()
+                .filter(triplet -> triplet.getValue2().getId() == anonUserId)
+                .findFirst()
+                .orElse(null);
     }
 }

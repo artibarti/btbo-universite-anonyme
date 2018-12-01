@@ -49,5 +49,4 @@ public class CommentController
     {
         return commentService.getRatingsForComment(id);
     }
-
 }

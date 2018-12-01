@@ -26,6 +26,9 @@ public class User {
     private Permissions permissions;
 
     @Transient
+    public String Token;
+
+    @Transient
     private Set<Admin> adminRoles;
     @Transient
     private Set<Comment> comments;
@@ -40,6 +43,6 @@ public class User {
 
     public UserDTO convertToDTO()
     {
-        return new UserDTO(this.id, this.firstName, this.lastName, this.email);
+        return new UserDTO(this.Token, this.firstName, this.lastName, this.email);
     }
 }
