@@ -1,6 +1,7 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CoursePulseDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
@@ -95,7 +96,7 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses/{id}/pulse", method = RequestMethod.GET)
-    public List<Integer> getPulseForCourse(@PathVariable("id") int id)
+    public List<CoursePulseDTO> getPulseForCourse(@PathVariable("id") int id)
     {
         return courseService.getPulseForCourse(id);
     }

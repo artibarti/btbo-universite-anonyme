@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CoursePulseDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
@@ -105,9 +106,9 @@ public class CourseService {
         return courseRatingDTO;
     }
 
-    public List<Integer> getPulseForCourse(int id)
+    public List<CoursePulseDTO> getPulseForCourse(int id)
     {
-        List<Integer> dailyPulseOnTheLast7Days = new ArrayList<>();
+        List<CoursePulseDTO> dailyPulseOnTheLast7Days = new ArrayList<>();
         LocalTime midnight = LocalTime.MIDNIGHT;
         LocalDate today = LocalDate.now();
         LocalDateTime todayMidnight = LocalDateTime.of(today, midnight).plusDays(1);
@@ -120,6 +121,7 @@ public class CourseService {
             // make it useable in filtering
             final int static_i = i;
 
+            String day;
             int numberOfComments;
             int numberOfQuestions;
 
@@ -133,9 +135,17 @@ public class CourseService {
                     .filter(p -> p.getTimestamp().isBefore(todayMidnight.minusDays(static_i)))
                     .filter(p -> p.getTimestamp().isAfter(todayMidnight.minusDays(static_i + 1)))
                     .count();
+            day = LocalDate.now().minusDays(static_i).getDayOfWeek().toString().toLowerCase();
 
-            dailyPulseOnTheLast7Days.add(numberOfComments + numberOfQuestions);
+            CoursePulseDTO coursePulseDTO = new CoursePulseDTO();
+
+            coursePulseDTO.setDay(day);
+            coursePulseDTO.setCommentPulse(numberOfComments);
+            coursePulseDTO.setQuestionPulse(numberOfQuestions);
+
+            dailyPulseOnTheLast7Days.add(coursePulseDTO);
         }
+
         return dailyPulseOnTheLast7Days;
     }
 }
