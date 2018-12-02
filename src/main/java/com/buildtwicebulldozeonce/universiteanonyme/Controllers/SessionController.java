@@ -29,12 +29,6 @@ public class SessionController
         return sessionService.getSession(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions", method = RequestMethod.GET)
-    public Set<Session> getAllSessionsForCourse(@PathVariable("courseID") int courseID)
-    {
-        return sessionService.getAllSessionsForCourse(courseID);
-    }
-
     @RequestMapping(value = "/courses/{courseID}/sessions/{id}/questions", method = RequestMethod.GET)
     public Set<Question> getQuestionsForSession(@PathVariable("courseID") int courseID, @PathVariable("id") int id)
     {

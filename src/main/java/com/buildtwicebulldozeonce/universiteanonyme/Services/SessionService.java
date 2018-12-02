@@ -30,11 +30,6 @@ public class SessionService {
         this.questionRepository = questionRepository;
     }
 
-    public Set<Session> getAllSessionsForCourse(int id)
-    {
-        return sessionRepository.getSessionsForCourse(id);
-    }
-
     public Session getSession(int id)
     {
         return sessionRepository.findById(id).orElse(null);

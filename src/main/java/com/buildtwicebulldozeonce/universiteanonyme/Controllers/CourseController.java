@@ -100,4 +100,10 @@ public class CourseController
     {
         return courseService.getPulseForCourse(id);
     }
+
+    @RequestMapping(value = "/courses/{courseID}/sessions", method = RequestMethod.GET)
+    public Set<Session> getAllSessionsForCourse(@PathVariable("courseID") int courseID)
+    {
+        return courseService.getSessionsForCourse(courseID);
+    }
 }
