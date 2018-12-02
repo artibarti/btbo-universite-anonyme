@@ -119,11 +119,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{id}/subs", method = RequestMethod.GET)
-    public Set<CourseSlimDTO> getSubscribtions(@PathVariable int id)
+    public Set<CourseSlimDTO> getSubscriptions(@PathVariable int id)
     {
         log.info("/users/" + id + "/subs endpoint reached");
 
-        return userService.getSubscribtionsForUser(id).stream()
+        return userService.getSubscriptionsForUser(id).stream()
                 .map(Course::convertToSlimDTO)
                 .collect(Collectors.toSet());
     }

@@ -19,5 +19,5 @@ public interface CourseRepository extends CrudRepository<Course, Integer>
                     "SELECT cs.id FROM course_subs cs " +
                         "WHERE cs.anon_user_id = :id)";
     @Query(value = subsForUserQuery, nativeQuery = true)
-    Set<Course> getSubscribtionsForUser(@Param("id") int id);
+    Set<Course> getSubscriptionsForUser(@Param("id") int id);
 }

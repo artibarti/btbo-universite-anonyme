@@ -101,9 +101,9 @@ public class UserService {
         return userRepository.findByEmail(email) != null;
     }
 
-    public Set<Course> getSubscribtionsForUser(int id)
+    public Set<Course> getSubscriptionsForUser(int id)
     {
-        return this.courseRepository.getSubscribtionsForUser(id);
+        return this.courseRepository.getSubscriptionsForUser(id);
     }
 
     public AnonUser getAnonUserByUserName(String userName)

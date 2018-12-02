@@ -20,8 +20,9 @@ public interface QuestionRepository extends CrudRepository<Question, Integer>
     String newsFeedQuestionsQuery =
             "SELECT * from question q " +
                     "WHERE q.session_id IN (SELECT s.id FROM session s " +
-                    "WHERE s.course_id IN (SELECT cs.course_id FROM course_subs cs " +
-                    "WHERE cs.anon_user_id = :id))" +
+                        "WHERE s.course_id IN (SELECT cs.course_id FROM course_subs cs " +
+                        "WHERE cs.anon_user_id = :id)) " +
+                    "AND q.anon_user_id != :id " +
                     "ORDER BY q.timestamp " +
                     "LIMIT 20";
     @Query(value = newsFeedQuestionsQuery, nativeQuery = true)

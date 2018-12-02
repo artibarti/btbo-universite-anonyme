@@ -20,12 +20,17 @@ public interface CommentRepository extends CrudRepository<Comment, Integer>
     String newsFeedCommentsQuery =
             "SELECT * FROM comment c WHERE c.refid IN (" +
                     "SELECT cr.id from course_room cr " +
-                    "WHERE cr.course_id IN (SELECT cs.course_id FROM course_subs cs " +
-                    "WHERE cs.anon_user_id = :id) UNION " +
+                        "WHERE cr.course_id IN (SELECT cs.course_id FROM course_subs cs " +
+                        "WHERE cs.anon_user_id = :id) " +
+                        "AND c.type = \'CourseRoomComment\' " +
+                        "AND c.anon_user_id != :id " +
+                        "AND c.user_id != :id UNION " +
                     "SELECT q.id from question q " +
-                    "WHERE q.session_id IN (SELECT s.id FROM session s " +
-                    "WHERE s.course_id IN (SELECT cs.course_id FROM course_subs cs " +
-                    "WHERE cs.anon_user_id = :id))) " +
+                        "WHERE q.session_id IN (SELECT s.id FROM session s " +
+                        "WHERE s.course_id IN (SELECT cs.course_id FROM course_subs cs " +
+                        "WHERE cs.anon_user_id = :id)) " +
+                        "AND c.type = \'QuestionComment\' " +
+                        "AND c.anon_user_id != :id) " +
                     "ORDER BY c.timestamp " +
                     "LIMIT 20";
     @Query(value = newsFeedCommentsQuery, nativeQuery = true)
