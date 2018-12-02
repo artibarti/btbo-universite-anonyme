@@ -116,7 +116,7 @@ public class CourseService {
         Set<Comment> comments = commentRepository.getCommentsForCourse(id);
         Set<Question> questions = questionRepository.getQuestionsForCourse(id);
 
-        for (int i = 0; i<7; i++)
+        for (int i = 6; i >= 0; i--)
         {
             // make it useable in filtering
             final int static_i = i;
