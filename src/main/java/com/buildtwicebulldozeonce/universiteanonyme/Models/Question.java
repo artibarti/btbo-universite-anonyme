@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.QuestionSlimDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,4 +36,13 @@ public class Question {
 
     @Transient
     private Set<Rating> ratings;
+
+
+    public QuestionSlimDTO convertToSlimDTO()
+    {
+        QuestionSlimDTO questionSlimDTO =
+                new QuestionSlimDTO(this.getId(), this.getMessage(), this.getTimestamp());
+
+        return questionSlimDTO;
+    }
 }

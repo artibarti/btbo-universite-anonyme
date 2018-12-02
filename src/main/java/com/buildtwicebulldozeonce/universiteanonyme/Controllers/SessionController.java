@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.QuestionSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Session;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -30,9 +32,11 @@ public class SessionController
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{id}/questions", method = RequestMethod.GET)
-    public Set<Question> getQuestionsForSession(@PathVariable("courseID") int courseID, @PathVariable("id") int id)
+    public Set<QuestionSlimDTO> getQuestionsForSession(@PathVariable("courseID") int courseID, @PathVariable("id") int id)
     {
-        return sessionService.getQuestionsForSession(id);
+        return sessionService.getQuestionsForSession(id).stream()
+                .map(Question::convertToSlimDTO)
+                .collect(Collectors.toSet());
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/", method = RequestMethod.POST)

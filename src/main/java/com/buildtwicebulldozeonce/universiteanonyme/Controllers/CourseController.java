@@ -3,6 +3,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CoursePulseDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
 import lombok.extern.java.Log;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -77,12 +79,6 @@ public class CourseController
         return courseService.getCourseRooms(id);
     }
 
-    @RequestMapping(value = "/courses/{id}/sessions", method = RequestMethod.GET)
-    public Set<Session> getSessionsForCourse(@PathVariable("id") int id)
-    {
-        return courseService.getSessionsForCourse(id);
-    }
-
     @RequestMapping(value = "/courses/{id}/ratings", method = RequestMethod.GET)
     public Set<Rating> getRatingsForCourse(@PathVariable("id") int id)
     {
@@ -102,8 +98,10 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions", method = RequestMethod.GET)
-    public Set<Session> getAllSessionsForCourse(@PathVariable("courseID") int courseID)
+    public Set<SessionSlimDTO> getAllSessionsForCourse(@PathVariable("courseID") int courseID)
     {
-        return courseService.getSessionsForCourse(courseID);
+        return courseService.getSessionsForCourse(courseID).stream()
+                .map(Session::convertToSlimDTO)
+                .collect(Collectors.toSet());
     }
 }

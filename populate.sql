@@ -56,8 +56,8 @@ INSERT INTO `course_subs` (`id`, `banned_until`, `anon_user_id`, `course_id`) VA
 INSERT INTO `course_subs` (`id`, `banned_until`, `anon_user_id`, `course_id`) VALUES ('106', '2018-11-04 00:00:00', '1', '103');
 
 /* add sessions */
-INSERT INTO `session`(`id`, `counter`, `is_active`, `course_id`) VALUES (101, 10, true, 101);
-INSERT INTO `session`(`id`, `counter`, `is_active`, `course_id`) VALUES (102, 20, false, 101);
+INSERT INTO `session`(`id`, `name`, `counter`, `is_active`, `course_id`) VALUES (101, "session 2018 okt 10", 10, true, 101);
+INSERT INTO `session`(`id`, `name`, `counter`, `is_active`, `course_id`) VALUES (102, "friday test and tea", 20, false, 101);
 
 /* add permissions */
 INSERT INTO `permissions`(`id`, `permission_store`) VALUES (101, 123456);
@@ -77,7 +77,11 @@ INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (103,
 
 /* add questions */
 INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `timestamp`, `anon_user_id`, `session_id`)
-  VALUES (101, "baby dont hurt me", "What is love?", 30, CURRENT_TIMESTAMP, 1, 101);
+  VALUES (101, "baby dont hurt me", "What is love?", 23, CURRENT_TIMESTAMP, 1, 101);
+INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `timestamp`, `anon_user_id`, `session_id`)
+  VALUES (102, "Of course him*-*", "Who is the most handsome most hot boi here if not artur heartheartheart???", 10, CURRENT_TIMESTAMP, 1, 101);
+INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `timestamp`, `anon_user_id`, `session_id`)
+  VALUES (103, "biztos maszturbal", "Where is Peti", 96, CURRENT_TIMESTAMP, 1, 101);
 
 /* add comments */
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`)
