@@ -8,6 +8,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentReposito
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CourseRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Log
 public class NewsFeedService
 {
     private final CommentRepository commentRepository;
@@ -65,13 +67,13 @@ public class NewsFeedService
         return news;
     }
 
-    public List<News> getNewsFeedForUser(int id)
+    public List<News> getNewsFeedForUser(int id, int anonID)
     {
         List<News> news = new ArrayList<>();
 
-        Set<Comment> comments = commentRepository.getNewsFeedCommentsForUser(id);
-        Set<Question> questions = questionRepository.getNewsFeedQuestionsForUser(id);
-        Set<Rating> ratings = ratingRepository.getNewsFeedRatingsForUser(id);
+        Set<Comment> comments = commentRepository.getNewsFeedCommentsForUser(id, anonID);
+        Set<Question> questions = questionRepository.getNewsFeedQuestionsForUser(anonID);
+        Set<Rating> ratings = ratingRepository.getNewsFeedRatingsForUser(id, anonID);
 
         comments.stream()
             .forEach(p -> news.add(convertCommentToNews(p)));

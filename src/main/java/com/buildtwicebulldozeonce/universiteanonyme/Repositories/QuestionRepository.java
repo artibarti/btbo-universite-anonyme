@@ -21,12 +21,12 @@ public interface QuestionRepository extends CrudRepository<Question, Integer>
             "SELECT * from question q " +
                     "WHERE q.session_id IN (SELECT s.id FROM session s " +
                         "WHERE s.course_id IN (SELECT cs.course_id FROM course_subs cs " +
-                        "WHERE cs.anon_user_id = :id)) " +
-                    "AND q.anon_user_id != :id " +
+                        "WHERE cs.anon_user_id = :anonID)) " +
+                    "AND q.anon_user_id != :anonID " +
                     "ORDER BY q.timestamp " +
                     "LIMIT 20";
     @Query(value = newsFeedQuestionsQuery, nativeQuery = true)
-    Set<Question> getNewsFeedQuestionsForUser(@Param("id") int id);
+    Set<Question> getNewsFeedQuestionsForUser(@Param("anonID") int anonID);
 
     String questionsForCourseQuery =
             "SELECT * from question q " +

@@ -25,12 +25,12 @@ public interface RatingRepository extends CrudRepository<Rating, Integer>
                     "r.type = \"CourseRating\")) UNION " +
             "SELECT * FROM rating r WHERE r.refid IN ( " +
                     "SELECT q.id FROM question q " +
-                        "WHERE q.anon_user_id = :id AND " +
+                        "WHERE q.anon_user_id = :anonID AND " +
                         "r.type = \"QuestionRating\") UNION " +
             "SELECT * FROM rating r WHERE r.refid IN ( " +
                     "SELECT c.id FROM comment c " +
-                         "WHERE c.anon_user_id = :id AND " +
+                         "WHERE c.anon_user_id = :anonID AND " +
                          "r.type = \"CommentRating\")";
     @Query(value = newsFeedRatingsQuery, nativeQuery = true)
-    Set<Rating> getNewsFeedRatingsForUser(@Param("id") int id);
+    Set<Rating> getNewsFeedRatingsForUser(@Param("id") int id, @Param("anonID") int anonID);
 }
