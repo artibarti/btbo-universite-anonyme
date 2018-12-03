@@ -26,9 +26,8 @@ public class NewsFeedController
     @RequestMapping(value = "/users/{id}/newsfeed", method = RequestMethod.GET)
     public List<News> getNewFeedForUser(@PathVariable("id") int id)
     {
-        /* return this.newsFeedService.getNewsFeedForUser(id,
-                this.userService.getLoggedInUserByUserId(id).getValue2().getId()); */
-        return this.newsFeedService.getNewsFeedForUser(id, id-100);
+        return this.newsFeedService.getNewsFeedForUser(id,
+                this.userService.getLoggedInUserByUserId(id).getValue2().getId());
     }
 
 }

@@ -17,7 +17,7 @@ public interface CourseRepository extends CrudRepository<Course, Integer>
     String subsForUserQuery =
             "SELECT * FROM course c WHERE c.id IN (" +
                     "SELECT cs.id FROM course_subs cs " +
-                        "WHERE cs.anon_user_id = :id)";
+                        "WHERE cs.anon_user_id = :anonID)";
     @Query(value = subsForUserQuery, nativeQuery = true)
-    Set<Course> getSubscriptionsForUser(@Param("id") int id);
+    Set<Course> getSubscriptionsForUser(@Param("anonID") int anonID);
 }
