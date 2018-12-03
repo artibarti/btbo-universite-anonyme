@@ -98,9 +98,9 @@ public class UserService {
         return user;
     }
 
-    public boolean checkIfEmailIsUsed(String email)
+    public boolean checkIfEmailOrUserNameIsUsed(String email, String username)
     {
-        return userRepository.findByEmail(email) != null;
+        return userRepository.findByEmail(email) != null || anonUserRepository.findByAnonName(username) != null;
     }
 
     public Set<Course> getSubscriptionsForUser(String token)

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,46 +33,41 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public UserDTO login(@RequestHeader HttpHeaders headers)
     {
-        String userName = headers.getFirst("username");
-        String password = headers.getFirst("password");
-        log.info(String.format("username %s, password: %s",userName,password));
-        User user = userService.authenticateUser(userName, password);
+        HashMap<String, String> values
+                = Functions.getValuesFromHttpHeader(headers, "username", "password");
+
+        User user = userService.authenticateUser(values.get("username"), values.get("password"));
+
         if (user != null)
-        {
             return user.convertToDTO();
-        }
         else
-        {
-            UserDTO empty = new UserDTO();
-            return empty;
-        }
+            return new UserDTO();
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public UserDTO register(@RequestHeader HttpHeaders headers)
     {
-        String email = headers.getFirst("email");
-        String password = headers.getFirst("password");
-        String firstName = headers.getFirst("firstname");
-        String lastName = headers.getFirst("lastname");
-        String userName = headers.getFirst("username");
+        HashMap<String, String> values = Functions.getValuesFromHttpHeader(
+                headers, "username", "password", "email", "firstname", "lastname");
 
-        if (userService.checkIfEmailIsUsed(email) || userService.isUserNameAlreadyTaken(userName) || password == null)
+        if (userService.checkIfEmailOrUserNameIsUsed(values.get("email"), values.get("username")) || values.get("password") == "")
         {
+            log.info("registration failed");
             UserDTO result = new UserDTO();
             return result;
         }
         else
         {
+            log.info("registration success");
             AnonUser anonUser = AnonUser.builder()
-                    .anonName(userName)
-                    .hashedPassword(password)
+                    .anonName(values.get("username"))
+                    .hashedPassword(values.get("password"))
                     .build();
             User user = User.builder()
-                    .firstName(firstName)
-                    .lastName(lastName)
-                    .doubleHashedPassword(PasswordHelper.hashPassword(anonUser.getHashedPassword(),password))
-                    .email(email)
+                    .firstName(values.get("firstname"))
+                    .lastName(values.get("lastname"))
+                    .doubleHashedPassword(PasswordHelper.hashPassword(anonUser.getHashedPassword(), values.get("password")))
+                    .email(values.get("email"))
                     .build();
 
             userService.addAnonUser(anonUser);
