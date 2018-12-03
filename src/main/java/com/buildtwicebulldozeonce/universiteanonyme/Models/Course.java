@@ -4,6 +4,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseSlimDTO;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
@@ -12,8 +13,9 @@ import java.util.Set;
 @Log
 @Data
 @Entity
-@Builder
+@NoArgsConstructor
 public class Course {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,8 +23,6 @@ public class Course {
     private String name;
     @Column(nullable = false)
     private String description;
-    @Column(nullable = false, unique = true)
-    private String inviteCode;
 
     @ManyToOne
     private User owner;

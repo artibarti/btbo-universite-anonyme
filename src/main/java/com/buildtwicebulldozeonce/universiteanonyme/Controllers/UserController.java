@@ -107,7 +107,6 @@ public class UserController {
     public Set<CourseSlimDTO> getAdminRolesForUser(@RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
-        log.info("/user/adminroles endpoint reached");
 
         return userService.getCoursesAdminedByUser(token).stream()
                 .map(Course::convertToSlimDTO)

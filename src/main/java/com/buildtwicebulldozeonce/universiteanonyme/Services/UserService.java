@@ -54,7 +54,7 @@ public class UserService {
 
     public Set<Course> getCoursesAdminedByUser(String token)
     {
-        return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue2().getId());
+        return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue1().getId());
     }
 
     public void updateUser(User user)

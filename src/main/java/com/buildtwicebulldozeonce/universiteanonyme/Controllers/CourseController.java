@@ -8,6 +8,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.InviteCodeGenerator;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,11 +25,13 @@ import java.util.stream.Collectors;
 public class CourseController
 {
     private final CourseService courseService;
+    private final UserService userService;
 
     @Autowired
-    public CourseController(CourseService courseService)
+    public CourseController(CourseService courseService, UserService userService)
     {
         this.courseService = courseService;
+        this.userService = userService;
     }
 
     @RequestMapping(value = "/courses/{id}", method = RequestMethod.GET)
@@ -38,13 +41,16 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses/add", method = RequestMethod.POST)
-    public void addCourse(@RequestBody CourseFatDTO course)
+    public void addCourse(@RequestBody CourseFatDTO courseFatDTO, @RequestHeader HttpHeaders headers)
     {
-        log.info("/courses/add endpoint reached");
-        log.info("Reading request body...");
-        log.info("course.name: " + course.getName());
-        log.info("course.description" + course.getDescription());
-        // courseService.addCourse(course);
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+
+        Course course = new Course();
+        course.setName(courseFatDTO.getName());
+        course.setDescription(courseFatDTO.getDescription());
+        course.setOwner(userService.getLoggedInUser(token).getValue1());
+
+        courseService.addCourse(course);
     }
 
     @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.PUT)
