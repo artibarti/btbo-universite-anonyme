@@ -30,12 +30,14 @@ public class CourseService {
     private final SessionRepository sessionRepository;
     private final CommentRepository commentRepository;
     private final QuestionRepository questionRepository;
+    private final InviteCodeRepository inviteCodeRepository;
 
     @Autowired
     public CourseService(CourseRepository courseRepository, RatingRepository ratingRepository,
                          UserRepository userRepository, CourseSubsRepository courseSubsRepository,
                          CourseRoomRepository courseRoomRepository, SessionRepository sessionRepository,
-                         CommentRepository commentRepository, QuestionRepository questionRepository)
+                         CommentRepository commentRepository, QuestionRepository questionRepository,
+                         InviteCodeRepository inviteCodeRepository)
     {
         this.courseRepository = courseRepository;
         this.ratingRepository = ratingRepository;
@@ -45,6 +47,7 @@ public class CourseService {
         this.sessionRepository = sessionRepository;
         this.commentRepository = commentRepository;
         this.questionRepository = questionRepository;
+        this.inviteCodeRepository = inviteCodeRepository;
     }
 
     public Course getCourse(int id)
@@ -147,5 +150,15 @@ public class CourseService {
         }
 
         return dailyPulseOnTheLast7Days;
+    }
+
+    public Set<InviteCode> getAllInviteCodesForCourse(int courseID)
+    {
+        return this.inviteCodeRepository.getAllInviteCodesForCourse(courseID);
+    }
+
+    public void addInviteCodeForCourse(InviteCode inviteCode)
+    {
+        this.inviteCodeRepository.save(inviteCode);
     }
 }

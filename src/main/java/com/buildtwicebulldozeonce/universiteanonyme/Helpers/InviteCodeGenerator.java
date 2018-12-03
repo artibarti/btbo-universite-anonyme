@@ -6,6 +6,7 @@ import java.util.Random;
 
 @Log
 public class InviteCodeGenerator {
+
     public static String GenerateInviteCode()
     {
         int leftLimit = 65; // A

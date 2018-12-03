@@ -4,12 +4,16 @@ import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CoursePulseDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.InviteCodeGenerator;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -103,5 +107,27 @@ public class CourseController
         return courseService.getSessionsForCourse(courseID).stream()
                 .map(Session::convertToSlimDTO)
                 .collect(Collectors.toSet());
+    }
+
+    @RequestMapping(value = "/courses/{courseID}/invite_codes", method = RequestMethod.GET)
+    public Set<InviteCode> getAllInviteCodesForCourse(@RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID)
+    {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+
+        return courseService.getAllInviteCodesForCourse(courseID);
+    }
+
+    @RequestMapping(value = "/courses/{courseID}/invite_codes/generate", method = RequestMethod.GET)
+    public InviteCode generateInviteCodeForCourse(@RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID)
+    {
+        HashMap<String, String> headerValues = Functions.getValuesFromHttpHeader(headers, "token", "validUntil", "maxCopy");
+
+        InviteCode inviteCode = new InviteCode();
+        inviteCode.setCode(InviteCodeGenerator.GenerateInviteCode());
+        inviteCode.setCourse(this.courseService.getCourse(courseID));
+        inviteCode.setMaxCopy(Integer.parseInt( headerValues.get("maxCopy") ));
+
+        this.courseService.addInviteCodeForCourse(inviteCode);
+        return inviteCode;
     }
 }

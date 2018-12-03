@@ -50,7 +50,7 @@ public class UserController {
         HashMap<String, String> values = Functions.getValuesFromHttpHeader(
                 headers, "username", "password", "email", "firstname", "lastname");
 
-        if (userService.checkIfEmailOrUserNameIsUsed(values.get("email"), values.get("username")) || values.get("password") == "")
+        if (userService.checkIfEmailOrUserNameIsUsed(values.get("email"), values.get("username")) || values.get("password") == null)
         {
             log.info("registration failed");
             UserDTO result = new UserDTO();
