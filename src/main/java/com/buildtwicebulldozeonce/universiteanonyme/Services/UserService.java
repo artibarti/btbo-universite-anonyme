@@ -35,7 +35,8 @@ public class UserService {
         this.ratingRepository = ratingRepository;
     }
 
-    public User getUser(int id) {
+    public User getUser(int id)
+    {
         return userRepository.findById(id).orElse(null);
     }
 
@@ -51,8 +52,9 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public Set<Course> getCoursesAdminedByUser(int id) {
-        return courseRepository.getCoursesAdminedByUser(id);
+    public Set<Course> getCoursesAdminedByUser(String token)
+    {
+        return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue2().getId());
     }
 
     public void updateUser(User user)
@@ -101,9 +103,9 @@ public class UserService {
         return userRepository.findByEmail(email) != null;
     }
 
-    public Set<Course> getSubscriptionsForUser(int id)
+    public Set<Course> getSubscriptionsForUser(String token)
     {
-        return this.courseRepository.getSubscriptionsForUser(id);
+        return this.courseRepository.getSubscriptionsForUser(getLoggedInUser(token).getValue2().getId());
     }
 
     public AnonUser getAnonUserByUserName(String userName)

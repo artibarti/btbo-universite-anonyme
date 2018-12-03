@@ -2,7 +2,9 @@ package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.PasswordHelper;
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.TokenHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import lombok.extern.java.Log;
@@ -79,51 +81,49 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
-    public void addUser(@RequestBody UserDTO user)
+    public void addUser(@RequestBody UserDTO user, @RequestHeader HttpHeaders headers)
     {
-        log.info("/users/add endpoint reached");
-        // userService.addUser(user);
+        String token = Functions.getValueFromHttpHeader(headers, "token");
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-    public User getUser(@PathVariable int id)
+    public User getUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
     {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
         return userService.getUser(id);
     }
 
-    @RequestMapping(value = "/users/{id}/delete", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable int id)
+    @RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
     {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
         userService.deleteUser(id);
     }
 
-    @RequestMapping(value = "/users/{id}/update", method = RequestMethod.PUT)
-    public void updateUser(@PathVariable int id, @RequestBody UserDTO user)
+    @RequestMapping(value = "/user/update", method = RequestMethod.PUT)
+    public void updateUser(@RequestBody UserDTO user, @RequestHeader HttpHeaders headers)
     {
-        log.info("/users/" + id + "/update endpoint reached");
-        log.info("Reading request body...");
-        log.info("user.firstname: " + user.getFirstName());
-        log.info("user.lastname: " + user.getLastName());
-        log.info("user.email: " + user.getEmail());
-        // userService.updateUser(user);
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        log.info("/user/update endpoint reached");
     }
 
-    @RequestMapping(value = "/users/{id}/adminroles", method = RequestMethod.GET)
-    public Set<CourseSlimDTO> getAdminRolesForUser(@PathVariable int id)
+    @RequestMapping(value = "/user/adminroles", method = RequestMethod.GET)
+    public Set<CourseSlimDTO> getAdminRolesForUser(@RequestHeader HttpHeaders headers)
     {
-        log.info("/users/" + id + "/adminroles endpoint reached");
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        log.info("/user/adminroles endpoint reached");
 
-        return userService.getCoursesAdminedByUser(id).stream()
+        return userService.getCoursesAdminedByUser(token).stream()
                 .map(Course::convertToSlimDTO)
                 .collect(Collectors.toSet());
     }
 
-    @RequestMapping(value = "/users/{id}/subs", method = RequestMethod.GET)
-    public Set<CourseSlimDTO> getSubscriptions(@PathVariable int id)
+    @RequestMapping(value = "/user/subs", method = RequestMethod.GET)
+    public Set<CourseSlimDTO> getSubscriptions(@RequestHeader HttpHeaders headers)
     {
-        log.info("/users/" + id + "/subs endpoint reached");
+        String token = Functions.getValueFromHttpHeader(headers, "token");
 
-        return userService.getSubscriptionsForUser(id).stream()
+        return userService.getSubscriptionsForUser(token).stream()
                 .map(Course::convertToSlimDTO)
                 .collect(Collectors.toSet());
     }
