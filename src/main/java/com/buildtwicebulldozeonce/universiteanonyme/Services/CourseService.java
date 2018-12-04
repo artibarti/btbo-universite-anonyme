@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CoursePulseDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
@@ -162,5 +163,10 @@ public class CourseService {
     public void addInviteCodeForCourse(InviteCode inviteCode)
     {
         this.inviteCodeRepository.save(inviteCode);
+    }
+
+    public Set<Course> getHotCourses()
+    {
+        return courseRepository.getHotCourses();
     }
 }

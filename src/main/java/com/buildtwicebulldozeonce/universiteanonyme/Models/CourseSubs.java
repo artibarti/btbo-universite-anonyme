@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Log
 @Data
 @Entity
-@Builder
+@NoArgsConstructor
 public class CourseSubs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

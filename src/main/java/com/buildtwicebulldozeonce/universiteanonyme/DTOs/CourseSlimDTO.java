@@ -9,4 +9,5 @@ public class CourseSlimDTO
 {
     int id;
     String name;
+    boolean hidden;
 }

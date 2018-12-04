@@ -11,6 +11,7 @@ import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,16 +24,24 @@ public class UserService {
     private final UserRepository userRepository;
     private final AnonUserRepository anonUserRepository;
     private final CourseRepository courseRepository;
-    private  final RatingRepository ratingRepository;
+    private final RatingRepository ratingRepository;
+    private final InviteCodeRepository inviteCodeRepository;
+    private CourseSubsRepository courseSubsRepository;
+
     private List<Triplet<String, User, AnonUser>> loggedInUsers = new ArrayList<>();
 
     @Autowired
     public UserService(UserRepository userRepository, AnonUserRepository anonUserRepository,
-                       CourseRepository courseRepository, RatingRepository ratingRepository) {
+                       CourseRepository courseRepository, RatingRepository ratingRepository,
+                       InviteCodeRepository inviteCodeRepository,
+                       CourseSubsRepository courseSubsRepository) {
+
         this.userRepository = userRepository;
         this.anonUserRepository = anonUserRepository;
         this.courseRepository = courseRepository;
         this.ratingRepository = ratingRepository;
+        this.inviteCodeRepository = inviteCodeRepository;
+        this.courseSubsRepository = courseSubsRepository;
     }
 
     public User getUser(int id)
@@ -145,5 +154,44 @@ public class UserService {
         return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue1().getId()).stream()
                 .filter(p -> p.getId() == id)
                 .findFirst() != null;
+    }
+
+    public Course subscribe(int id, String code, String token)
+    {
+        Course course = courseRepository.findById(id).get();
+        AnonUser anonUser = getLoggedInUser(token).getValue2();
+        InviteCode inviteCode = inviteCodeRepository.findFirstByCodeAndCourse(code, course);
+
+        if (inviteCode == null || course == null || anonUser == null)
+        {
+            log.info("Something is wrong");
+            return null;
+        }
+
+        switch (inviteCode.getMaxCopy())
+        {
+            case 0:
+                return null;
+            case -1:
+                break;
+            default:
+                inviteCode.setMaxCopy(inviteCode.getMaxCopy() - 1);
+        }
+
+        if (inviteCode.getValidUntil().isBefore(LocalDateTime.now()))
+        {
+            return null;
+        }
+
+        CourseSubs sub = new CourseSubs();
+        sub.setAnonUser(anonUser);
+        sub.setCourse(course);
+
+        courseSubsRepository.save(sub);
+
+        log.info("New subsribtion added for course " + course.getName()
+                + " by user " + anonUser.getAnonName());
+
+        return course;
     }
 }

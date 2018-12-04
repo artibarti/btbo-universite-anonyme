@@ -76,31 +76,23 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/users/add", method = RequestMethod.POST)
-    public void addUser(@RequestBody UserDTO user, @RequestHeader HttpHeaders headers)
-    {
-        String token = Functions.getValueFromHttpHeader(headers, "token");
-    }
-
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public User getUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
     {
-        String token = Functions.getValueFromHttpHeader(headers, "token");
-        return userService.getUser(id);
+        // TODO
+        return null;
     }
 
     @RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
     {
-        String token = Functions.getValueFromHttpHeader(headers, "token");
-        userService.deleteUser(id);
+        // TODO
     }
 
     @RequestMapping(value = "/user/update", method = RequestMethod.PUT)
     public void updateUser(@RequestBody UserDTO user, @RequestHeader HttpHeaders headers)
     {
-        String token = Functions.getValueFromHttpHeader(headers, "token");
-        log.info("/user/update endpoint reached");
+        // TODO
     }
 
     @RequestMapping(value = "/user/adminroles", method = RequestMethod.GET)
@@ -123,4 +115,12 @@ public class UserController {
                 .collect(Collectors.toSet());
     }
 
+    @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.GET)
+    public CourseSlimDTO subscribe(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
+    {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        String inviteCode = Functions.getValueFromHttpHeader(headers, "inviteCode");
+
+        return userService.subscribe(id, inviteCode, token).convertToSlimDTO();
+    }
 }

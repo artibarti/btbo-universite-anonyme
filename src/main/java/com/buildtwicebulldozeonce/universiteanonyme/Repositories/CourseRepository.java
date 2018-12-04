@@ -20,4 +20,9 @@ public interface CourseRepository extends CrudRepository<Course, Integer>
                         "WHERE cs.anon_user_id = :anonID)";
     @Query(value = subsForUserQuery, nativeQuery = true)
     Set<Course> getSubscriptionsForUser(@Param("anonID") int anonID);
+
+    String hotCoursesQuery =
+            "SELECT * FROM course c WHERE c.hidden IS false LIMIT 20";
+    @Query(value = hotCoursesQuery, nativeQuery = true)
+    Set<Course> getHotCourses();
 }

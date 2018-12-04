@@ -1,9 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
-import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
-import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CoursePulseDTO;
-import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
-import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.InviteCodeGenerator;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
@@ -41,7 +38,7 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses/add", method = RequestMethod.POST)
-    public void addCourse(@RequestBody CourseFatDTO courseFatDTO, @RequestHeader HttpHeaders headers)
+    public CourseSlimDTO addCourse(@RequestBody CourseFatDTO courseFatDTO, @RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
 
@@ -49,8 +46,10 @@ public class CourseController
         course.setName(courseFatDTO.getName());
         course.setDescription(courseFatDTO.getDescription());
         course.setOwner(userService.getLoggedInUser(token).getValue1());
-
+        course.setHidden(courseFatDTO.isHidden());
         courseService.addCourse(course);
+        
+        return course.convertToSlimDTO();
     }
 
     @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.PUT)
@@ -127,25 +126,40 @@ public class CourseController
                 .collect(Collectors.toSet());
     }
 
-    @RequestMapping(value = "/courses/{courseID}/invite_codes", method = RequestMethod.GET)
+    @RequestMapping(value = "/courses/{courseID}/invitecodes", method = RequestMethod.GET)
     public Set<InviteCode> getAllInviteCodesForCourse(@RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
-
-        return courseService.getAllInviteCodesForCourse(courseID);
+        if (userService.checkIfUserOwnsCourse(courseID, token))
+        {
+            return courseService.getAllInviteCodesForCourse(courseID);
+        }
+        else
+        {
+            return null;
+        }
     }
 
-    @RequestMapping(value = "/courses/{courseID}/invite_codes/generate", method = RequestMethod.GET)
-    public InviteCode generateInviteCodeForCourse(@RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID)
+    @RequestMapping(value = "/courses/{courseID}/invitecodes/generate", method = RequestMethod.POST)
+    public InviteCode generateInviteCodeForCourse(@RequestBody InviteCode inviteCode, @RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID)
     {
-        HashMap<String, String> headerValues = Functions.getValuesFromHttpHeader(headers, "token", "validUntil", "maxCopy");
-
-        InviteCode inviteCode = new InviteCode();
-        inviteCode.setCode(InviteCodeGenerator.GenerateInviteCode());
-        inviteCode.setCourse(this.courseService.getCourse(courseID));
-        inviteCode.setMaxCopy(Integer.parseInt( headerValues.get("maxCopy") ));
-
-        this.courseService.addInviteCodeForCourse(inviteCode);
-        return inviteCode;
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (userService.checkIfUserOwnsCourse(courseID, token))
+        {
+            HashMap<String, String> headerValues = Functions.getValuesFromHttpHeader(headers, "token");
+            inviteCode.setCode(InviteCodeGenerator.GenerateInviteCode());
+            this.courseService.addInviteCodeForCourse(inviteCode);
+            return inviteCode;
+        }
+        return null;
     }
+
+    @RequestMapping(value = "/courses/hot", method = RequestMethod.GET)
+    public Set<CourseFatDTO> getHotCourses(@RequestHeader HttpHeaders headers)
+    {
+        return courseService.getHotCourses().stream()
+                .map(Course::convertToFatDTO)
+                .collect(Collectors.toSet());
+    }
+
 }
