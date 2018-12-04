@@ -10,4 +10,5 @@ public class CourseFatDTO
     int id;
     String name;
     String description;
+    boolean hided;
 }
