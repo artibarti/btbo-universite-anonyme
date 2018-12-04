@@ -146,7 +146,6 @@ public class CourseController
         String token = Functions.getValueFromHttpHeader(headers, "token");
         if (userService.checkIfUserOwnsCourse(courseID, token))
         {
-            HashMap<String, String> headerValues = Functions.getValuesFromHttpHeader(headers, "token");
             inviteCode.setCode(InviteCodeGenerator.GenerateInviteCode());
             this.courseService.addInviteCodeForCourse(inviteCode);
             return inviteCode;
