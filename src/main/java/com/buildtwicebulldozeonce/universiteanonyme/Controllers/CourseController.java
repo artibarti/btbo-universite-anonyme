@@ -47,8 +47,8 @@ public class CourseController
         course.setDescription(courseFatDTO.getDescription());
         course.setOwner(userService.getLoggedInUser(token).getValue1());
         course.setHidden(courseFatDTO.isHidden());
+
         courseService.addCourse(course);
-        
         return course.convertToSlimDTO();
     }
 
@@ -141,15 +141,27 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses/{courseID}/invitecodes/generate", method = RequestMethod.POST)
-    public InviteCode generateInviteCodeForCourse(@RequestBody InviteCode inviteCode, @RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID)
+    public InviteCode generateInviteCodeForCourse(@RequestBody InviteCodeDTO inviteCodeDTO, @RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         if (userService.checkIfUserOwnsCourse(courseID, token))
         {
+            Course course = courseService.getCourse(courseID);
+            if (course == null)
+            {
+                return null;
+            }
+
+            InviteCode inviteCode = new InviteCode();
+            inviteCode.setMaxCopy(inviteCodeDTO.getMaxCopy());
+            inviteCode.setValidUntil(inviteCodeDTO.getValidUntil());
             inviteCode.setCode(InviteCodeGenerator.GenerateInviteCode());
+            inviteCode.setCourse(course);
+
             this.courseService.addInviteCodeForCourse(inviteCode);
             return inviteCode;
         }
+
         return null;
     }
 

@@ -42,13 +42,13 @@ INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_
 INSERT INTO `anon_user`(`id`, `anon_name`, `hashed_password`) VALUES (1, "anonymous", "hashdpwd");
 
 /* add courses */
-INSERT INTO `course`(`id`, `invite_code`, `name`, `owner_id`, `description`) VALUES (101, "A4Bf1", "Kalkulus 1", 101, "Orban Viktro a kiralyunk");
-INSERT INTO `course`(`id`, `invite_code`, `name`, `owner_id`, `description`) VALUES (102, "FFe56", "Kalkulus 2", 101, "Nem ehezunk es nem fazunk");
-INSERT INTO `course`(`id`, `invite_code`, `name`, `owner_id`, `description`) VALUES (103, "AABBC", "Dimat", 102, "In summary, present your constraint to your boss and let them take a call on which task is important!");
-INSERT INTO `course`(`id`, `invite_code`, `name`, `owner_id`, `description`) VALUES (104, "1433S", "Python", 102, "Second issue is you falling back on your work. I do not think this has anything to do with lunch.");
-INSERT INTO `course`(`id`, `invite_code`, `name`, `owner_id`, `description`) VALUES (105, "a9H4a", "XML", 102, "If your schedule is packed outside your lunch hours, make your boss aware of that");
-INSERT INTO `course`(`id`, `invite_code`, `name`, `owner_id`, `description`) VALUES (106, "AcBD3", "RFT", 103, "You wanna know the truth, i eat a lotta soup");
-INSERT INTO `course`(`id`, `invite_code`, `name`, `owner_id`, `description`) VALUES (107, "Ssq23", "Automataelméleti alkalmazások", 104, "I hate to say noo, when it comes to those beautiful blue eyes");
+INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (102, "Kalkulus 2", 101, "Nem ehezunk es nem fazunk", 0);
+INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (101, "Kalkulus 1", 101, "Orban Viktro a kiralyunk", 0);
+INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (103, "Dimat", 102, "In summary, present your constraint to your boss and let them take a call on which task is important!", 0);
+INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (104, "Python", 102, "Second issue is you falling back on your work. I do not think this has anything to do with lunch.", 0);
+INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (105, "XML", 102, "If your schedule is packed outside your lunch hours, make your boss aware of that", 0);
+INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (106, "RFT", 103, "You wanna know the truth, i eat a lotta soup", 0);
+INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (107, "Automataelméleti alkalmazások", 104, "I hate to say noo, when it comes to those beautiful blue eyes", 0);
 
 /* add course subs */
 INSERT INTO `course_subs` (`id`, `banned_until`, `anon_user_id`, `course_id`) VALUES ('104', '2018-11-29 00:00:00', '1', '101');
