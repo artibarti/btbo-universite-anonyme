@@ -11,7 +11,7 @@ import java.util.Set;
 @CrossOrigin(origins = "*")
 public interface CourseRepository extends CrudRepository<Course, Integer>
 {
-    @Query(value = "SELECT c FROM Course as c JOIN c.owner as o WHERE o.id = :id")
+    @Query(value = "SELECT * FROM course c WHERE c.owner_id = :id", nativeQuery = true)
     Set<Course> getCoursesAdminedByUser(@Param("id") int id);
 
     String subsForUserQuery =

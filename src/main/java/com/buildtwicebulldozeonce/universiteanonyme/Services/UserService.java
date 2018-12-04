@@ -139,4 +139,11 @@ public class UserService {
                 .findFirst()
                 .orElse(null);
     }
+
+    public boolean checkIfUserOwnsCourse(int id, String token)
+    {
+        return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue1().getId()).stream()
+                .filter(p -> p.getId() == id)
+                .findFirst() != null;
+    }
 }

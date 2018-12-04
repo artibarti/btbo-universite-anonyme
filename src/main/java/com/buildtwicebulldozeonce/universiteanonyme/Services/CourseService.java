@@ -31,13 +31,14 @@ public class CourseService {
     private final CommentRepository commentRepository;
     private final QuestionRepository questionRepository;
     private final InviteCodeRepository inviteCodeRepository;
+    private final AnonUserRepository anonUserRepository;
 
     @Autowired
     public CourseService(CourseRepository courseRepository, RatingRepository ratingRepository,
                          UserRepository userRepository, CourseSubsRepository courseSubsRepository,
                          CourseRoomRepository courseRoomRepository, SessionRepository sessionRepository,
                          CommentRepository commentRepository, QuestionRepository questionRepository,
-                         InviteCodeRepository inviteCodeRepository)
+                         InviteCodeRepository inviteCodeRepository, AnonUserRepository anonUserRepository)
     {
         this.courseRepository = courseRepository;
         this.ratingRepository = ratingRepository;
@@ -48,6 +49,7 @@ public class CourseService {
         this.commentRepository = commentRepository;
         this.questionRepository = questionRepository;
         this.inviteCodeRepository = inviteCodeRepository;
+        this.anonUserRepository = anonUserRepository;
     }
 
     public Course getCourse(int id)
@@ -76,9 +78,9 @@ public class CourseService {
         return userRepository.getCourseAdmins(id);
     }
 
-    public Set<CourseSubs> getCourseSubs(int id)
+    public Set<AnonUser> getCourseSubs(int id)
     {
-        return courseSubsRepository.getCourseSubsForCourse(id);
+        return this.anonUserRepository.getUsersSubbedForCourse(id);
     }
 
     public Set<CourseRoom> getCourseRooms(int id)

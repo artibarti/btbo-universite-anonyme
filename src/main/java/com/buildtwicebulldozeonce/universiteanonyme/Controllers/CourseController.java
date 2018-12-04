@@ -54,15 +54,23 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.PUT)
-    public void updateCourse(@RequestBody Course course)
+    public void updateCourse(@PathVariable("id") int id, @RequestBody Course course, @RequestHeader HttpHeaders headers)
     {
-        courseService.updateCourse(course);
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (userService.checkIfUserOwnsCourse(id, token) )
+        {
+            courseService.updateCourse(course);
+        }
     }
 
     @RequestMapping(value = "/courses/{id}/delete", method = RequestMethod.DELETE)
-    public void deleteCourse(@PathVariable("id") int id)
+    public void deleteCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers)
     {
-        courseService.deleteCourse(id);
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (userService.checkIfUserOwnsCourse(id, token) )
+        {
+            courseService.deleteCourse(id);
+        }
     }
 
     @RequestMapping(value = "/courses/{id}/admins", method = RequestMethod.GET)
@@ -72,7 +80,7 @@ public class CourseController
     }
 
     @RequestMapping(value = "/courses/{id}/subs", method = RequestMethod.GET)
-    public Set<CourseSubs> getCourseSubsForCourse(@PathVariable("id") int id)
+    public Set<AnonUser> getCourseSubsForCourse(@PathVariable("id") int id)
     {
         return courseService.getCourseSubs(id);
     }
@@ -80,7 +88,11 @@ public class CourseController
     @RequestMapping(value = "/courses/{id}/subs/sum", method = RequestMethod.GET)
     public Integer getCourseSubsSumForCourse(@PathVariable("id") int id)
     {
-        return courseService.getCourseSubs(id).size();
+        Set<AnonUser> result = courseService.getCourseSubs(id);
+        if (result != null)
+            return result.size();
+        else
+            return 0;
     }
 
     @RequestMapping(value = "/courses/{id}/rooms", method = RequestMethod.GET)

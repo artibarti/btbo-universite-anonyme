@@ -16,4 +16,11 @@ public interface AnonUserRepository extends CrudRepository<AnonUser, Integer>
 {
     AnonUser findByAnonNameAndHashedPassword(String anonName, String hashedPassword);
     AnonUser findByAnonName(String anonName);
+
+    String courseAdminsQuery =
+            "SELECT * FROM anon_user au WHERE au.id IN ( " +
+                    "SELECT cs.anon_user_id from course_subs cs " +
+                    "WHERE cs.course_id = :id)";
+    @Query(value = courseAdminsQuery, nativeQuery = true)
+    Set<AnonUser> getUsersSubbedForCourse(@Param("id") int id);
 }
