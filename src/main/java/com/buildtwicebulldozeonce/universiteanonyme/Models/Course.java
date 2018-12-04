@@ -24,7 +24,7 @@ public class Course {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private boolean hided;
+    private boolean hidden;
 
     @ManyToOne
     private User owner;
@@ -48,7 +48,7 @@ public class Course {
 
     public CourseFatDTO convertToFatDTO()
     {
-        return new CourseFatDTO(this.id, this.name, this.description, this.hided);
+        return new CourseFatDTO(this.id, this.name, this.description, this.hidden);
     }
 }
 
