@@ -156,15 +156,14 @@ public class UserService {
                 .findFirst() != null;
     }
 
-    public Course subscribe(int id, String code, String token)
+    public Course subscribe(String code, String token)
     {
-        Course course = courseRepository.findById(id).get();
+        Course course = courseRepository.findByInviteCode(code);
         AnonUser anonUser = getLoggedInUser(token).getValue2();
         InviteCode inviteCode = inviteCodeRepository.findFirstByCodeAndCourse(code, course);
 
         if (inviteCode == null || course == null || anonUser == null)
         {
-            log.info("Something is wrong");
             return null;
         }
 
@@ -178,9 +177,12 @@ public class UserService {
                 inviteCode.setMaxCopy(inviteCode.getMaxCopy() - 1);
         }
 
-        if (inviteCode.getValidUntil().isBefore(LocalDateTime.now()))
+        if (inviteCode.getValidUntil() != null)
         {
-            return null;
+            if (inviteCode.getValidUntil().isBefore(LocalDateTime.now()))
+            {
+                return null;
+            }
         }
 
         CourseSubs sub = new CourseSubs();
@@ -188,10 +190,6 @@ public class UserService {
         sub.setCourse(course);
 
         courseSubsRepository.save(sub);
-
-        log.info("New subsribtion added for course " + course.getName()
-                + " by user " + anonUser.getAnonName());
-
         return course;
     }
 }

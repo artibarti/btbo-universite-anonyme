@@ -115,12 +115,12 @@ public class UserController {
                 .collect(Collectors.toSet());
     }
 
-    @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.GET)
-    public CourseSlimDTO subscribe(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
+    @RequestMapping(value = "/courses/subscribe", method = RequestMethod.GET)
+    public CourseSlimDTO subscribe(@RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
-        String inviteCode = Functions.getValueFromHttpHeader(headers, "inviteCode");
+        String inviteCode = Functions.getValueFromHttpHeader(headers, "code");
 
-        return userService.subscribe(id, inviteCode, token).convertToSlimDTO();
+        return userService.subscribe(inviteCode, token).convertToSlimDTO();
     }
 }

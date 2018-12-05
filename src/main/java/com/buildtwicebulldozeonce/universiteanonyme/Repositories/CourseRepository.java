@@ -25,4 +25,10 @@ public interface CourseRepository extends CrudRepository<Course, Integer>
             "SELECT * FROM course c WHERE c.hidden IS false LIMIT 20";
     @Query(value = hotCoursesQuery, nativeQuery = true)
     Set<Course> getHotCourses();
+
+    String courseByInviteCodeQuery =
+            "SELECT * FROM course c WHERE c.id = " +
+                    "(SELECT course_id FROM invite_code WHERE code LIKE :code)";
+    @Query(value = courseByInviteCodeQuery, nativeQuery = true)
+    Course findByInviteCode(@Param("code") String code);
 }
