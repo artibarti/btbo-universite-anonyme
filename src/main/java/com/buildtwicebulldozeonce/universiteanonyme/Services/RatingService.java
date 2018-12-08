@@ -14,7 +14,7 @@ public class RatingService {
 
     @Autowired
     public RatingService(RatingRepository ratingRepository) {
-        this.ratingRepository = ratingRepository;
+        RatingService.ratingRepository = ratingRepository;
     }
 
     public static void addRating(@NonNull Rating rating)

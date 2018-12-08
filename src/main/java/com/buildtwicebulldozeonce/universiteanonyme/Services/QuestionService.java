@@ -25,9 +25,9 @@ public class QuestionService {
     public QuestionService(QuestionRepository questionRepository, RatingRepository ratingRepository,
                            CommentRepository commentRepository)
     {
-        this.questionRepository = questionRepository;
-        this.ratingRepository = ratingRepository;
-        this.commentRepository = commentRepository;
+        QuestionService.questionRepository = questionRepository;
+        QuestionService.ratingRepository = ratingRepository;
+        QuestionService.commentRepository = commentRepository;
     }
 
     public static List<Question> getAllQuestions() {
