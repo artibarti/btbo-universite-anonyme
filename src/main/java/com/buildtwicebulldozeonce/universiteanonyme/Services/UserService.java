@@ -6,6 +6,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Log
+@Slf4j
 @Service
 public class UserService {
 
@@ -78,7 +79,7 @@ public class UserService {
 
 
         if (anonUser == null || !anonUser.getHashedPassword().equals(hashedPassword)) {
-            log.warning("No AnonUser found with username: " + anonName);
+            log.warn("No AnonUser found with username: " + anonName);
             return null;
         }
 
@@ -86,7 +87,7 @@ public class UserService {
         User user = userRepository.findByDoubleHashedPassword(doubleHashedPassword);
 
         if (user == null) {
-            log.warning("No user found by doubleHashedPassword :" + doubleHashedPassword);
+            log.warn("No user found by doubleHashedPassword :" + doubleHashedPassword);
             return null;
         }
 
@@ -193,5 +194,22 @@ public class UserService {
 
             return course;
         }
+    }
+
+    public static boolean logoutLoggedInUserByToken(String token)
+    {
+        Triplet<String, User, AnonUser> loggedInUser = getLoggedInUser(token);
+        if(loggedInUser == null)
+        {
+            log.error(String.format("Could not find logged in user by token: %s", token));
+            return false;
+        }
+        return logoutLoggedInUser(loggedInUser);
+    }
+
+    public static boolean logoutLoggedInUser(Triplet<String, User, AnonUser> loggedInUser)
+    {
+        log.trace(String.format("Removing %s from loggedInUsers...", loggedInUser.getValue2().getAnonName()));
+        return loggedInUsers.remove(loggedInUser);
     }
 }

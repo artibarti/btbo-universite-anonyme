@@ -8,6 +8,8 @@ import com.buildtwicebulldozeonce.universiteanonyme.Helpers.TokenHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
-@Log
+@Slf4j
 public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -123,4 +125,15 @@ public class UserController {
         return UserService.subscribeToFreeCourse(id, token).convertToSlimDTO();
     }
 
+    @RequestMapping(value = "/logout/{token}", method = RequestMethod.GET)
+    public String logout(@PathVariable("token") String token)
+    {
+        if(UserService.logoutLoggedInUserByToken(token))
+        {
+            log.trace("Successful logout!");
+            return "Successful logout!";
+        }
+        log.error("Error while logging out...");
+        return "Error while logging out...";
+    }
 }
