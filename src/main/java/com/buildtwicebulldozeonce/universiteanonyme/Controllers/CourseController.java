@@ -140,7 +140,9 @@ public class CourseController {
 
     @RequestMapping(value = "/courses/hot", method = RequestMethod.GET)
     public Set<CourseFatDTO> getHotCourses(@RequestHeader HttpHeaders headers) {
-        return CourseService.getHotCourses().stream()
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        int id = UserService.getLoggedInUser(token).getValue2().getId();
+        return CourseService.getHotCourses(id).stream()
                 .map(Course::convertToFatDTO)
                 .collect(Collectors.toSet());
     }

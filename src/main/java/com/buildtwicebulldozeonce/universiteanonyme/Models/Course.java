@@ -14,7 +14,6 @@ import java.util.Set;
 @Data
 @Entity
 @NoArgsConstructor
-@Builder
 public class Course {
 
     @Id
