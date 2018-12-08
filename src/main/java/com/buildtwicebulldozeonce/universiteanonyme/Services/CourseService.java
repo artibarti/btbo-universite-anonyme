@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -62,35 +63,45 @@ public class CourseService {
             courseRepository.save(course);
     }
 
-    public static void deleteCourse(int id) {
+    public static void deleteCourse(int id, String token) {
 
-        log.info("course id " + id);
+        Course course = CourseService.getCourse(id);
+        log.info("Trying to delete course with id");
+        if (course == null) {
+            log.info("Cant find course");
+        } else {
+            if (course.getOwner().getId() == UserService.getLoggedInUser(token).getValue1().getId()) {
+                log.info("Deleting course with id: " + course.getId());
 
-        commentRepository.getCommentsForCourse(id)
-                .forEach(comment -> {
-                    ratingRepository.getRatingByRefIDAndType(comment.getRefID(), Rating.RatingType.CommentRating).
-                            forEach(ratingRepository::delete);
-                    commentRepository.delete(comment);
-                    log.info("Deleted comment ->" + comment.getId());
+                commentRepository.getCommentsForCourse(id)
+                        .forEach(comment -> {
+                            ratingRepository.getRatingByRefIDAndType(comment.getRefID(), Rating.RatingType.CommentRating).
+                                    forEach(ratingRepository::delete);
+                            commentRepository.delete(comment);
+                            log.info("Deleted comment ->" + comment.getId());
+                        });
+
+                log.info("Deleted all comments");
+
+                courseRoomRepository.getCourseRoomsForCourse(id).forEach(courseRoomRepository::delete);
+                log.info("Deleted all courseRooms");
+
+                sessionRepository.getSessionsForCourse(id).forEach(session -> {
+                    questionRepository.getQuestionsForCourse(id).forEach(questionRepository::delete);
+                    sessionRepository.delete(session);
+                    log.info("Deleted Session ->" + session.getId());
                 });
 
-        log.info("Deleted all comments");
+                log.info("Deleted all sessions and related questions");
 
-        courseRepository.findById(id).get().getCourseRooms().forEach(courseRoomRepository::delete);
+                courseRepository.deleteById(id);
 
-        log.info("Deleted all courseRooms");
+                log.info("Deleted course");
+            } else {
+                log.info("Not the owner");
+            }
+        }
 
-        sessionRepository.getSessionsForCourse(id).forEach(session -> {
-            questionRepository.getQuestionsForCourse(id).forEach(questionRepository::delete);
-            sessionRepository.delete(session);
-            log.info("Deleted Session ->" + session.getId());
-        });
-
-        log.info("Deleted all sessions and related questions");
-
-        courseRepository.deleteById(id);
-
-        log.info("Deleted course");
     }
 
     public static Set<User> getCourseAdmins(int id) {
@@ -166,8 +177,13 @@ public class CourseService {
         return dailyPulseOnTheLast7Days;
     }
 
-    public static Set<InviteCode> getAllInviteCodesForCourse(int courseID) {
-        return inviteCodeRepository.getAllInviteCodesForCourse(courseID);
+    public static Set<InviteCode> getAllInviteCodesForCourse(int courseID, String token) {
+
+        if (UserService.checkIfUserOwnsCourse(courseID, token)) {
+            return inviteCodeRepository.getAllInviteCodesForCourse(courseID);
+        } else {
+            return new HashSet<>();
+        }
     }
 
     public static void addInviteCodeForCourse(InviteCode inviteCode) {

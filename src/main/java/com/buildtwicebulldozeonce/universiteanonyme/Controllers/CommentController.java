@@ -25,7 +25,7 @@ public class CommentController
         CommentService.addComment(comment);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}/delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/comments/{id}/delete", method = RequestMethod.DELETE)
     public void deleteComment(@PathVariable("id") int id)
     {
         CommentService.deleteComment(id);
