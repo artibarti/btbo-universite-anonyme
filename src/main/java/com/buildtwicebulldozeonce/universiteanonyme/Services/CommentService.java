@@ -15,36 +15,36 @@ import java.util.Set;
 @Service
 public class CommentService {
 
-    private final CommentRepository commentRepository;
-    private final RatingRepository ratingRepository;
+    private  static CommentRepository commentRepository;
+    private  static RatingRepository ratingRepository;
 
     @Autowired
     public CommentService(CommentRepository commentRepository, RatingRepository ratingRepository) {
-        this.commentRepository = commentRepository;
-        this.ratingRepository = ratingRepository;
+        CommentService.commentRepository = commentRepository;
+        CommentService.ratingRepository = ratingRepository;
     }
 
-    public Comment getComment(int id)
+    public static Comment getComment(int id)
     {
         return commentRepository.findById(id).orElse(null);
     }
 
-    public void addComment(@NonNull Comment comment)
+    public static void addComment(@NonNull Comment comment)
     {
         commentRepository.save(comment);
     }
 
-    public void deleteComment(int id)
+    public static void deleteComment(int id)
     {
         commentRepository.deleteById(id);
     }
 
-    public void updateComment(@NonNull Comment comment)
+    public static void updateComment(@NonNull Comment comment)
     {
         commentRepository.save(comment);
     }
 
-    public Set<Rating> getRatingsForComment(int id)
+    public static Set<Rating> getRatingsForComment(int id)
     {
         return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CommentRating);
     }

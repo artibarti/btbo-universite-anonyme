@@ -23,16 +23,16 @@ import java.util.Set;
 @Log
 public class CourseService {
 
-    private final CourseRepository courseRepository;
-    private final RatingRepository ratingRepository;
-    private final UserRepository userRepository;
-    private final CourseSubsRepository courseSubsRepository;
-    private final CourseRoomRepository courseRoomRepository;
-    private final SessionRepository sessionRepository;
-    private final CommentRepository commentRepository;
-    private final QuestionRepository questionRepository;
-    private final InviteCodeRepository inviteCodeRepository;
-    private final AnonUserRepository anonUserRepository;
+    private  static CourseRepository courseRepository;
+    private  static RatingRepository ratingRepository;
+    private  static UserRepository userRepository;
+    private  static CourseSubsRepository courseSubsRepository;
+    private  static CourseRoomRepository courseRoomRepository;
+    private  static SessionRepository sessionRepository;
+    private  static CommentRepository commentRepository;
+    private  static QuestionRepository questionRepository;
+    private  static InviteCodeRepository inviteCodeRepository;
+    private  static AnonUserRepository anonUserRepository;
 
     @Autowired
     public CourseService(CourseRepository courseRepository, RatingRepository ratingRepository,
@@ -41,65 +41,73 @@ public class CourseService {
                          CommentRepository commentRepository, QuestionRepository questionRepository,
                          InviteCodeRepository inviteCodeRepository, AnonUserRepository anonUserRepository)
     {
-        this.courseRepository = courseRepository;
-        this.ratingRepository = ratingRepository;
-        this.userRepository = userRepository;
-        this.courseSubsRepository = courseSubsRepository;
-        this.courseRoomRepository = courseRoomRepository;
-        this.sessionRepository = sessionRepository;
-        this.commentRepository = commentRepository;
-        this.questionRepository = questionRepository;
-        this.inviteCodeRepository = inviteCodeRepository;
-        this.anonUserRepository = anonUserRepository;
+        CourseService.courseRepository = courseRepository;
+        CourseService.ratingRepository = ratingRepository;
+        CourseService.userRepository = userRepository;
+        CourseService.courseSubsRepository = courseSubsRepository;
+        CourseService.courseRoomRepository = courseRoomRepository;
+        CourseService.sessionRepository = sessionRepository;
+        CourseService.commentRepository = commentRepository;
+        CourseService.questionRepository = questionRepository;
+        CourseService.inviteCodeRepository = inviteCodeRepository;
+        CourseService.anonUserRepository = anonUserRepository;
     }
 
-    public Course getCourse(int id)
+    public static Course getCourse(int id)
     {
         return courseRepository.findById(id).orElse(null);
     }
 
-    public void addCourse(@NonNull Course course)
+    public static void addCourse(@NonNull Course course)
     {
         courseRepository.save(course);
     }
 
-    public void updateCourse(Course course)
+    public static void updateCourse(Course course)
     {
         if (courseRepository.existsById(course.getId()))
             courseRepository.save(course);
     }
 
-    public void deleteCourse(int id)
+    private static void deleteCourseRooms(int id)
     {
+    }
+
+    public static void deleteCourse(int id)
+    {
+       commentRepository.getCommentsForCourse(id).forEach(commentRepository::delete);
+
+       courseRepository.findById(id).get().getCourseRooms().forEach(courseRoomRepository::delete);
+
         courseRepository.deleteById(id);
     }
 
-    public Set<User> getCourseAdmins(int id)
+    public static Set<User> getCourseAdmins(int id)
     {
         return userRepository.getCourseAdmins(id);
     }
 
-    public Set<AnonUser> getCourseSubs(int id)
+    public static Set<AnonUser> getCourseSubs(int id)
     {
-        return this.anonUserRepository.getUsersSubbedForCourse(id);
+        return anonUserRepository.getUsersSubbedForCourse(id);
     }
 
-    public Set<CourseRoom> getCourseRooms(int id)
+    public static Set<CourseRoom> getCourseRooms(int id)
     {
         return courseRoomRepository.getCourseRoomsForCourse(id);
     }
 
-    public Set<Session> getSessionsForCourse(int id)
+    public static Set<Session> getSessionsForCourse(int id)
     {
         return sessionRepository.getSessionsForCourse(id);
     }
 
-    public Set<Rating> getRatingsForCourse(int id)
+    public static Set<Rating> getRatingsForCourse(int id)
     {
         return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CourseRating);
     }
 
-    public CourseRatingDTO getRatingSumForCourse(int id)
+    public static CourseRatingDTO getRatingSumForCourse(int id)
     {
         Set<Rating> ratings = ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CourseRating);
         CourseRatingDTO courseRatingDTO = new CourseRatingDTO();
@@ -112,7 +120,7 @@ public class CourseService {
         return courseRatingDTO;
     }
 
-    public List<CoursePulseDTO> getPulseForCourse(int id)
+    public static List<CoursePulseDTO> getPulseForCourse(int id)
     {
         List<CoursePulseDTO> dailyPulseOnTheLast7Days = new ArrayList<>();
         LocalTime midnight = LocalTime.MIDNIGHT;
@@ -155,18 +163,18 @@ public class CourseService {
         return dailyPulseOnTheLast7Days;
     }
 
-    public Set<InviteCode> getAllInviteCodesForCourse(int courseID)
+    public static Set<InviteCode> getAllInviteCodesForCourse(int courseID)
     {
-        return this.inviteCodeRepository.getAllInviteCodesForCourse(courseID);
+        return inviteCodeRepository.getAllInviteCodesForCourse(courseID);
     }
 
-    public void addInviteCodeForCourse(InviteCode inviteCode)
+    public static void addInviteCodeForCourse(InviteCode inviteCode)
     {
-        this.inviteCodeRepository.save(inviteCode);
+        inviteCodeRepository.save(inviteCode);
     }
 
-    public Set<Course> getHotCourses(int anonUserID)
+    public static Set<Course> getHotCourses()
     {
-        return courseRepository.getHotCourses(anonUserID);
+        return courseRepository.getHotCourses();
     }
 }

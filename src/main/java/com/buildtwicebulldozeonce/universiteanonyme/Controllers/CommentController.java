@@ -13,40 +13,33 @@ import java.util.Set;
 @RestController
 public class CommentController
 {
-    private final CommentService commentService;
-
-    @Autowired
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
-
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}", method = RequestMethod.GET)
     public Comment getComment(@PathVariable("id") int id)
     {
-        return commentService.getComment(id);
+        return CommentService.getComment(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/add", method = RequestMethod.POST)
     public void addComment(@RequestBody Comment comment)
     {
-        commentService.addComment(comment);
+        CommentService.addComment(comment);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}/delete", method = RequestMethod.DELETE)
     public void deleteComment(@PathVariable("id") int id)
     {
-        commentService.deleteComment(id);
+        CommentService.deleteComment(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}/update", method = RequestMethod.PUT)
     public void updateComment(@RequestBody Comment comment)
     {
-        commentService.updateComment(comment);
+        CommentService.updateComment(comment);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}/ratings", method = RequestMethod.GET)
     public Set<Rating> getRatingsForComment(@PathVariable("id") int id)
     {
-        return commentService.getRatingsForComment(id);
+        return CommentService.getRatingsForComment(id);
     }
 }

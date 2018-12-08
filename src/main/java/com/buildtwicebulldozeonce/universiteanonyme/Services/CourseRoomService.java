@@ -15,36 +15,36 @@ import java.util.Set;
 @Service
 public class CourseRoomService {
 
-    private final CourseRoomRepository courseRoomRepository;
-    private final CommentRepository commentRepository;
+    private  static CourseRoomRepository courseRoomRepository;
+    private  static CommentRepository commentRepository;
 
     @Autowired
     public CourseRoomService(CourseRoomRepository courseRoomRepository, CommentRepository commentRepository) {
-        this.courseRoomRepository = courseRoomRepository;
-        this.commentRepository = commentRepository;
+        CourseRoomService.courseRoomRepository = courseRoomRepository;
+        CourseRoomService.commentRepository = commentRepository;
     }
 
-    public CourseRoom getCourseRoom(int id)
+    public static CourseRoom getCourseRoom(int id)
     {
         return courseRoomRepository.findById(id).orElse(null);
     }
 
-    public void addCourseRoom(@NonNull CourseRoom courseRoom)
+    public static void addCourseRoom(@NonNull CourseRoom courseRoom)
     {
         courseRoomRepository.save(courseRoom);
     }
 
-    public Set<Comment> getCommentsForCourseRoom(int id)
+    public static Set<Comment> getCommentsForCourseRoom(int id)
     {
         return commentRepository.getCommentByTypeAndID(id, Comment.CommentType.CourseRoomComment);
     }
 
-    public void updateCourseRoom(CourseRoom courseRoom)
+    public static void updateCourseRoom(CourseRoom courseRoom)
     {
         courseRoomRepository.save(courseRoom);
     }
 
-    public void deleteCourseRoom(int id)
+    public static void deleteCourseRoom(int id)
     {
         courseRoomRepository.deleteById(id);
     }
