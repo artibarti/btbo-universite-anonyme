@@ -150,5 +150,4 @@ public class CourseController {
                 .map(Course::convertToFatDTO)
                 .collect(Collectors.toSet());
     }
-
 }

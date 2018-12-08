@@ -9,4 +9,5 @@ public class SessionSlimDTO
 {
     int id;
     String name;
+    int courseId;
 }

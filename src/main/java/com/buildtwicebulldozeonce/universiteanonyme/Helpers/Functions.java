@@ -18,7 +18,7 @@ public class Functions
         for (String key : keys)
         {
             String value = headers.getFirst(key);
-            log.info(String.format("Readin value for key %s... value => %s", key, value));
+            log.info(String.format("Reading value for key %s... value => %s", key, value));
             values.put(key, value);
         }
 
@@ -30,7 +30,7 @@ public class Functions
         log.info("Reading http header...");
 
         String value = headers.getFirst(key);
-        log.info(String.format("Readin value for key %s... value => %s", key, value));
+        log.info(String.format("Reading value for key %s... value => %s", key, value));
         return value;
     }
 }
