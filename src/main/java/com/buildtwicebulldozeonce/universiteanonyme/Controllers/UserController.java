@@ -22,21 +22,13 @@ import java.util.stream.Collectors;
 @Log
 public class UserController {
 
-    private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService)
-    {
-        this.userService = userService;
-    }
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public UserDTO login(@RequestHeader HttpHeaders headers)
     {
         HashMap<String, String> values
                 = Functions.getValuesFromHttpHeader(headers, "username", "password");
 
-        User user = userService.authenticateUser(values.get("username"), values.get("password"));
+        User user = UserService.authenticateUser(values.get("username"), values.get("password"));
 
         if (user != null)
             return user.convertToDTO();
@@ -50,7 +42,7 @@ public class UserController {
         HashMap<String, String> values = Functions.getValuesFromHttpHeader(
                 headers, "username", "password", "email", "firstname", "lastname");
 
-        if (userService.checkIfEmailOrUserNameIsUsed(values.get("email"), values.get("username")) || values.get("password") == null)
+        if (UserService.checkIfEmailOrUserNameIsUsed(values.get("email"), values.get("username")) || values.get("password") == null)
         {
             log.info("registration failed");
             UserDTO result = new UserDTO();
@@ -70,8 +62,8 @@ public class UserController {
                     .email(values.get("email"))
                     .build();
 
-            userService.addAnonUser(anonUser);
-            userService.addUser(user);
+            UserService.addAnonUser(anonUser);
+            UserService.addUser(user);
             return user.convertToDTO();
         }
     }
@@ -100,7 +92,7 @@ public class UserController {
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
 
-        return userService.getCoursesAdminedByUser(token).stream()
+        return UserService.getCoursesAdminedByUser(token).stream()
                 .map(Course::convertToSlimDTO)
                 .collect(Collectors.toSet());
     }
@@ -110,7 +102,7 @@ public class UserController {
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
 
-        return userService.getSubscriptionsForUser(token).stream()
+        return UserService.getSubscriptionsForUser(token).stream()
                 .map(Course::convertToSlimDTO)
                 .collect(Collectors.toSet());
     }
@@ -121,6 +113,6 @@ public class UserController {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         String inviteCode = Functions.getValueFromHttpHeader(headers, "code");
 
-        return userService.subscribe(inviteCode, token).convertToSlimDTO();
+        return UserService.subscribe(inviteCode, token).convertToSlimDTO();
     }
 }

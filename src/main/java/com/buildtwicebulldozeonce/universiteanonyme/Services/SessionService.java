@@ -17,46 +17,46 @@ import java.util.Set;
 @Service
 public class SessionService {
 
-    private final SessionRepository sessionRepository;
-    private final RatingRepository ratingRepository;
-    private final QuestionRepository questionRepository;
+    private  static SessionRepository sessionRepository;
+    private  static RatingRepository ratingRepository;
+    private  static QuestionRepository questionRepository;
 
     @Autowired
     public SessionService(SessionRepository sessionRepository, RatingRepository ratingRepository,
                           QuestionRepository questionRepository)
     {
-        this.sessionRepository = sessionRepository;
-        this.ratingRepository = ratingRepository;
-        this.questionRepository = questionRepository;
+        SessionService.sessionRepository = sessionRepository;
+        SessionService.ratingRepository = ratingRepository;
+        SessionService.questionRepository = questionRepository;
     }
 
-    public Session getSession(int id)
+    public static Session getSession(int id)
     {
         return sessionRepository.findById(id).orElse(null);
     }
 
-    public void addSession(int courseID, @NonNull Session session)
+    public static void addSession(int courseID, @NonNull Session session)
     {
 
     }
 
-    public void deleteSession(int id)
+    public static void deleteSession(int id)
     {
         sessionRepository.deleteById(id);
     }
 
-    public void updateSession(Session session)
+    public static void updateSession(Session session)
     {
         if (sessionRepository.existsById(session.getId()))
             sessionRepository.save(session);
     }
 
-    public Set<Question> getQuestionsForSession(int id)
+    public static Set<Question> getQuestionsForSession(int id)
     {
         return questionRepository.getQuestionsForSession(id);
     }
 
-    public Set<Rating> getRatingsForSession(int id)
+    public static Set<Rating> getRatingsForSession(int id)
     {
         return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.SessionRating);
     }

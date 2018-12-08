@@ -16,47 +16,39 @@ import java.util.Set;
 @RestController
 public class QuestionController
 {
-    private final QuestionService questionService;
-
-    @Autowired
-    public QuestionController(QuestionService questionService)
-    {
-        this.questionService = questionService;
-    }
-
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}", method = RequestMethod.GET)
     public Question getQuestion(@PathVariable("id") int id)
     {
-        return questionService.getQuestion(id);
+        return QuestionService.getQuestion(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/add", method = RequestMethod.POST)
     public void addQuestionForSession(@PathVariable("sessionID") int sessionID, @RequestBody Question question)
     {
-        questionService.addQuestionForSession(sessionID, question);
+        QuestionService.addQuestionForSession(sessionID, question);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/delete", method = RequestMethod.DELETE)
     public void deleteQuestion(@PathVariable("id") int id)
     {
-        questionService.deleteQuestion(id);
+        QuestionService.deleteQuestion(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/update", method = RequestMethod.PUT)
     public void updateQuestion(@RequestBody Question question)
     {
-        questionService.updateQuestion(question);
+        QuestionService.updateQuestion(question);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/ratings", method = RequestMethod.GET)
     public Set<Rating> getRatingsForQuestion(@PathVariable("id") int id)
     {
-        return questionService.getRatingsForQuestion(id);
+        return QuestionService.getRatingsForQuestion(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/comments", method = RequestMethod.GET)
     public Set<Comment> getCommentsForQuestion(@PathVariable("id") int id)
     {
-        return questionService.getCommentsForQuestion(id);
+        return QuestionService.getCommentsForQuestion(id);
     }
 }

@@ -4,7 +4,6 @@ import com.buildtwicebulldozeonce.universiteanonyme.Helpers.PasswordHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.TokenHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
-import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.javatuples.Triplet;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -21,14 +19,14 @@ import java.util.Set;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final AnonUserRepository anonUserRepository;
-    private final CourseRepository courseRepository;
-    private final RatingRepository ratingRepository;
-    private final InviteCodeRepository inviteCodeRepository;
-    private CourseSubsRepository courseSubsRepository;
+    private static UserRepository userRepository;
+    private static AnonUserRepository anonUserRepository;
+    private static CourseRepository courseRepository;
+    private static RatingRepository ratingRepository;
+    private static InviteCodeRepository inviteCodeRepository;
+    private static CourseSubsRepository courseSubsRepository;
 
-    private List<Triplet<String, User, AnonUser>> loggedInUsers = new ArrayList<>();
+    private static List<Triplet<String, User, AnonUser>> loggedInUsers = new ArrayList<>();
 
     @Autowired
     public UserService(UserRepository userRepository, AnonUserRepository anonUserRepository,
@@ -36,49 +34,44 @@ public class UserService {
                        InviteCodeRepository inviteCodeRepository,
                        CourseSubsRepository courseSubsRepository) {
 
-        this.userRepository = userRepository;
-        this.anonUserRepository = anonUserRepository;
-        this.courseRepository = courseRepository;
-        this.ratingRepository = ratingRepository;
-        this.inviteCodeRepository = inviteCodeRepository;
-        this.courseSubsRepository = courseSubsRepository;
+        UserService.userRepository = userRepository;
+        UserService.anonUserRepository = anonUserRepository;
+        UserService.courseRepository = courseRepository;
+        UserService.ratingRepository = ratingRepository;
+        UserService.inviteCodeRepository = inviteCodeRepository;
+        UserService.courseSubsRepository = courseSubsRepository;
     }
 
-    public User getUser(int id)
-    {
+    public static User getUser(int id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public void addUser(@NonNull User user) {
+    public static void addUser(@NonNull User user) {
         userRepository.save(user);
     }
 
-    public void addAnonUser(@NonNull AnonUser anonUser) {
+    public static void addAnonUser(@NonNull AnonUser anonUser) {
         anonUserRepository.save(anonUser);
     }
 
-    public void deleteUser(int id) {
+    public static void deleteUser(int id) {
         userRepository.deleteById(id);
     }
 
-    public Set<Course> getCoursesAdminedByUser(String token)
-    {
+    public static Set<Course> getCoursesAdminedByUser(String token) {
         return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue1().getId());
     }
 
-    public void updateUser(User user)
-    {
+    public static void updateUser(User user) {
         if (userRepository.existsById(user.getId()))
             userRepository.save(user);
     }
 
-    public boolean isUserNameAlreadyTaken(String userName)
-    {
+    public static boolean isUserNameAlreadyTaken(String userName) {
         return anonUserRepository.findByAnonName(userName) != null;
     }
 
-    public User authenticateUser(String anonName, String hashedPassword)
-    {
+    public static User authenticateUser(String anonName, String hashedPassword) {
         log.info("authenticate user with email: " + anonName + " and hashedPassword: " + hashedPassword);
 
         AnonUser anonUser = anonUserRepository.findByAnonName(anonName);
@@ -107,23 +100,19 @@ public class UserService {
         return user;
     }
 
-    public boolean checkIfEmailOrUserNameIsUsed(String email, String username)
-    {
+    public static boolean checkIfEmailOrUserNameIsUsed(String email, String username) {
         return userRepository.findByEmail(email) != null || anonUserRepository.findByAnonName(username) != null;
     }
 
-    public Set<Course> getSubscriptionsForUser(String token)
-    {
-        return this.courseRepository.getSubscriptionsForUser(getLoggedInUser(token).getValue2().getId());
+    public static Set<Course> getSubscriptionsForUser(String token) {
+        return courseRepository.getSubscriptionsForUser(getLoggedInUser(token).getValue2().getId());
     }
 
-    public AnonUser getAnonUserByUserName(String userName)
-    {
+    public static AnonUser getAnonUserByUserName(String userName) {
         return anonUserRepository.findByAnonName(userName);
     }
 
-    public Triplet<String, User, AnonUser> getLoggedInUser(String token)
-    {
+    public static Triplet<String, User, AnonUser> getLoggedInUser(String token) {
         return loggedInUsers
                 .stream()
                 .filter(triplet -> triplet.getValue0().equals(token))
@@ -131,8 +120,7 @@ public class UserService {
                 .orElse(null);
     }
 
-    public Triplet<String, User, AnonUser> getLoggedInUserByUserId(int userId)
-    {
+    public static Triplet<String, User, AnonUser> getLoggedInUserByUserId(int userId) {
         return loggedInUsers
                 .stream()
                 .filter(triplet -> triplet.getValue1().getId() == userId)
@@ -140,8 +128,7 @@ public class UserService {
                 .orElse(null);
     }
 
-    public Triplet<String, User, AnonUser> getLoggedInUserByAnonUserId(int anonUserId)
-    {
+    public static Triplet<String, User, AnonUser> getLoggedInUserByAnonUserId(int anonUserId) {
         return loggedInUsers
                 .stream()
                 .filter(triplet -> triplet.getValue2().getId() == anonUserId)
@@ -149,26 +136,21 @@ public class UserService {
                 .orElse(null);
     }
 
-    public boolean checkIfUserOwnsCourse(int id, String token)
-    {
+    public static boolean checkIfUserOwnsCourse(int id, String token) {
         return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue1().getId()).stream()
-                .filter(p -> p.getId() == id)
-                .findFirst() != null;
+                .anyMatch(p -> p.getId() == id);
     }
 
-    public Course subscribe(String code, String token)
-    {
+    public static Course subscribe(String code, String token) {
         Course course = courseRepository.findByInviteCode(code);
         AnonUser anonUser = getLoggedInUser(token).getValue2();
         InviteCode inviteCode = inviteCodeRepository.findFirstByCodeAndCourse(code, course);
 
-        if (inviteCode == null || course == null || anonUser == null)
-        {
+        if (inviteCode == null || course == null || anonUser == null) {
             return null;
         }
 
-        switch (inviteCode.getMaxCopy())
-        {
+        switch (inviteCode.getMaxCopy()) {
             case 0:
                 return null;
             case -1:
@@ -177,10 +159,8 @@ public class UserService {
                 inviteCode.setMaxCopy(inviteCode.getMaxCopy() - 1);
         }
 
-        if (inviteCode.getValidUntil() != null)
-        {
-            if (inviteCode.getValidUntil().isBefore(LocalDateTime.now()))
-            {
+        if (inviteCode.getValidUntil() != null) {
+            if (inviteCode.getValidUntil().isBefore(LocalDateTime.now())) {
                 return null;
             }
         }

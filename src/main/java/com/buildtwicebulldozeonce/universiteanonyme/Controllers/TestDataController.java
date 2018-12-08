@@ -13,14 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class TestDataController {
-    private final UserService userService;
-    private final CourseService courseService;
-
-    @Autowired
-    public TestDataController(UserService userService, CourseService courseService) {
-        this.userService = userService;
-        this.courseService = courseService;
-    }
 
     @RequestMapping(value = "/createTestData")
     public void createTestData() {
@@ -35,11 +27,10 @@ public class TestDataController {
         Course course = Course.builder()
                 .name("TestCourse0")
                 .owner(user)
-                .inviteCode("VLBIA5")
                 .build();
 
-        userService.addUser(user);
-        userService.addUser(user2);
-        courseService.addCourse(course);
+        UserService.addUser(user);
+        UserService.addUser(user2);
+        CourseService.addCourse(course);
     }
 }

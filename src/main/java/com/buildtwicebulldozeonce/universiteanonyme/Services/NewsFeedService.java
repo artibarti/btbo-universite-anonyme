@@ -19,22 +19,22 @@ import java.util.stream.Collectors;
 @Log
 public class NewsFeedService
 {
-    private final CommentRepository commentRepository;
-    private final QuestionRepository questionRepository;
-    private final RatingRepository ratingRepository;
-    private final CourseRepository courseRepository;
+    private  static CommentRepository commentRepository;
+    private  static QuestionRepository questionRepository;
+    private  static RatingRepository ratingRepository;
+    private  static CourseRepository courseRepository;
 
     @Autowired
     public NewsFeedService(CommentRepository commentRepository, QuestionRepository questionRepository,
                            RatingRepository ratingRepository, CourseRepository courseRepository)
     {
-        this.commentRepository = commentRepository;
-        this.questionRepository = questionRepository;
-        this.ratingRepository = ratingRepository;
-        this.courseRepository = courseRepository;
+        NewsFeedService.commentRepository = commentRepository;
+        NewsFeedService.questionRepository = questionRepository;
+        NewsFeedService.ratingRepository = ratingRepository;
+        NewsFeedService.courseRepository = courseRepository;
     }
 
-    private News convertRatingToNews(Rating rating)
+    private static News convertRatingToNews(Rating rating)
     {
         News news = new News();
         news.setRefID(rating.getRefID());
@@ -44,7 +44,7 @@ public class NewsFeedService
         return news;
     }
 
-    private News convertCommentToNews(Comment comment)
+    private static News convertCommentToNews(Comment comment)
     {
         News news = new News();
         news.setTimestamp(comment.getTimestamp());
@@ -55,7 +55,7 @@ public class NewsFeedService
         return news;
     }
 
-    private News convertQuestionToNews(Question question)
+    private static News convertQuestionToNews(Question question)
     {
         News news = new News();
         news.setTimestamp(question.getTimestamp());
@@ -67,7 +67,7 @@ public class NewsFeedService
         return news;
     }
 
-    public List<News> getNewsFeedForUser(int id, int anonID)
+    public static List<News> getNewsFeedForUser(int id, int anonID)
     {
         List<News> news = new ArrayList<>();
 
@@ -75,11 +75,11 @@ public class NewsFeedService
         Set<Question> questions = questionRepository.getNewsFeedQuestionsForUser(anonID);
         Set<Rating> ratings = ratingRepository.getNewsFeedRatingsForUser(id, anonID);
 
-        comments.stream()
+        comments
             .forEach(p -> news.add(convertCommentToNews(p)));
-        questions.stream()
+        questions
             .forEach(p -> news.add(convertQuestionToNews(p)));
-        ratings.stream()
+        ratings
             .forEach(p -> news.add(convertRatingToNews(p)));
 
         return news.stream()

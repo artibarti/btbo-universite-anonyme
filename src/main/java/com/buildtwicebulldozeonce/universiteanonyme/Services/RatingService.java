@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 @Log
 @Service
 public class RatingService {
-    private final RatingRepository ratingRepository;
+    private  static RatingRepository ratingRepository;
 
     @Autowired
     public RatingService(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
     }
 
-    public void addRating(@NonNull Rating rating)
+    public static void addRating(@NonNull Rating rating)
     {
         ratingRepository.save(rating);
     }
