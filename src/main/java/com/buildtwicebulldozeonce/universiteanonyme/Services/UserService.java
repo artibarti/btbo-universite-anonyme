@@ -172,4 +172,26 @@ public class UserService {
         courseSubsRepository.save(sub);
         return course;
     }
+
+    public Course subscribeToFreeCourse(int id, String token)
+    {
+        Course course = courseRepository.findById(id).get();
+        AnonUser anonUser = getLoggedInUser(token).getValue2();
+
+        if (course == null || course.isHidden() || anonUser == null)
+        {
+            log.info("something is wrong");
+            return null;
+        }
+
+        else
+        {
+            CourseSubs sub = new CourseSubs();
+            sub.setCourse(course);
+            sub.setAnonUser(anonUser);
+            courseSubsRepository.save(sub);
+
+            return course;
+        }
+    }
 }

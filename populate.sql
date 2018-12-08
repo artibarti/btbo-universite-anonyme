@@ -39,7 +39,7 @@ INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_
 INSERT INTO `user`(`id`, `double_hashed_password`, `email`, `first_name`, `last_name`) VALUES (110,"hashedpwd2","vonattamas@gmail.com","Vonat", "Tamás");
 
 /* add anon user */
-INSERT INTO `anon_user`(`id`, `anon_name`, `hashed_password`) VALUES (1, "anonymous", "hashdpwd");
+INSERT INTO `anon_user`(`id`, `anon_name`, `hashed_password`) VALUES (101, "anonymous", "hashdpwd");
 
 /* add courses */
 INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (102, "Kalkulus 2", 101, "Nem ehezunk es nem fazunk", 0);
@@ -50,10 +50,13 @@ INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (
 INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (106, "RFT", 103, "You wanna know the truth, i eat a lotta soup", 0);
 INSERT INTO `course`(`id`, `name`, `owner_id`, `description`, `hidden`) VALUES (107, "Automataelméleti alkalmazások", 104, "I hate to say noo, when it comes to those beautiful blue eyes", 0);
 
+/* add invite codes */
+INSERT INTO `invite_code`(`id`, `code`, `max_copy`, `valid_until`, `course_id`) VALUES (101,"AABBCC",-1,NULL,101);
+
 /* add course subs */
-INSERT INTO `course_subs` (`id`, `banned_until`, `anon_user_id`, `course_id`) VALUES ('104', '2018-11-29 00:00:00', '1', '101');
-INSERT INTO `course_subs` (`id`, `banned_until`, `anon_user_id`, `course_id`) VALUES ('105', '2018-11-01 00:00:00', '1', '102');
-INSERT INTO `course_subs` (`id`, `banned_until`, `anon_user_id`, `course_id`) VALUES ('106', '2018-11-04 00:00:00', '1', '103');
+INSERT INTO `course_subs` (`id`, `banned_until`, `anon_user_id`, `course_id`) VALUES ('104', '2018-11-29 00:00:00', '101', '101');
+INSERT INTO `course_subs` (`id`, `banned_until`, `anon_user_id`, `course_id`) VALUES ('105', '2018-11-01 00:00:00', '101', '102');
+INSERT INTO `course_subs` (`id`, `banned_until`, `anon_user_id`, `course_id`) VALUES ('106', '2018-11-04 00:00:00', '101', '103');
 
 /* add sessions */
 INSERT INTO `session`(`id`, `name`, `counter`, `is_active`, `course_id`) VALUES (101, "session 2018 okt 10", 10, true, 101);
@@ -77,35 +80,35 @@ INSERT INTO `admin`(`id`, `course_id`, `permissions_id`, `user_id`) VALUES (103,
 
 /* add questions */
 INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `timestamp`, `anon_user_id`, `session_id`)
-  VALUES (101, "baby dont hurt me", "What is love?", 23, CURRENT_TIMESTAMP, 1, 101);
+  VALUES (101, "baby dont hurt me", "What is love?", 23, CURRENT_TIMESTAMP, 101, 101);
 INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `timestamp`, `anon_user_id`, `session_id`)
-  VALUES (102, "Of course him*-*", "Who is the most handsome most hot boi here if not artur heartheartheart???", 10, CURRENT_TIMESTAMP, 1, 101);
+  VALUES (102, "Of course him*-*", "Who is the most handsome most hot boi here if not artur heartheartheart???", 10, CURRENT_TIMESTAMP, 101, 101);
 INSERT INTO `question`(`id`, `answer`, `message`, `rating`, `timestamp`, `anon_user_id`, `session_id`)
-  VALUES (103, "biztos maszturbal", "Where is Peti", 96, CURRENT_TIMESTAMP, 1, 101);
+  VALUES (103, "biztos maszturbal", "Where is Peti", 96, CURRENT_TIMESTAMP, 101, 101);
 
 /* add comments */
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`)
-  VALUES (101, "I get an ArgumentError (unknown keyword: content_type) in active_storage/services/3_service.rb and can''t find the source of the issue.", 1, 101, 101, "CourseRoomComment", CURRENT_TIMESTAMP);
+  VALUES (101, "I get an ArgumentError (unknown keyword: content_type) in active_storage/services/3_service.rb and can''t find the source of the issue.", 101, 101, 101, "CourseRoomComment", CURRENT_TIMESTAMP);
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`)
-  VALUES (102, "idk man, the model has one attached logo (an image) and I try to update the model with an image.", 1, 101, 101, "QuestionComment", CURRENT_TIMESTAMP);
+  VALUES (102, "idk man, the model has one attached logo (an image) and I try to update the model with an image.", 101, 101, 101, "QuestionComment", CURRENT_TIMESTAMP);
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`)
-  VALUES (104, "still darkness, in advance, thank you very much!", 1, 102, 101, "QuestionComment", '2018-11-08 00:00:00');
+  VALUES (104, "still darkness, in advance, thank you very much!", 101, 102, 101, "QuestionComment", '2018-11-08 00:00:00');
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`)
-  VALUES (105, "i just wanna go home", 1, 103, 101, "QuestionComment", '2018-11-17 00:00:00');
+  VALUES (105, "i just wanna go home", 101, 103, 101, "QuestionComment", '2018-11-17 00:00:00');
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`)
-  VALUES (106, "thats kinda interesting man", 1, 103, 101, "QuestionComment", '2018-11-17 03:00:00');
+  VALUES (106, "thats kinda interesting man", 101, 103, 101, "QuestionComment", '2018-11-17 03:00:00');
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`)
-  VALUES (107, "What can I do? We are incredibly busy so I really need that half hour as a breather. Equally if I take a half hour lunch somewhere outside of that half our presentation f", 1, 101, 101, "QuestionComment", '2018-11-07 09:00:00');
+  VALUES (107, "What can I do? We are incredibly busy so I really need that half hour as a breather. Equally if I take a half hour lunch somewhere outside of that half our presentation f", 101, 101, 101, "QuestionComment", '2018-11-07 09:00:00');
 INSERT INTO `comment`(`id`, `message`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`)
-  VALUES (103, "What does x stand for?", 1, 102, 101, "CourseRoomComment", '2018-11-02 00:00:00');
+  VALUES (103, "What does x stand for?", 101, 102, 101, "CourseRoomComment", '2018-11-02 00:00:00');
 
 /* add ratings */
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (102, 1, 1, 102,101,"CommentRating",'2018-11-02 00:00:00');
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (103, 2, 1, 103,101,"CommentRating",'2018-11-02 00:00:00');
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (101, 5, 1, 101,101,"CommentRating",CURRENT_TIMESTAMP );
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (104, 4, 1, 101,101,"CommentRating",CURRENT_TIMESTAMP );
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (105, 5, 1, 109,101,"CommentRating",'2018-11-02 00:00:00');
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (106, 3, 1, 101,101,"CourseRating",CURRENT_TIMESTAMP );
-INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (107, 5, 1, 109,101,"CourseRating",'2018-11-02 00:00:00');
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (102, 1, 101, 102,101,"CommentRating",'2018-11-02 00:00:00');
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (103, 2, 101, 103,101,"CommentRating",'2018-11-02 00:00:00');
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (101, 5, 101, 101,101,"CommentRating",CURRENT_TIMESTAMP );
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (104, 4, 101, 101,101,"CommentRating",CURRENT_TIMESTAMP );
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (105, 5, 101, 109,101,"CommentRating",'2018-11-02 00:00:00');
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (106, 3, 101, 101,101,"CourseRating",CURRENT_TIMESTAMP );
+INSERT INTO `rating`(`id`, `value`, `anon_user_id`, `user_id`, `refid`, `type`, `timestamp`) VALUES (107, 5, 101, 109,101,"CourseRating",'2018-11-02 00:00:00');
 
 COMMIT;

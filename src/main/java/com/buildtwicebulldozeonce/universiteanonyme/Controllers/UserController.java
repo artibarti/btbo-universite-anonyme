@@ -115,4 +115,12 @@ public class UserController {
 
         return UserService.subscribe(inviteCode, token).convertToSlimDTO();
     }
+
+    @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.GET)
+    public CourseSlimDTO subscribeToFreeCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers)
+    {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        return userService.subscribeToFreeCourse(id, token).convertToSlimDTO();
+    }
+
 }
