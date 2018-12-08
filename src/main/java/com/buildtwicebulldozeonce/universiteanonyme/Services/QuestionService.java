@@ -17,48 +17,48 @@ import java.util.Set;
 @Service
 public class QuestionService {
 
-    private final QuestionRepository questionRepository;
-    private final RatingRepository ratingRepository;
-    private final CommentRepository commentRepository;
+    private  static QuestionRepository questionRepository;
+    private  static RatingRepository ratingRepository;
+    private  static CommentRepository commentRepository;
 
     @Autowired
     public QuestionService(QuestionRepository questionRepository, RatingRepository ratingRepository,
                            CommentRepository commentRepository)
     {
-        this.questionRepository = questionRepository;
-        this.ratingRepository = ratingRepository;
-        this.commentRepository = commentRepository;
+        QuestionService.questionRepository = questionRepository;
+        QuestionService.ratingRepository = ratingRepository;
+        QuestionService.commentRepository = commentRepository;
     }
 
-    public List<Question> getAllQuestions() {
+    public static List<Question> getAllQuestions() {
         return Lists.newArrayList(questionRepository.findAll());
     }
 
-    public Question getQuestion(int id) {
+    public static Question getQuestion(int id) {
         return questionRepository.findById(id).orElse(null);
     }
 
-    public void addQuestionForSession(int id, @NonNull Question question)
+    public static void addQuestionForSession(int id, @NonNull Question question)
     {
 
     }
 
-    public void deleteQuestion(int id)
+    public static void deleteQuestion(int id)
     {
         questionRepository.deleteById(id);
     }
 
-    public void updateQuestion(@NonNull Question question)
+    public static void updateQuestion(@NonNull Question question)
     {
         questionRepository.save(question);
     }
 
-    public Set<Rating> getRatingsForQuestion(int id)
+    public static Set<Rating> getRatingsForQuestion(int id)
     {
         return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.QuestionRating);
     }
 
-    public Set<Comment> getCommentsForQuestion(int id)
+    public static Set<Comment> getCommentsForQuestion(int id)
     {
         return commentRepository.getCommentByTypeAndID(id, Comment.CommentType.QuestionComment);
     }

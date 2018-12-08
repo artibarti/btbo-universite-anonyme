@@ -15,24 +15,14 @@ import java.util.Set;
 @RestController
 public class NewsFeedController
 {
-    private final NewsFeedService newsFeedService;
-    private final UserService userService;
-
-    @Autowired
-    public NewsFeedController(NewsFeedService newsFeedService, UserService userService)
-    {
-        this.newsFeedService = newsFeedService;
-        this.userService = userService;
-    }
-
     @RequestMapping(value = "/user/newsfeed", method = RequestMethod.GET)
     public List<News> getNewFeedForUser(@RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers,"token");
 
-        int anonID = this.userService.getLoggedInUser(token).getValue2().getId();
-        int id = this.userService.getLoggedInUser(token).getValue1().getId();
-        return this.newsFeedService.getNewsFeedForUser(id, anonID);
+        int anonID = UserService.getLoggedInUser(token).getValue2().getId();
+        int id = UserService.getLoggedInUser(token).getValue1().getId();
+        return NewsFeedService.getNewsFeedForUser(id, anonID);
     }
 
 }

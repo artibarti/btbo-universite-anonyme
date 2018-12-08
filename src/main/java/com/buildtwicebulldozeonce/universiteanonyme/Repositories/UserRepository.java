@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Repositories;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Models.Course;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

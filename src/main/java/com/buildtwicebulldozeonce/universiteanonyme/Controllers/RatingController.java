@@ -16,19 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class RatingController {
 
-    private final UserService userService;
-    private final RatingService ratingService;
-
-    @Autowired
-    public RatingController(UserService UserService, RatingService RatingService) {
-        this.userService = UserService;
-        this.ratingService = RatingService;
-    }
-
     @RequestMapping(value = "/token/{token}/isanon/{isAnon}/ratingtype/{ratingType}/ratingvalue/{ratingValue}/refID/{refId}", method = RequestMethod.GET)
     public String addRating(@PathVariable("token") String token, @PathVariable("isAnon") boolean isAnon, @PathVariable("ratingType") String ratingType, @PathVariable("ratingValue") int ratingValue, @PathVariable("refId") int refId)
     {
-        Triplet<String, User, AnonUser> loggedInUser = userService.getLoggedInUser(token);
+        Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
         if(loggedInUser == null)
         {
             log.error("Couldn't find user by token:" + token);
@@ -57,7 +48,7 @@ public class RatingController {
                     .build();
         }
 
-        ratingService.addRating(rating);
+        RatingService.addRating(rating);
 
         return "Rating saved";
     }

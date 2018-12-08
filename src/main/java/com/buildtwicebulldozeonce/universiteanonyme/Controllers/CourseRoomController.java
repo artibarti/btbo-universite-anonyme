@@ -12,41 +12,33 @@ import java.util.Set;
 @RestController
 public class CourseRoomController
 {
-    private final CourseRoomService courseRoomService;
-
-    @Autowired
-    public CourseRoomController(CourseRoomService courseRoomService) {
-        this.courseRoomService = courseRoomService;
-    }
-
     @RequestMapping(value = "/courses/{courseID}/courserooms/{id}", method = RequestMethod.GET)
     public CourseRoom getCourseRoom(@PathVariable("id") int id)
     {
-        return courseRoomService.getCourseRoom(id);
+        return CourseRoomService.getCourseRoom(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/courserooms/add", method = RequestMethod.POST)
     public void addCourseRoom(@RequestBody CourseRoom courseRoom)
     {
-        courseRoomService.addCourseRoom(courseRoom);
+        CourseRoomService.addCourseRoom(courseRoom);
     }
 
     @RequestMapping(value = "/courses/{courseID}/courserooms/{id}/delete", method = RequestMethod.DELETE)
     public void deleteCourseRoom(@PathVariable("id") int id)
     {
-        courseRoomService.deleteCourseRoom(id);
+        CourseRoomService.deleteCourseRoom(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/courserooms/{id}/put", method = RequestMethod.PUT)
     public void updateCourseRoom(@RequestBody CourseRoom courseRoom)
     {
-        courseRoomService.updateCourseRoom(courseRoom);
+        CourseRoomService.updateCourseRoom(courseRoom);
     }
 
     @RequestMapping(value = "/courses/{courseID}/courserooms/{id}/comments", method = RequestMethod.GET)
     public Set<Comment> getCommentsForCourseRoom(@PathVariable("id") int id)
     {
-        return courseRoomService.getCommentsForCourseRoom(id);
+        return CourseRoomService.getCommentsForCourseRoom(id);
     }
-
 }

@@ -18,23 +18,16 @@ import java.util.stream.Collectors;
 @RestController
 public class SessionController
 {
-    private final SessionService sessionService;
-
-    @Autowired
-    public SessionController(SessionService sessionService) {
-        this.sessionService = sessionService;
-    }
-
     @RequestMapping(value = "/courses/{courseID}/sessions/{id}", method = RequestMethod.GET)
     public Session getSession(@PathVariable("courseID") int courseID, @PathVariable("id") int id)
     {
-        return sessionService.getSession(id);
+        return SessionService.getSession(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{id}/questions", method = RequestMethod.GET)
     public Set<QuestionSlimDTO> getQuestionsForSession(@PathVariable("courseID") int courseID, @PathVariable("id") int id)
     {
-        return sessionService.getQuestionsForSession(id).stream()
+        return SessionService.getQuestionsForSession(id).stream()
                 .map(Question::convertToSlimDTO)
                 .collect(Collectors.toSet());
     }
@@ -42,25 +35,25 @@ public class SessionController
     @RequestMapping(value = "/courses/{courseID}/sessions/", method = RequestMethod.POST)
     public void addSession(@PathVariable("courseID") int courseID, @RequestBody Session session)
     {
-        sessionService.addSession(courseID, session);
+        SessionService.addSession(courseID, session);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{id}/delete", method = RequestMethod.DELETE)
     public void deleteSession(@PathVariable("id") int id)
     {
-        sessionService.deleteSession(id);
+        SessionService.deleteSession(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{id}/update", method = RequestMethod.PUT)
     public void updateSession(@RequestBody Session session)
     {
-        sessionService.updateSession(session);
+        SessionService.updateSession(session);
     }
 
     @RequestMapping(value = "/courses/{courseiID}/sessions/{id}/ratings", method = RequestMethod.GET)
     public Set<Rating> getRatingsForSession(@PathVariable("id") int id)
     {
-        return sessionService.getRatingsForSession(id);
+        return SessionService.getRatingsForSession(id);
     }
 
 }

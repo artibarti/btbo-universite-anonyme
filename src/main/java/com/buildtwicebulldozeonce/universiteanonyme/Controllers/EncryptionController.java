@@ -11,25 +11,17 @@ import org.springframework.web.bind.annotation.*;
 @Log
 public class EncryptionController {
 
-    private final UserService userService;
-
-    @Autowired
-    public EncryptionController(UserService userService)
-    {
-        this.userService = userService;
-    }
-
     @RequestMapping(value = "/users/{userName}/getsalt", method = RequestMethod.GET)
     public String getSaltForUser(@PathVariable String userName)
     {
         log.info("Getting salt for: " + userName);
-        if(!userService.isUserNameAlreadyTaken(userName))
+        if(!UserService.isUserNameAlreadyTaken(userName))
         {
             log.info("User does not exist: " + userName);
             return "";
         }
 
-        AnonUser anonUser = userService.getAnonUserByUserName(userName);
+        AnonUser anonUser = UserService.getAnonUserByUserName(userName);
         String hashedPassword = anonUser.getHashedPassword();
         String salt = hashedPassword.substring(hashedPassword.lastIndexOf("#")+1);
         log.info("Returning salt for user: " + userName + "\nSalt: " + salt);
