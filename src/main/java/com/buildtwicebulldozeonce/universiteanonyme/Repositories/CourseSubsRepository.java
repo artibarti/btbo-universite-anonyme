@@ -17,4 +17,5 @@ public interface CourseSubsRepository extends CrudRepository<CourseSubs, Integer
     @Query(value = "SELECT cs FROM CourseSubs as cs JOIN cs.course as c WHERE c.id = :id")
     Set<CourseSubs> getCourseSubsForCourse(@Param("id") int id);
 
+    CourseSubs getByCourse_IdAndAndAnonUser_Id(int curseId, int anonId);
 }

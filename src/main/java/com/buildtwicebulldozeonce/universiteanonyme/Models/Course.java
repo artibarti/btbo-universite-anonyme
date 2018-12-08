@@ -2,7 +2,6 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseSlimDTO;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;

@@ -104,6 +104,18 @@ public class CourseService {
 
     }
 
+    public static void leaveCourse(int id, String token) {
+        User user = UserService.getLoggedInUser(token).getValue1();
+        log.info("User with id: " + user.getId() + " leaving course");
+        if (user.getId() == CourseService.getCourse(id).getOwner().getId()) {
+            log.info("you are the owner, you cant leave");
+            return;
+        } else {
+            courseSubsRepository.delete(courseSubsRepository.getByCourse_IdAndAndAnonUser_Id(id,UserService.getLoggedInUser(token).getValue2().getId()));
+            log.info("fasz");
+        }
+    }
+
     public static Set<User> getCourseAdmins(int id) {
         return userRepository.getCourseAdmins(id);
     }

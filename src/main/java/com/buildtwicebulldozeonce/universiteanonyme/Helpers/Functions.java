@@ -11,14 +11,16 @@ public class Functions
 {
     public static HashMap<String, String> getValuesFromHttpHeader(HttpHeaders headers, String... keys)
     {
-        log.info("Reading http header...");
+        //log.info("Reading http header...");
 
         HashMap<String, String> values = new HashMap<>();
 
         for (String key : keys)
         {
             String value = headers.getFirst(key);
-            log.info(String.format("Readin value for key %s... value => %s", key, value));
+            if (!"token".equals(key)) {
+                //log.info(String.format("Readin value for key %s... value => %s", key, value));
+            }
             values.put(key, value);
         }
 
@@ -27,10 +29,13 @@ public class Functions
 
     public static String getValueFromHttpHeader(HttpHeaders headers, String key)
     {
-        log.info("Reading http header...");
-
+        if (!"token".equals(key)) {
+            //log.info("Reading http header...");
+        }
         String value = headers.getFirst(key);
-        log.info(String.format("Readin value for key %s... value => %s", key, value));
+        if (!"token".equals(key)) {
+            //log.info(String.format("Readin value for key %s... value => %s", key, value));
+        }
         return value;
     }
 }

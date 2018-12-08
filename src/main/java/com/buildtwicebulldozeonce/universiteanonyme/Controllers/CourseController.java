@@ -48,7 +48,7 @@ public class CourseController {
 
     @RequestMapping(value = "/courses/{id}/delete", method = RequestMethod.DELETE)
     public void deleteCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
-        CourseService.deleteCourse(id, Functions.getValueFromHttpHeader(headers,"token"));
+        CourseService.deleteCourse(id, Functions.getValueFromHttpHeader(headers, "token"));
     }
 
     @RequestMapping(value = "/courses/{id}/admins", method = RequestMethod.GET)
@@ -59,6 +59,11 @@ public class CourseController {
     @RequestMapping(value = "/courses/{id}/subs", method = RequestMethod.GET)
     public Set<AnonUser> getCourseSubsForCourse(@PathVariable("id") int id) {
         return CourseService.getCourseSubs(id);
+    }
+
+    @RequestMapping(value = "/courses/{id}/leave", method = RequestMethod.GET)
+    public void leaveCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
+        CourseService.leaveCourse(id, Functions.getValueFromHttpHeader(headers, "token"));
     }
 
     @RequestMapping(value = "/courses/{id}/subs/sum", method = RequestMethod.GET)
@@ -99,7 +104,7 @@ public class CourseController {
 
     @RequestMapping(value = "/courses/{courseID}/invitecodes", method = RequestMethod.GET)
     public Set<InviteCode> getAllInviteCodesForCourse(@RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID) {
-            return CourseService.getAllInviteCodesForCourse(courseID, Functions.getValueFromHttpHeader(headers,"token"));
+        return CourseService.getAllInviteCodesForCourse(courseID, Functions.getValueFromHttpHeader(headers, "token"));
     }
 
     @RequestMapping(value = "/courses/{courseID}/invitecodes/generate", method = RequestMethod.POST)
