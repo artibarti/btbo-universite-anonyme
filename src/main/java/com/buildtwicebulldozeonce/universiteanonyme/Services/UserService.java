@@ -77,9 +77,18 @@ public class UserService {
 
         AnonUser anonUser = anonUserRepository.findByAnonName(anonName);
 
-
-        if (anonUser == null || !anonUser.getHashedPassword().equals(hashedPassword)) {
+        if(anonUser == null) {
             log.warn("No AnonUser found with username: " + anonName);
+            return null;
+        }
+
+        if(getLoggedInUserByAnonUserId(anonUser.getId()) != null) {
+            log.info(String.format("%s was already logged in...", anonName));
+            logoutLoggedInUser(getLoggedInUserByAnonUserId(anonUser.getId()));
+        }
+
+        if (!anonUser.getHashedPassword().equals(hashedPassword)) {
+            log.warn("Wrong password!");
             return null;
         }
 
