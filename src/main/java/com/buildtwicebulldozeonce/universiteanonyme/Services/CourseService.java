@@ -165,8 +165,8 @@ public class CourseService {
         this.inviteCodeRepository.save(inviteCode);
     }
 
-    public Set<Course> getHotCourses()
+    public Set<Course> getHotCourses(int anonUserID)
     {
-        return courseRepository.getHotCourses();
+        return courseRepository.getHotCourses(anonUserID);
     }
 }

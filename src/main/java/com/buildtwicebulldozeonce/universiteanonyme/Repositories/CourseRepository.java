@@ -16,15 +16,18 @@ public interface CourseRepository extends CrudRepository<Course, Integer>
 
     String subsForUserQuery =
             "SELECT * FROM course c WHERE c.id IN (" +
-                    "SELECT cs.id FROM course_subs cs " +
+                    "SELECT cs.course_id FROM course_subs cs " +
                         "WHERE cs.anon_user_id = :anonID)";
     @Query(value = subsForUserQuery, nativeQuery = true)
     Set<Course> getSubscriptionsForUser(@Param("anonID") int anonID);
 
     String hotCoursesQuery =
-            "SELECT * FROM course c WHERE c.hidden IS false LIMIT 20";
+            "SELECT * FROM course c WHERE c.hidden IS false " +
+                    "AND c.id NOT IN " +
+                        "(SELECT cs.course_id FROM course_subs cs WHERE cs.anon_user_id = :anonID) " +
+                    "LIMIT 20";
     @Query(value = hotCoursesQuery, nativeQuery = true)
-    Set<Course> getHotCourses();
+    Set<Course> getHotCourses(@Param("anonID") int anonID);
 
     String courseByInviteCodeQuery =
             "SELECT * FROM course c WHERE c.id = " +
