@@ -1,11 +1,9 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
-import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CoursePulseDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
-import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,24 +20,23 @@ import java.util.Set;
 @Log
 public class CourseService {
 
-    private  static CourseRepository courseRepository;
-    private  static RatingRepository ratingRepository;
-    private  static UserRepository userRepository;
-    private  static CourseSubsRepository courseSubsRepository;
-    private  static CourseRoomRepository courseRoomRepository;
-    private  static SessionRepository sessionRepository;
-    private  static CommentRepository commentRepository;
-    private  static QuestionRepository questionRepository;
-    private  static InviteCodeRepository inviteCodeRepository;
-    private  static AnonUserRepository anonUserRepository;
+    private static CourseRepository courseRepository;
+    private static RatingRepository ratingRepository;
+    private static UserRepository userRepository;
+    private static CourseSubsRepository courseSubsRepository;
+    private static CourseRoomRepository courseRoomRepository;
+    private static SessionRepository sessionRepository;
+    private static CommentRepository commentRepository;
+    private static QuestionRepository questionRepository;
+    private static InviteCodeRepository inviteCodeRepository;
+    private static AnonUserRepository anonUserRepository;
 
     @Autowired
     public CourseService(CourseRepository courseRepository, RatingRepository ratingRepository,
                          UserRepository userRepository, CourseSubsRepository courseSubsRepository,
                          CourseRoomRepository courseRoomRepository, SessionRepository sessionRepository,
                          CommentRepository commentRepository, QuestionRepository questionRepository,
-                         InviteCodeRepository inviteCodeRepository, AnonUserRepository anonUserRepository)
-    {
+                         InviteCodeRepository inviteCodeRepository, AnonUserRepository anonUserRepository) {
         CourseService.courseRepository = courseRepository;
         CourseService.ratingRepository = ratingRepository;
         CourseService.userRepository = userRepository;
@@ -53,62 +49,71 @@ public class CourseService {
         CourseService.anonUserRepository = anonUserRepository;
     }
 
-    public static Course getCourse(int id)
-    {
+    public static Course getCourse(int id) {
         return courseRepository.findById(id).orElse(null);
     }
 
-    public static void addCourse(@NonNull Course course)
-    {
+    public static void addCourse(@NonNull Course course) {
         courseRepository.save(course);
     }
 
-    public static void updateCourse(Course course)
-    {
+    public static void updateCourse(Course course) {
         if (courseRepository.existsById(course.getId()))
             courseRepository.save(course);
     }
 
-    private static void deleteCourseRooms(int id)
-    {
-    }
+    public static void deleteCourse(int id) {
 
-    public static void deleteCourse(int id)
-    {
-       commentRepository.getCommentsForCourse(id).forEach(commentRepository::delete);
+        log.info("course id " + id);
 
-       courseRepository.findById(id).get().getCourseRooms().forEach(courseRoomRepository::delete);
+        commentRepository.getCommentsForCourse(id)
+                .forEach(comment -> {
+                    ratingRepository.getRatingByRefIDAndType(comment.getRefID(), Rating.RatingType.CommentRating).
+                            forEach(ratingRepository::delete);
+                    commentRepository.delete(comment);
+                    log.info("Deleted comment ->" + comment.getId());
+                });
+
+        log.info("Deleted all comments");
+
+        courseRepository.findById(id).get().getCourseRooms().forEach(courseRoomRepository::delete);
+
+        log.info("Deleted all courseRooms");
+
+        sessionRepository.getSessionsForCourse(id).forEach(session -> {
+            questionRepository.getQuestionsForCourse(id).forEach(questionRepository::delete);
+            sessionRepository.delete(session);
+            log.info("Deleted Session ->" + session.getId());
+        });
+
+        log.info("Deleted all sessions and related questions");
 
         courseRepository.deleteById(id);
+
+        log.info("Deleted course");
     }
 
-    public static Set<User> getCourseAdmins(int id)
-    {
+    public static Set<User> getCourseAdmins(int id) {
         return userRepository.getCourseAdmins(id);
     }
 
-    public static Set<AnonUser> getCourseSubs(int id)
-    {
+    public static Set<AnonUser> getCourseSubs(int id) {
         return anonUserRepository.getUsersSubbedForCourse(id);
     }
 
-    public static Set<CourseRoom> getCourseRooms(int id)
-    {
+    public static Set<CourseRoom> getCourseRooms(int id) {
         return courseRoomRepository.getCourseRoomsForCourse(id);
     }
 
-    public static Set<Session> getSessionsForCourse(int id)
-    {
+    public static Set<Session> getSessionsForCourse(int id) {
         return sessionRepository.getSessionsForCourse(id);
     }
 
-    public static Set<Rating> getRatingsForCourse(int id)
-    {
+    public static Set<Rating> getRatingsForCourse(int id) {
         return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CourseRating);
     }
 
-    public static CourseRatingDTO getRatingSumForCourse(int id)
-    {
+    public static CourseRatingDTO getRatingSumForCourse(int id) {
         Set<Rating> ratings = ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CourseRating);
         CourseRatingDTO courseRatingDTO = new CourseRatingDTO();
         courseRatingDTO.setNumberOfRatings(ratings.size());
@@ -120,8 +125,7 @@ public class CourseService {
         return courseRatingDTO;
     }
 
-    public static List<CoursePulseDTO> getPulseForCourse(int id)
-    {
+    public static List<CoursePulseDTO> getPulseForCourse(int id) {
         List<CoursePulseDTO> dailyPulseOnTheLast7Days = new ArrayList<>();
         LocalTime midnight = LocalTime.MIDNIGHT;
         LocalDate today = LocalDate.now();
@@ -130,8 +134,7 @@ public class CourseService {
         Set<Comment> comments = commentRepository.getCommentsForCourse(id);
         Set<Question> questions = questionRepository.getQuestionsForCourse(id);
 
-        for (int i = 6; i >= 0; i--)
-        {
+        for (int i = 6; i >= 0; i--) {
             // make it useable in filtering
             final int static_i = i;
 
@@ -141,14 +144,14 @@ public class CourseService {
 
             numberOfComments = (int)
                     comments.stream()
-                    .filter(p -> p.getTimestamp().isBefore(todayMidnight.minusDays(static_i)))
-                    .filter(p -> p.getTimestamp().isAfter(todayMidnight.minusDays(static_i + 1)))
-                    .count();
+                            .filter(p -> p.getTimestamp().isBefore(todayMidnight.minusDays(static_i)))
+                            .filter(p -> p.getTimestamp().isAfter(todayMidnight.minusDays(static_i + 1)))
+                            .count();
             numberOfQuestions = (int)
                     questions.stream()
-                    .filter(p -> p.getTimestamp().isBefore(todayMidnight.minusDays(static_i)))
-                    .filter(p -> p.getTimestamp().isAfter(todayMidnight.minusDays(static_i + 1)))
-                    .count();
+                            .filter(p -> p.getTimestamp().isBefore(todayMidnight.minusDays(static_i)))
+                            .filter(p -> p.getTimestamp().isAfter(todayMidnight.minusDays(static_i + 1)))
+                            .count();
             day = LocalDate.now().minusDays(static_i).getDayOfWeek().toString().toLowerCase();
 
             CoursePulseDTO coursePulseDTO = new CoursePulseDTO();
@@ -163,18 +166,15 @@ public class CourseService {
         return dailyPulseOnTheLast7Days;
     }
 
-    public static Set<InviteCode> getAllInviteCodesForCourse(int courseID)
-    {
+    public static Set<InviteCode> getAllInviteCodesForCourse(int courseID) {
         return inviteCodeRepository.getAllInviteCodesForCourse(courseID);
     }
 
-    public static void addInviteCodeForCourse(InviteCode inviteCode)
-    {
+    public static void addInviteCodeForCourse(InviteCode inviteCode) {
         inviteCodeRepository.save(inviteCode);
     }
 
-    public static Set<Course> getHotCourses(int anonUserID)
-    {
+    public static Set<Course> getHotCourses(int anonUserID) {
         return courseRepository.getHotCourses(anonUserID);
     }
 }

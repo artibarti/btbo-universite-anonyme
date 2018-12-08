@@ -46,15 +46,19 @@ public class CourseController {
         }
     }
 
-    @RequestMapping(value = "/courses/{id}/delete", method = RequestMethod.GET)
+    @RequestMapping(value = "/courses/{id}/delete", method = RequestMethod.DELETE)
     public void deleteCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
         Course course = CourseService.getCourse(id);
         String token = Functions.getValueFromHttpHeader(headers, "token");
+        log.info("Trying to delete course with id");
         if (course == null) {
             log.info("Cant find course");
         } else {
-            if (course.getOwner().equals(UserService.getLoggedInUser(token).getValue1())) {
-
+            if (course.getOwner().getId() == UserService.getLoggedInUser(token).getValue1().getId()) {
+                CourseService.deleteCourse(id);
+                log.info("Deleted course with id: " + course.getId());
+            } else {
+                log.info("Not the owner");
             }
 
         }
