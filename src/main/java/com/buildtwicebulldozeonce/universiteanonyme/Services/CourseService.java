@@ -175,6 +175,6 @@ public class CourseService {
 
     public static Set<Course> getHotCourses()
     {
-        return courseRepository.getHotCourses();
+        return courseRepository.getHotCourses(1);
     }
 }

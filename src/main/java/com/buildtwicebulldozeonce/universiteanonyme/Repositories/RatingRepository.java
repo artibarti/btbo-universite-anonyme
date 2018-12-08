@@ -33,4 +33,8 @@ public interface RatingRepository extends CrudRepository<Rating, Integer>
                          "r.type = \"CommentRating\")";
     @Query(value = newsFeedRatingsQuery, nativeQuery = true)
     Set<Rating> getNewsFeedRatingsForUser(@Param("id") int id, @Param("anonID") int anonID);
+
+    Set<Rating> getRatingByRefIDAndType(int refID, Rating.RatingType type);
+
+
 }
