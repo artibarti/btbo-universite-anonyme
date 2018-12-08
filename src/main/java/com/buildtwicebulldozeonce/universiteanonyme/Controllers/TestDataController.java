@@ -1,4 +1,4 @@
-package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
+/*package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Course;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
@@ -34,3 +34,4 @@ public class TestDataController {
         CourseService.addCourse(course);
     }
 }
+*/

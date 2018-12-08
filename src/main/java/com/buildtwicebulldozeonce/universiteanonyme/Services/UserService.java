@@ -173,7 +173,7 @@ public class UserService {
         return course;
     }
 
-    public Course subscribeToFreeCourse(int id, String token)
+    public static Course subscribeToFreeCourse(int id, String token)
     {
         Course course = courseRepository.findById(id).get();
         AnonUser anonUser = getLoggedInUser(token).getValue2();

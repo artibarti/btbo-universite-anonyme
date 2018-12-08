@@ -120,7 +120,7 @@ public class UserController {
     public CourseSlimDTO subscribeToFreeCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
-        return userService.subscribeToFreeCourse(id, token).convertToSlimDTO();
+        return UserService.subscribeToFreeCourse(id, token).convertToSlimDTO();
     }
 
 }
