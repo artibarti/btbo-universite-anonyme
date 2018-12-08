@@ -35,7 +35,7 @@ public class Session {
 
     public SessionSlimDTO convertToSlimDTO()
     {
-        SessionSlimDTO sessionSlimDTO = new SessionSlimDTO(this.getId(), this.getName());
+        SessionSlimDTO sessionSlimDTO = SessionSlimDTO.builder().id(getId()).name(getName()).courseId(course.getId()).build();
         return sessionSlimDTO;
     }
 }

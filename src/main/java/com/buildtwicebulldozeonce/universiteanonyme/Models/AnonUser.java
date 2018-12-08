@@ -18,7 +18,7 @@ import java.util.Set;
 public class AnonUser {
     @Id
     @GeneratedValue(generator = MyGenerator.generatorName)
-    @GenericGenerator(name = MyGenerator.generatorName, strategy = "myGenerator")
+    @GenericGenerator(name = MyGenerator.generatorName, strategy = "com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator")
     private int id;
     @Column(nullable = false, unique = true)
     private String anonName;
