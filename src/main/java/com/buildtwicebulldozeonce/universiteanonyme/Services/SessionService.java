@@ -8,18 +8,20 @@ import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepositor
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.SessionRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class SessionService {
 
-    private  static SessionRepository sessionRepository;
-    private  static RatingRepository ratingRepository;
-    private  static QuestionRepository questionRepository;
+    private static SessionRepository sessionRepository;
+    private static RatingRepository ratingRepository;
+    private static QuestionRepository questionRepository;
 
     @Autowired
     public SessionService(SessionRepository sessionRepository, RatingRepository ratingRepository,
@@ -35,14 +37,20 @@ public class SessionService {
         return sessionRepository.findById(id).orElse(null);
     }
 
-    public static void addSession(int courseID, @NonNull Session session)
+    public static void saveSession(Session session)
     {
-
+        log.trace("Entering SessionService::saveSession...");
+        int numberOfSessions = sessionRepository.getSessionsForCourse(session.getCourse().getId()).size();
+        session.setCounter(numberOfSessions + 1);
+        sessionRepository.save(session);
+        log.trace(String.format("Successfully saved session %s for course %s",
+                session.getName(),
+                session.getCourse().getName()));
     }
 
-    public static void deleteSession(int id)
+    public static void deleteSession(Session session)
     {
-        sessionRepository.deleteById(id);
+
     }
 
     public static void updateSession(Session session)
