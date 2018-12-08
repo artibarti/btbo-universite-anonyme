@@ -10,9 +10,10 @@ import java.util.Random;
 public class MyGenerator implements IdentifierGenerator {
 
     public static final String generatorName = "id_generator";
+    public static Random random = new Random();
 
     @Override
     public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object object) throws HibernateException {
-        return new Random().nextInt();
+        return random.nextInt();
     }
 }

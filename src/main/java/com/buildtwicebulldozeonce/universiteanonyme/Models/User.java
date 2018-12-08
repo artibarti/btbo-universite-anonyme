@@ -18,7 +18,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(generator = MyGenerator.generatorName)
-    @GenericGenerator(name = MyGenerator.generatorName, strategy = "myGenerator")
+    @GenericGenerator(name = MyGenerator.generatorName, strategy = "com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator")
     private int id;
     private String firstName;
     private String lastName;
