@@ -138,13 +138,9 @@ public class CourseController {
         return null;
     }
 
-    @RequestMapping(value = "/courses/hot", method = RequestMethod.GET)         
-    public static Set<CourseFatDTO> getHotCourses(@RequestHeader HttpHeaders headers)
-    {
-        String token = Functions.getValueFromHttpHeader(headers, "token");
-        int id = userService.getLoggedInUser(token).getValue2().getId();
-
-        return courseService.getHotCourses(id).stream()
+    @RequestMapping(value = "/courses/hot", method = RequestMethod.GET)
+    public Set<CourseFatDTO> getHotCourses(@RequestHeader HttpHeaders headers) {
+        return CourseService.getHotCourses().stream()
                 .map(Course::convertToFatDTO)
                 .collect(Collectors.toSet());
     }
