@@ -1,14 +1,12 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
-import com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator;
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.IdGenerator;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Log
@@ -17,8 +15,8 @@ import java.util.Set;
 @Builder
 public class AnonUser {
     @Id
-    @GeneratedValue(generator = MyGenerator.generatorName)
-    @GenericGenerator(name = MyGenerator.generatorName, strategy = "com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator")
+    @GeneratedValue(generator = IdGenerator.generatorName)
+    @GenericGenerator(name = IdGenerator.generatorName, strategy = "com.buildtwicebulldozeonce.universiteanonyme.Helpers.IdGenerator")
     private int id;
     @Column(nullable = false, unique = true)
     private String anonName;

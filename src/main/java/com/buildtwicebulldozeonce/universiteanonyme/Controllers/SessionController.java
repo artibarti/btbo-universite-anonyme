@@ -54,7 +54,7 @@ public class SessionController
                 .course(course)
                 .build();
 
-        SessionService.saveSession(session);
+        SessionService.createSession(session);
     }
 
     @RequestMapping(value = "/sessions/delete", method = RequestMethod.DELETE)

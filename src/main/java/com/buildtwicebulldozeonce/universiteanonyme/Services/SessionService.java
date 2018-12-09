@@ -37,9 +37,9 @@ public class SessionService {
         return sessionRepository.findById(id).orElse(null);
     }
 
-    public static void saveSession(Session session)
+    public static void createSession(Session session)
     {
-        log.trace("Entering SessionService::saveSession...");
+        log.trace("Entering SessionService::createSession...");
         int numberOfSessions = sessionRepository.getSessionsForCourse(session.getCourse().getId()).size();
         session.setCounter(numberOfSessions + 1);
         sessionRepository.save(session);

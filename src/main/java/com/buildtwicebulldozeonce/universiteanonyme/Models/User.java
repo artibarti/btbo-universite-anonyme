@@ -1,7 +1,7 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
-import com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator;
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.IdGenerator;
 import lombok.*;
 import lombok.extern.java.Log;
 import org.hibernate.annotations.GenericGenerator;
@@ -17,8 +17,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(generator = MyGenerator.generatorName)
-    @GenericGenerator(name = MyGenerator.generatorName, strategy = "com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator")
+    @GeneratedValue(generator = IdGenerator.generatorName)
+    @GenericGenerator(name = IdGenerator.generatorName, strategy = "com.buildtwicebulldozeonce.universiteanonyme.Helpers.IdGenerator")
     private int id;
     private String firstName;
     private String lastName;

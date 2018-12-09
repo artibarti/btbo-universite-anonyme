@@ -7,8 +7,7 @@ import org.hibernate.id.IdentifierGenerator;
 import java.io.Serializable;
 import java.util.Random;
 
-public class MyGenerator implements IdentifierGenerator {
-
+public class IdGenerator implements IdentifierGenerator {
     public static final String generatorName = "id_generator";
     public static Random random = new Random();
 
