@@ -64,6 +64,23 @@ public class CourseService {
             courseRepository.save(course);
     }
 
+    public static void deleteCourse(Course course) {
+
+        log.info("Cleaning up dependencies for course: %s...",course.getId());
+
+        log.info("Deleting sessions related to the course");
+        sessionRepository.getSessionsByCourse_Id(course.getId()).forEach(SessionService::deleteSession);
+
+        log.info("Deleting courseRooms related to the course");
+        courseRoomRepository.getCourseRoomsByCourse_Id(course.getId()).forEach(CourseRoomService::deleteCourseRoom);
+
+        log.info("Deleting courseSubs related to the course");
+        courseSubsRepository.getCourseSubsByCourse_Id(course.getId()).forEach(courseSubsRepository::delete);
+
+        log.info("Deleting course");
+        courseRepository.delete(course);
+    }
+
     public static void deleteCourse(int id, String token) {
         Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
         Course course = CourseService.getCourse(id);
@@ -100,7 +117,6 @@ public class CourseService {
         if (loggedInUser.getValue1().getId() == CourseService.getCourse(id).getOwner().getId()) {
             log.info("The user is the owner of the course");
             return;
-        }
 
         courseSubsRepository.delete(courseSubsRepository.getByCourse_IdAndAndAnonUser_Id(id, loggedInUser.getValue2().getId()));
         log.info("Successfully left the course.");

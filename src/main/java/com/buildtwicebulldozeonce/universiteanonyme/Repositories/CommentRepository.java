@@ -49,4 +49,6 @@ public interface CommentRepository extends CrudRepository<Comment, Integer>
                         "AND c.type = \'QuestionComment\')";
     @Query(value = commentsForCourseQuery, nativeQuery = true)
     Set<Comment> getCommentsForCourse(@Param("id") int id);
+
+    Set<Comment> getCommentByRefIDAndType(int refID, Comment.CommentType type);
 }

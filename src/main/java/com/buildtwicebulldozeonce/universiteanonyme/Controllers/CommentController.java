@@ -1,10 +1,8 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -28,7 +26,7 @@ public class CommentController
     @RequestMapping(value = "/comments/{id}/delete", method = RequestMethod.DELETE)
     public void deleteComment(@PathVariable("id") int id)
     {
-        CommentService.deleteComment(id);
+        CommentService.deleteComment(CommentService.getComment(id));
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/{id}/update", method = RequestMethod.PUT)

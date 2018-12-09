@@ -35,4 +35,6 @@ public interface QuestionRepository extends CrudRepository<Question, Integer>
                     "WHERE s.course_id = :id)";
     @Query(value = questionsForCourseQuery, nativeQuery = true)
     Set<Question> getQuestionsForCourse(@Param("id") int id);
+
+    Set<Question> getQuestionsBySession_Id(int session_id);
 }

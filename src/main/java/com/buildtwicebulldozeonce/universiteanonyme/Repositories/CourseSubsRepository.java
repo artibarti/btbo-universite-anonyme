@@ -18,4 +18,6 @@ public interface CourseSubsRepository extends CrudRepository<CourseSubs, Integer
     Set<CourseSubs> getCourseSubsForCourse(@Param("id") int id);
 
     CourseSubs getByCourse_IdAndAndAnonUser_Id(int curseId, int anonId);
+
+    Set<CourseSubs> getCourseSubsByCourse_Id(int course_id);
 }

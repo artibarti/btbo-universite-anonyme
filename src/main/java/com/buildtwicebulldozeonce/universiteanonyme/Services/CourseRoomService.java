@@ -46,22 +46,12 @@ public class CourseRoomService {
         courseRoomRepository.save(courseRoom);
     }
 
-    public static void deleteCourseRoom(int id)
-    {
-        CommentService.deleteCommentsByCourseRoomId(id);
-        courseRoomRepository.deleteById(id);
-        log.info("Successfully deleted course room by id => " + id);
-    }
-
     public static void deleteCourseRoom(CourseRoom courseRoom)
     {
-        CommentService.deleteCommentsByCourseRoomId(courseRoom.getId());
-        courseRoomRepository.delete(courseRoom);
-        log.info("Successfully deleted course room => " + courseRoom.getName());
-    }
+        log.info("Deleting comments related to courseroom with id: %s...",courseRoom.getId());
+        commentRepository.getCommentByRefIDAndType(courseRoom.getId(), Comment.CommentType.CourseRoomComment).forEach(CommentService::deleteComment);
 
-    public static void deleteCourseRoomsForCourse(int id)
-    {
-        CourseService.getCourseRooms(id).forEach(CourseRoomService::deleteCourseRoom);
+        log.info("Deleting courseroom...");
+        courseRoomRepository.delete(courseRoom);
     }
 }

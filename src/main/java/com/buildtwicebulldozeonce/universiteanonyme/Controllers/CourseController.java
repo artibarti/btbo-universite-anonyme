@@ -48,7 +48,8 @@ public class CourseController {
 
     @RequestMapping(value = "/courses/{id}/delete", method = RequestMethod.DELETE)
     public void deleteCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
-        CourseService.deleteCourse(id, Functions.getValueFromHttpHeader(headers, "token"));
+        Course course = CourseService.getCourse(id);
+        CourseService.deleteCourse(course);
     }
 
     @RequestMapping(value = "/courses/{id}/admins", method = RequestMethod.GET)

@@ -15,4 +15,6 @@ public interface CourseRoomRepository extends CrudRepository<CourseRoom, Integer
     @Query(value = "SELECT cr FROM CourseRoom as cr JOIN cr.course as c WHERE c.id = :id")
     Set<CourseRoom> getCourseRoomsForCourse(@Param("id") int id);
 
+    Set<CourseRoom> getCourseRoomsByCourse_Id(int course_id);
+
 }
