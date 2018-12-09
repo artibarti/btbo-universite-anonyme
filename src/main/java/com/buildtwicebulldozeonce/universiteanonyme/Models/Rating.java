@@ -19,8 +19,6 @@ public class Rating {
     @Column(nullable = false)
     private int value;
     @ManyToOne
-    private User user;
-    @ManyToOne
     private AnonUser anonUser;
     @Column(nullable = false)
     private int refID;

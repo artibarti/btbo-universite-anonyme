@@ -41,7 +41,7 @@ public class RatingController {
                     .build();
         }
 
-        RatingService.addRating(rating);
+        RatingService.saveRating(rating);
 
         return "Rating saved";
     }

@@ -1,9 +1,11 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.QuestionService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -39,5 +41,12 @@ public class QuestionController {
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/comments", method = RequestMethod.GET)
     public Set<Comment> getCommentsForQuestion(@PathVariable("id") int id) {
         return QuestionService.getCommentsForQuestion(id);
+    }
+
+    @RequestMapping(value = "/questions/{id}/ratings/add/{value}")
+    public void addRating(@PathVariable("id") int questionId, @PathVariable("value") int value, @RequestBody HttpHeaders httpHeader)
+    {
+        String token = Functions.getValueFromHttpHeader(httpHeader, "token");
+        QuestionService.addRating(token, questionId, value);
     }
 }

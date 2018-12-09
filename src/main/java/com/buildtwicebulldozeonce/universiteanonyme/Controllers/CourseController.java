@@ -91,6 +91,13 @@ public class CourseController {
         return CourseService.getRatingSumForCourse(id);
     }
 
+    @RequestMapping(value = "/courses/{id}/ratings/add/{value}", method = RequestMethod.POST)
+    public void addRating(@PathVariable("id") int courseId, @PathVariable("value") int value, @RequestHeader HttpHeaders headers)
+    {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        CourseService.addRating(token, value, courseId);
+    }
+
     @RequestMapping(value = "/courses/{id}/pulse", method = RequestMethod.GET)
     public List<CoursePulseDTO> getPulseForCourse(@PathVariable("id") int id) {
         return CourseService.getPulseForCourse(id);

@@ -1,17 +1,17 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -68,4 +68,36 @@ public class QuestionService {
         return commentRepository.getCommentByTypeAndID(id, Comment.CommentType.QuestionComment);
     }
 
+    public static void addRating(String token, int questionId, int value) {
+        Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
+        Question question = getQuestion(questionId);
+        Rating rating;
+
+        if(isQuestionRatedByUser(loggedInUser.getValue2(), question))
+        {
+            rating = RatingService.getRating(loggedInUser.getValue2(), Rating.RatingType.QuestionRating, questionId);
+            rating.setValue(value);
+            rating.setTimestamp(LocalDateTime.now());
+        }
+        else {
+            rating = Rating.builder()
+                    .value(value)
+                    .refID(questionId)
+                    .type(Rating.RatingType.QuestionRating)
+                    .timestamp(LocalDateTime.now())
+                    .anonUser(loggedInUser.getValue2())
+                    .build();
+        }
+        log.trace("Question: " + question.getMessage() + " has been rated by: " +
+                loggedInUser.getValue2().getAnonName() + " with value: " + value);
+        RatingService.saveRating(rating);
+    }
+
+    public static boolean isQuestionRatedByUser(AnonUser anonUser, Question question) {
+        return getRating(anonUser, question) != null;
+    }
+
+    public static Rating getRating(AnonUser anonUser, Question question) {
+        return ratingRepository.getRatingByAnonUserAndAndTypeAndRefID(anonUser, Rating.RatingType.QuestionRating, question.getId());
+    }
 }
