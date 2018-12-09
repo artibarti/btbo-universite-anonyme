@@ -16,4 +16,6 @@ public interface SessionRepository extends CrudRepository<Session, Integer>
     @Query("SELECT s FROM Session as s JOIN s.course as c WHERE c.id = :id")
     Set<Session> getSessionsForCourse(@Param("id") int id);
 
+    Set<Session> getSessionsByCourse_Id(int course_id);
+
 }

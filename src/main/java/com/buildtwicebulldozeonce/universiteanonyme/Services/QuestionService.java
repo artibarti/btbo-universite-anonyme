@@ -8,12 +8,14 @@ import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionReposit
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class QuestionService {
 
@@ -43,9 +45,18 @@ public class QuestionService {
 
     }
 
-    public static void deleteQuestion(int id)
+    public static void deleteQuestion(Question question)
     {
-        questionRepository.deleteById(id);
+        log.info("Cleaning up dependencies for question: %s...",question.getId());
+
+        log.info("Deleting ratings related to the question");
+        ratingRepository.getRatingByRefIDAndType(question.getId(), Rating.RatingType.QuestionRating).forEach(RatingService::deleteRating);
+
+        log.info("Deleting comments related to the question");
+        commentRepository.getCommentByRefIDAndType(question.getId(), Comment.CommentType.QuestionComment).forEach(CommentService::deleteComment);
+
+        log.info("Deleting question...");
+        questionRepository.delete(question);
     }
 
     public static void updateQuestion(@NonNull Question question)

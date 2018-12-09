@@ -4,14 +4,14 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
-import com.google.common.collect.Lists;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class CommentService {
 
@@ -34,9 +34,13 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public static void deleteComment(int id)
+    public static void deleteComment(Comment comment)
     {
-        commentRepository.deleteById(id);
+        log.info("Deleting ratings related to comment with id: %s...",comment.getId());
+        ratingRepository.getRatingByRefIDAndType(comment.getId(), Rating.RatingType.CommentRating).forEach(RatingService::deleteRating);
+
+        log.info("Deleting comment...");
+        commentRepository.delete(comment);
     }
 
     public static void updateComment(@NonNull Comment comment)

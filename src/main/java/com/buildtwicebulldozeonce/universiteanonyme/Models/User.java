@@ -2,7 +2,10 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,6 +19,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+    @Transient
+    public String token;
     @Id
     @GeneratedValue(generator = MyGenerator.generatorName)
     @GenericGenerator(name = MyGenerator.generatorName, strategy = "com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator")
@@ -24,13 +29,8 @@ public class User {
     private String lastName;
     private String email;
     private String doubleHashedPassword;
-
     @OneToOne
     private Permissions permissions;
-
-    @Transient
-    public String token;
-
     @Transient
     private Set<Admin> adminRoles;
     @Transient
@@ -44,8 +44,7 @@ public class User {
     @Transient
     private AnonUser anonUser;
 
-    public UserDTO convertToDTO()
-    {
+    public UserDTO convertToDTO() {
         return new UserDTO(this.token, this.firstName, this.lastName, this.email);
     }
 }

@@ -6,6 +6,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Log
+@Slf4j
 public class CourseService {
 
     private static CourseRepository courseRepository;
@@ -61,6 +62,23 @@ public class CourseService {
     public static void updateCourse(Course course) {
         if (courseRepository.existsById(course.getId()))
             courseRepository.save(course);
+    }
+
+    public static void deleteCourse(Course course) {
+
+        log.info("Cleaning up dependencies for course: %s...",course.getId());
+
+        log.info("Deleting sessions related to the course");
+        sessionRepository.getSessionsByCourse_Id(course.getId()).forEach(SessionService::deleteSession);
+
+        log.info("Deleting courseRooms related to the course");
+        courseRoomRepository.getCourseRoomsByCourse_Id(course.getId()).forEach(CourseRoomService::deleteCourseRoom);
+
+        log.info("Deleting courseSubs related to the course");
+        courseSubsRepository.getCourseSubsByCourse_Id(course.getId()).forEach(courseSubsRepository::delete);
+
+        log.info("Deleting course");
+        courseRepository.delete(course);
     }
 
     public static void deleteCourse(int id, String token) {
@@ -111,7 +129,7 @@ public class CourseService {
             log.info("you are the owner, you cant leave");
             return;
         } else {
-            courseSubsRepository.delete(courseSubsRepository.getByCourse_IdAndAndAnonUser_Id(id,UserService.getLoggedInUser(token).getValue2().getId()));
+            courseSubsRepository.delete(courseSubsRepository.getByCourse_IdAndAndAnonUser_Id(id, UserService.getLoggedInUser(token).getValue2().getId()));
             log.info("fasz");
         }
     }
