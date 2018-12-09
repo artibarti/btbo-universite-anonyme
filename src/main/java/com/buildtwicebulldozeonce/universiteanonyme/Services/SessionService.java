@@ -46,7 +46,7 @@ public class SessionService {
 
     public static void deleteSession(Session session) {
 
-        log.info("Cleaning up dependencies for session: %s...", session.getId());
+        log.info("Cleaning up dependencies for session: "+ session.getId());
 
         log.info("Deleting questions related to the session");
         questionRepository.getQuestionsBySession_Id(session.getId()).forEach(QuestionService::deleteQuestion);
