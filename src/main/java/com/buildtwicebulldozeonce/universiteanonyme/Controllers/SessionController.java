@@ -13,8 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -105,9 +104,10 @@ public class SessionController {
     }
 
     @RequestMapping(value = "/sessions/{id}/questions", method = RequestMethod.GET)
-    public Set<QuestionFatDTO> getQuestionsForActiveSession(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
-        Set<QuestionFatDTO> questionFatDTOS = new HashSet<>();
+    public List<QuestionFatDTO> getQuestionsForActiveSession(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
+        List<QuestionFatDTO> questionFatDTOS = new ArrayList<>();
         QuestionService.getQuestionsForSession(SessionService.getSession(id)).forEach(question -> questionFatDTOS.add(QuestionService.convertToFatDTO(question)));
+        questionFatDTOS.sort(Comparator.comparing(QuestionFatDTO::getTimestamp));
         return questionFatDTOS;
     }
 }

@@ -25,21 +25,14 @@ public class RatingController {
         Rating.RatingType ratingTypeEnum = Rating.RatingType.valueOf(ratingType);
         Rating rating;
 
-        if (isAnon) {
-            rating = Rating.builder()
-                    .anonUser(loggedInUser.getValue2())
-                    .type(ratingTypeEnum)
-                    .refID(refId)
-                    .value(ratingValue)
-                    .build();
-        } else {
-            rating = Rating.builder()
-                    .user(loggedInUser.getValue1())
-                    .type(ratingTypeEnum)
-                    .refID(refId)
-                    .value(ratingValue)
-                    .build();
-        }
+
+        rating = Rating.builder()
+                .anonUser(loggedInUser.getValue2())
+                .type(ratingTypeEnum)
+                .refID(refId)
+                .value(ratingValue)
+                .build();
+
 
         RatingService.saveRating(rating);
 

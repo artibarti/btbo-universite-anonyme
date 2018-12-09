@@ -26,9 +26,6 @@ public interface RatingRepository extends CrudRepository<Rating, Integer> {
                     "WHERE c.anon_user_id = :anonID AND " +
                     "r.type = \"CommentRating\")";
 
-    @Query(value = "SELECT r FROM Rating as r JOIN r.user as u WHERE u.id = :id")
-    Set<Rating> getAllRatingsFromUser(@Param("id") int id);
-
     @Query("SELECT r FROM Rating as r WHERE r.refID = :id AND r.type = :type")
     Set<Rating> getRatingsByTypeAndID(@Param("id") int id, @Param("type") Rating.RatingType type);
 
