@@ -65,7 +65,7 @@ public class CourseService {
 
     public static void deleteCourse(Course course) {
 
-        log.info("Cleaning up dependencies for course: "+ course.getId());
+        log.info(String.format("Cleaning up dependencies for course: %s...", course.getId()));
 
         log.info("Deleting sessions related to the course");
         sessionRepository.getSessionsByCourse_Id(course.getId()).forEach(SessionService::deleteSession);

@@ -45,7 +45,7 @@ public class QuestionService {
     }
 
     public static void deleteQuestion(Question question) {
-        log.info("Cleaning up dependencies for question: " + question.getId());
+        log.info(String.format("Cleaning up dependencies for question: %s...", question.getId()));
 
         log.info("Deleting ratings related to the question");
         ratingRepository.getRatingByRefIDAndType(question.getId(), Rating.RatingType.QuestionRating).forEach(RatingService::deleteRating);
@@ -55,15 +55,6 @@ public class QuestionService {
 
         log.info("Deleting question...");
         questionRepository.delete(question);
-    }
-
-    public static void deleteQuestionsBySession(Session session) {
-        deleteQuestionsBySessionId(session.getId());
-        log.info("Successfully delete every question for session => " + session.getName());
-    }
-
-    public static void deleteQuestionsBySessionId(int id) {
-        questionRepository.getQuestionsForSession(id).forEach(QuestionService::deleteQuestion);
     }
 
     public static void updateQuestion(@NonNull Question question) {

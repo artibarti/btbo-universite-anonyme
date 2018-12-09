@@ -33,7 +33,7 @@ public class CommentService {
     }
 
     public static void deleteComment(Comment comment) {
-        log.info("Deleting ratings related to comment with id: "+comment.getId());
+        log.info(String.format("Deleting ratings related to comment with id: %s...",comment.getId()));
         ratingRepository.getRatingByRefIDAndType(comment.getId(), Rating.RatingType.CommentRating).forEach(RatingService::deleteRating);
 
         log.info("Deleting comment...");

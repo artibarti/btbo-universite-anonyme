@@ -41,7 +41,7 @@ public class CourseRoomService {
     }
 
     public static void deleteCourseRoom(CourseRoom courseRoom) {
-        log.info("Deleting comments related to courseroom with id: %s...", courseRoom.getId());
+        log.info(String.format("Deleting comments related to courseroom with id: %s...", courseRoom.getId()));
         commentRepository.getCommentByRefIDAndType(courseRoom.getId(), Comment.CommentType.CourseRoomComment).forEach(CommentService::deleteComment);
 
         log.info("Deleting courseroom...");
