@@ -13,6 +13,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
+@Slf4j
 public class CommentService {
 
     private  static CommentRepository commentRepository;
@@ -35,6 +36,7 @@ public class CommentService {
     }
 
     public static void deleteComment(Comment comment)
+
     {
         log.info("Deleting ratings related to comment with id: %s...",comment.getId());
         ratingRepository.getRatingByRefIDAndType(comment.getId(), Rating.RatingType.CommentRating).forEach(RatingService::deleteRating);

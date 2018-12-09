@@ -1,11 +1,13 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
+
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import lombok.extern.java.Log;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -22,8 +24,8 @@ public class User {
     @Transient
     public String token;
     @Id
-    @GeneratedValue(generator = MyGenerator.generatorName)
-    @GenericGenerator(name = MyGenerator.generatorName, strategy = "com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator")
+    @GeneratedValue(generator = IdGenerator.generatorName)
+    @GenericGenerator(name = IdGenerator.generatorName, strategy = "com.buildtwicebulldozeonce.universiteanonyme.Helpers.IdGenerator")
     private int id;
     private String firstName;
     private String lastName;

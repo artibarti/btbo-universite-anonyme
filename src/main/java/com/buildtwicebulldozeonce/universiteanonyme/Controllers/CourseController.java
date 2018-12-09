@@ -138,4 +138,10 @@ public class CourseController {
                 .map(Course::convertToFatDTO)
                 .collect(Collectors.toSet());
     }
+
+    @RequestMapping(value = "/courses/{id}/activesession",method = RequestMethod.GET)
+    public SessionSlimDTO getActiveSession(@PathVariable("id") int id,@RequestHeader HttpHeaders headers)
+    {
+        return CourseService.getActiveSession(CourseService.getCourse(id));
+    }
 }

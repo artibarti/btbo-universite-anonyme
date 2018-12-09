@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Models.Course;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Session;
@@ -31,11 +32,13 @@ public class SessionService {
     public static Session getSession(int id) {
         return sessionRepository.findById(id).orElse(null);
     }
+    public static void createSession(Session session)
+    {
+        log.trace("Entering SessionService::createSession...");
 
-    public static void saveSession(Session session) {
-        log.trace("Entering SessionService::saveSession...");
         int numberOfSessions = sessionRepository.getSessionsForCourse(session.getCourse().getId()).size();
         session.setCounter(numberOfSessions + 1);
+        log.trace(session.toString());
         sessionRepository.save(session);
         log.trace(String.format("Successfully saved session %s for course %s",
                 session.getName(),
@@ -59,6 +62,7 @@ public class SessionService {
     public static void updateSession(Session session) {
         if (sessionRepository.existsById(session.getId()))
             sessionRepository.save(session);
+
     }
 
     public static Set<Question> getQuestionsForSession(int id) {

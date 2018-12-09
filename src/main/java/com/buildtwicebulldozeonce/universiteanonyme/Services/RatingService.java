@@ -27,5 +27,6 @@ public class RatingService {
     {
         log.info("Deleting rating...");
         ratingRepository.delete(rating);
+
     }
 }

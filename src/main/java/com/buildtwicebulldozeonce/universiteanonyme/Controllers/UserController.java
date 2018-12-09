@@ -125,9 +125,11 @@ public class UserController {
         return UserService.subscribeToFreeCourse(id, token).convertToSlimDTO();
     }
 
-    @RequestMapping(value = "/logout/{token}", method = RequestMethod.GET)
-    public String logout(@PathVariable("token") String token)
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(@RequestHeader HttpHeaders headers)
     {
+        String token = Functions.getValueFromHttpHeader(headers,"token");
+
         if(UserService.logoutLoggedInUserByToken(token))
         {
             log.trace("Successful logout!");

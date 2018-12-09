@@ -1,8 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
@@ -17,6 +15,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
+@Slf4j
 public class QuestionService {
 
     private  static QuestionRepository questionRepository;
@@ -57,6 +56,22 @@ public class QuestionService {
 
         log.info("Deleting question...");
         questionRepository.delete(question);
+    }
+
+    public static void deleteQuestion(Question question)
+    {
+        questionRepository.delete(question);
+    }
+
+    public static void deleteQuestionsBySession(Session session)
+    {
+        deleteQuestionsBySessionId(session.getId());
+        log.info("Successfully delete every question for session => " + session.getName());
+    }
+
+    public static void deleteQuestionsBySessionId(int id)
+    {
+        questionRepository.getQuestionsForSession(id).forEach(QuestionService::deleteQuestion);
     }
 
     public static void updateQuestion(@NonNull Question question)
