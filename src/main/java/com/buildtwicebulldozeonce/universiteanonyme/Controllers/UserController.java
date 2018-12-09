@@ -125,7 +125,7 @@ public class UserController {
         return UserService.subscribeToFreeCourse(id, token).convertToSlimDTO();
     }
 
-    @RequestMapping(value = "/logout/", method = RequestMethod.GET)
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(@RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers,"token");
