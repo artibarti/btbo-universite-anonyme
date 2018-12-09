@@ -19,7 +19,7 @@ public class PasswordHelper {
      */
     public static boolean comparePassword(String hash, String password) {
         String salt = hash.substring(hash.lastIndexOf("#") + 1);
-        String hashedPassword = hashPassword(password, salt)+ "#" + salt;
+        String hashedPassword = hashPassword(password, salt) + "#" + salt;
         return hash.equals(hashedPassword);
     }
 

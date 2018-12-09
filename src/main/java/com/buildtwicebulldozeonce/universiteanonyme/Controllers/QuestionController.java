@@ -10,41 +10,34 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*")
 @RestController
-public class QuestionController
-{
+public class QuestionController {
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}", method = RequestMethod.GET)
-    public Question getQuestion(@PathVariable("id") int id)
-    {
+    public Question getQuestion(@PathVariable("id") int id) {
         return QuestionService.getQuestion(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/add", method = RequestMethod.POST)
-    public void addQuestionForSession(@PathVariable("sessionID") int sessionID, @RequestBody Question question)
-    {
+    public void addQuestionForSession(@PathVariable("sessionID") int sessionID, @RequestBody Question question) {
         QuestionService.addQuestionForSession(sessionID, question);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/delete", method = RequestMethod.DELETE)
-    public void deleteQuestion(@PathVariable("id") int id)
-    {
-        QuestionService.deleteQuestion(id);
+    public void deleteQuestion(@PathVariable("id") int id) {
+        QuestionService.deleteQuestion(QuestionService.getQuestion(id));
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/update", method = RequestMethod.PUT)
-    public void updateQuestion(@RequestBody Question question)
-    {
+    public void updateQuestion(@RequestBody Question question) {
         QuestionService.updateQuestion(question);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/ratings", method = RequestMethod.GET)
-    public Set<Rating> getRatingsForQuestion(@PathVariable("id") int id)
-    {
+    public Set<Rating> getRatingsForQuestion(@PathVariable("id") int id) {
         return QuestionService.getRatingsForQuestion(id);
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/comments", method = RequestMethod.GET)
-    public Set<Comment> getCommentsForQuestion(@PathVariable("id") int id)
-    {
+    public Set<Comment> getCommentsForQuestion(@PathVariable("id") int id) {
         return QuestionService.getCommentsForQuestion(id);
     }
 }

@@ -3,7 +3,6 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.java.Log;
 
@@ -35,8 +34,7 @@ public class Session {
     private Set<Rating> ratings;
 
 
-    public SessionSlimDTO convertToSlimDTO()
-    {
+    public SessionSlimDTO convertToSlimDTO() {
         SessionSlimDTO sessionSlimDTO = SessionSlimDTO.builder().id(getId()).name(getName()).courseId(course.getId()).build();
         return sessionSlimDTO;
     }

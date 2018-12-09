@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class QuestionSlimDTO
-{
+public class QuestionSlimDTO {
     int id;
     String message;
     LocalDateTime timestamp;

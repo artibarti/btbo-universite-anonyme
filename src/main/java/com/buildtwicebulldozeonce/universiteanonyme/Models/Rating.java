@@ -13,14 +13,11 @@ import java.time.LocalDateTime;
 @Builder
 public class Rating {
 
-    public enum RatingType {CommentRating, CourseRating, QuestionRating, SessionRating}
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
     private int value;
-
     @ManyToOne
     private User user;
     @ManyToOne
@@ -31,5 +28,6 @@ public class Rating {
     private RatingType type;
     @Column(nullable = false)
     private LocalDateTime timestamp;
+    public enum RatingType {CommentRating, CourseRating, QuestionRating, SessionRating}
 
 }

@@ -27,7 +27,7 @@ public class Course {
 
     @ManyToOne
     private User owner;
-    
+
     @Transient
     private Set<Admin> admins;
     @Transient
@@ -40,13 +40,11 @@ public class Course {
     private Set<Session> sessions;
 
 
-    public CourseSlimDTO convertToSlimDTO()
-    {
+    public CourseSlimDTO convertToSlimDTO() {
         return new CourseSlimDTO(this.id, this.name, this.hidden);
     }
 
-    public CourseFatDTO convertToFatDTO()
-    {
+    public CourseFatDTO convertToFatDTO() {
         return new CourseFatDTO(this.id, this.name, this.description, this.hidden);
     }
 }

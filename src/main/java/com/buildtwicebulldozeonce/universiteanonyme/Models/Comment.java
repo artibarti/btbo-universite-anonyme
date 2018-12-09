@@ -14,27 +14,23 @@ import java.util.Set;
 @Builder
 public class Comment {
 
-    public enum CommentType {CourseRoomComment, QuestionComment}
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
     private String message;
-
     @ManyToOne
     private AnonUser anonUser;
     @ManyToOne
     private User user;
-
     @Transient
     private Set<Rating> ratings;
-
     @Column(nullable = false)
     private int refID;
     @Enumerated(EnumType.STRING)
     private CommentType type;
     @Column(nullable = false)
     private LocalDateTime timestamp;
+    public enum CommentType {CourseRoomComment, QuestionComment}
 
 }

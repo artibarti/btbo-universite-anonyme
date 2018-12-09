@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Set;
 
 @CrossOrigin(origins = "*")
-public interface InviteCodeRepository  extends CrudRepository<InviteCode, Integer>
-{
+public interface InviteCodeRepository extends CrudRepository<InviteCode, Integer> {
     @Query(value = "SELECT ic FROM InviteCode as ic JOIN ic.course as c WHERE c.id = :courseID")
     Set<InviteCode> getAllInviteCodesForCourse(@Param("courseID") int courseID);
 

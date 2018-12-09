@@ -9,28 +9,28 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Set;
 
 @CrossOrigin(origins = "*")
-public interface RatingRepository extends CrudRepository<Rating, Integer>
-{
+public interface RatingRepository extends CrudRepository<Rating, Integer> {
+    String newsFeedRatingsQuery =
+            "SELECT * FROM rating r WHERE r.refid IN ( " +
+                    "(SELECT c.id from course c " +
+                    "WHERE c.id IN (SELECT a.course_id FROM admin a " +
+                    "WHERE a.user_id = :id) AND " +
+                    "r.type = \"CourseRating\")) UNION " +
+                    "SELECT * FROM rating r WHERE r.refid IN ( " +
+                    "SELECT q.id FROM question q " +
+                    "WHERE q.anon_user_id = :anonID AND " +
+                    "r.type = \"QuestionRating\") UNION " +
+                    "SELECT * FROM rating r WHERE r.refid IN ( " +
+                    "SELECT c.id FROM comment c " +
+                    "WHERE c.anon_user_id = :anonID AND " +
+                    "r.type = \"CommentRating\")";
+
     @Query(value = "SELECT r FROM Rating as r JOIN r.user as u WHERE u.id = :id")
     Set<Rating> getAllRatingsFromUser(@Param("id") int id);
 
     @Query("SELECT r FROM Rating as r WHERE r.refID = :id AND r.type = :type")
     Set<Rating> getRatingsByTypeAndID(@Param("id") int id, @Param("type") Rating.RatingType type);
 
-    String newsFeedRatingsQuery =
-            "SELECT * FROM rating r WHERE r.refid IN ( " +
-                    "(SELECT c.id from course c " +
-                        "WHERE c.id IN (SELECT a.course_id FROM admin a " +
-                            "WHERE a.user_id = :id) AND " +
-                    "r.type = \"CourseRating\")) UNION " +
-            "SELECT * FROM rating r WHERE r.refid IN ( " +
-                    "SELECT q.id FROM question q " +
-                        "WHERE q.anon_user_id = :anonID AND " +
-                        "r.type = \"QuestionRating\") UNION " +
-            "SELECT * FROM rating r WHERE r.refid IN ( " +
-                    "SELECT c.id FROM comment c " +
-                         "WHERE c.anon_user_id = :anonID AND " +
-                         "r.type = \"CommentRating\")";
     @Query(value = newsFeedRatingsQuery, nativeQuery = true)
     Set<Rating> getNewsFeedRatingsForUser(@Param("id") int id, @Param("anonID") int anonID);
 

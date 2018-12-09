@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Set;
 
 @CrossOrigin(origins = "*")
-public interface CourseSubsRepository extends CrudRepository<CourseSubs, Integer>
-{
+public interface CourseSubsRepository extends CrudRepository<CourseSubs, Integer> {
     @Query(value = "SELECT cs FROM CourseSubs as cs JOIN cs.anonUser as au WHERE au.id = :id")
     Set<CourseSubs> getCourseSubsForAnonUser(@Param("id") int id);
 

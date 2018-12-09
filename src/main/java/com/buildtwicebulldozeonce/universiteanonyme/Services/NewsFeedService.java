@@ -12,30 +12,30 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Log
-public class NewsFeedService
-{
-    private  static CommentRepository commentRepository;
-    private  static QuestionRepository questionRepository;
-    private  static RatingRepository ratingRepository;
-    private  static CourseRepository courseRepository;
+public class NewsFeedService {
+    private static CommentRepository commentRepository;
+    private static QuestionRepository questionRepository;
+    private static RatingRepository ratingRepository;
+    private static CourseRepository courseRepository;
 
     @Autowired
     public NewsFeedService(CommentRepository commentRepository, QuestionRepository questionRepository,
-                           RatingRepository ratingRepository, CourseRepository courseRepository)
-    {
+                           RatingRepository ratingRepository, CourseRepository courseRepository) {
         NewsFeedService.commentRepository = commentRepository;
         NewsFeedService.questionRepository = questionRepository;
         NewsFeedService.ratingRepository = ratingRepository;
         NewsFeedService.courseRepository = courseRepository;
     }
 
-    private static News convertRatingToNews(Rating rating)
-    {
+    private static News convertRatingToNews(Rating rating) {
         News news = new News();
         news.setRefID(rating.getRefID());
         news.setAnonUserName(rating.getAnonUser().getAnonName());
@@ -44,8 +44,7 @@ public class NewsFeedService
         return news;
     }
 
-    private static News convertCommentToNews(Comment comment)
-    {
+    private static News convertCommentToNews(Comment comment) {
         News news = new News();
         news.setTimestamp(comment.getTimestamp());
         news.setType(comment.getType().toString());
@@ -55,8 +54,7 @@ public class NewsFeedService
         return news;
     }
 
-    private static News convertQuestionToNews(Question question)
-    {
+    private static News convertQuestionToNews(Question question) {
         News news = new News();
         news.setTimestamp(question.getTimestamp());
         news.setType("Question");
@@ -67,8 +65,7 @@ public class NewsFeedService
         return news;
     }
 
-    public static List<News> getNewsFeedForUser(int id, int anonID)
-    {
+    public static List<News> getNewsFeedForUser(int id, int anonID) {
         List<News> news = new ArrayList<>();
 
         Set<Comment> comments = commentRepository.getNewsFeedCommentsForUser(id, anonID);
@@ -76,15 +73,15 @@ public class NewsFeedService
         Set<Rating> ratings = ratingRepository.getNewsFeedRatingsForUser(id, anonID);
 
         comments
-            .forEach(p -> news.add(convertCommentToNews(p)));
+                .forEach(p -> news.add(convertCommentToNews(p)));
         questions
-            .forEach(p -> news.add(convertQuestionToNews(p)));
+                .forEach(p -> news.add(convertQuestionToNews(p)));
         ratings
-            .forEach(p -> news.add(convertRatingToNews(p)));
+                .forEach(p -> news.add(convertRatingToNews(p)));
 
         return news.stream()
-            .sorted(Comparator.comparing(News::getTimestamp).reversed())
-            .collect(Collectors.toList());
+                .sorted(Comparator.comparing(News::getTimestamp).reversed())
+                .collect(Collectors.toList());
     }
 
 

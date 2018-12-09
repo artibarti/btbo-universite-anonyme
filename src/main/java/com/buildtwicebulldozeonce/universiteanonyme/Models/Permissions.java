@@ -2,9 +2,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
-import org.hibernate.annotations.Any;
 
 import javax.persistence.*;
 

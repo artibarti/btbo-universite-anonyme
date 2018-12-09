@@ -3,11 +3,9 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.QuestionSlimDTO;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -38,8 +36,7 @@ public class Question {
     private Set<Rating> ratings;
 
 
-    public QuestionSlimDTO convertToSlimDTO()
-    {
+    public QuestionSlimDTO convertToSlimDTO() {
         QuestionSlimDTO questionSlimDTO =
                 new QuestionSlimDTO(this.getId(), this.getMessage(), this.getTimestamp());
 

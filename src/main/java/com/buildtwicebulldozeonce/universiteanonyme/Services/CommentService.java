@@ -11,13 +11,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-@Slf4j
 @Service
 @Slf4j
 public class CommentService {
 
-    private  static CommentRepository commentRepository;
-    private  static RatingRepository ratingRepository;
+    private static CommentRepository commentRepository;
+    private static RatingRepository ratingRepository;
 
     @Autowired
     public CommentService(CommentRepository commentRepository, RatingRepository ratingRepository) {
@@ -25,33 +24,27 @@ public class CommentService {
         CommentService.ratingRepository = ratingRepository;
     }
 
-    public static Comment getComment(int id)
-    {
+    public static Comment getComment(int id) {
         return commentRepository.findById(id).orElse(null);
     }
 
-    public static void addComment(@NonNull Comment comment)
-    {
+    public static void addComment(@NonNull Comment comment) {
         commentRepository.save(comment);
     }
 
-    public static void deleteComment(Comment comment)
-
-    {
-        log.info("Deleting ratings related to comment with id: %s...",comment.getId());
+    public static void deleteComment(Comment comment) {
+        log.info("Deleting ratings related to comment with id: %s...", comment.getId());
         ratingRepository.getRatingByRefIDAndType(comment.getId(), Rating.RatingType.CommentRating).forEach(RatingService::deleteRating);
 
         log.info("Deleting comment...");
         commentRepository.delete(comment);
     }
 
-    public static void updateComment(@NonNull Comment comment)
-    {
+    public static void updateComment(@NonNull Comment comment) {
         commentRepository.save(comment);
     }
 
-    public static Set<Rating> getRatingsForComment(int id)
-    {
+    public static Set<Rating> getRatingsForComment(int id) {
         return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.CommentRating);
     }
 }

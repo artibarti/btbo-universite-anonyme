@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CourseSlimDTO
-{
+public class CourseSlimDTO {
     int id;
     String name;
     boolean hidden;

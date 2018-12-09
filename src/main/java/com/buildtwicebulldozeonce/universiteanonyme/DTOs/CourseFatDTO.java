@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class CourseFatDTO
-{
+public class CourseFatDTO {
     int id;
     String name;
     String description;

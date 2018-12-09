@@ -23,20 +23,19 @@ class RandomStringGenerator {
     }
 
     private static void populate(boolean smallLetters, boolean bigLetters, boolean numbers) {
-        if(numbers) {
+        if (numbers) {
             populateList(48, 57);
         }
-        if(bigLetters) {
+        if (bigLetters) {
             populateList(65, 90);
         }
-        if(smallLetters) {
+        if (smallLetters) {
             populateList(97, 122);
         }
     }
 
     private static void populateList(int leftLimit, int rightLimit) {
-        for (; leftLimit <= rightLimit; leftLimit++)
-        {
+        for (; leftLimit <= rightLimit; leftLimit++) {
             chars.add((char) leftLimit);
         }
     }

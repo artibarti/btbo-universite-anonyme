@@ -5,7 +5,6 @@ import com.buildtwicebulldozeonce.universiteanonyme.Helpers.TokenHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
 import lombok.NonNull;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,12 +76,12 @@ public class UserService {
 
         AnonUser anonUser = anonUserRepository.findByAnonName(anonName);
 
-        if(anonUser == null) {
+        if (anonUser == null) {
             log.warn("No AnonUser found with username: " + anonName);
             return null;
         }
 
-        if(getLoggedInUserByAnonUserId(anonUser.getId()) != null) {
+        if (getLoggedInUserByAnonUserId(anonUser.getId()) != null) {
             log.info(String.format("%s was already logged in...", anonName));
             logoutLoggedInUser(getLoggedInUserByAnonUserId(anonUser.getId()));
         }
@@ -183,8 +182,7 @@ public class UserService {
         return course;
     }
 
-    public static Course subscribeToFreeCourse(int id, String token)
-    {
+    public static Course subscribeToFreeCourse(int id, String token) {
         Course course = courseRepository.findById(id).orElse(null);
         AnonUser anonUser = getLoggedInUser(token).getValue2();
 
@@ -209,19 +207,16 @@ public class UserService {
         return course;
     }
 
-    public static boolean logoutLoggedInUserByToken(String token)
-    {
+    public static boolean logoutLoggedInUserByToken(String token) {
         Triplet<String, User, AnonUser> loggedInUser = getLoggedInUser(token);
-        if(loggedInUser == null)
-        {
+        if (loggedInUser == null) {
             log.error(String.format("Could not find logged in user by token: %s", token));
             return false;
         }
         return logoutLoggedInUser(loggedInUser);
     }
 
-    public static boolean logoutLoggedInUser(Triplet<String, User, AnonUser> loggedInUser)
-    {
+    public static boolean logoutLoggedInUser(Triplet<String, User, AnonUser> loggedInUser) {
         log.trace(String.format("Removing %s from loggedInUsers...", loggedInUser.getValue2().getAnonName()));
         return loggedInUsers.remove(loggedInUser);
     }

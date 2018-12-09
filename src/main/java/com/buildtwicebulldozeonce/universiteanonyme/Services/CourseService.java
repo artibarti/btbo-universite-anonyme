@@ -6,7 +6,6 @@ import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
 import lombok.NonNull;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +54,7 @@ public class CourseService {
     }
 
     public static void addCourse(@NonNull Course course) {
-        log.trace("Course added with id: ",course.getId());
+        log.trace("Course added with id: " + course.getId());
         courseRepository.save(course);
     }
 
@@ -66,7 +65,7 @@ public class CourseService {
 
     public static void deleteCourse(Course course) {
 
-        log.info("Cleaning up dependencies for course: %s...",course.getId());
+        log.info("Cleaning up dependencies for course: %s...", course.getId());
 
         log.info("Deleting sessions related to the course");
         sessionRepository.getSessionsByCourse_Id(course.getId()).forEach(SessionService::deleteSession);
@@ -81,35 +80,6 @@ public class CourseService {
         courseRepository.delete(course);
     }
 
-    public static void deleteCourse(int id, String token) {
-        Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
-        Course course = CourseService.getCourse(id);
-        log.info(String.format("Trying to delete course with id %s", id));
-        if (course == null) {
-            log.info(String.format("Can't find course by id: %s", id));
-            return;
-        }
-
-        if (course.getOwner().getId() != loggedInUser.getValue1().getId()) {
-            log.warn(String.format("The user with the id %s is not the owner of this course!", loggedInUser.getValue1().getId()));
-            return;
-        }
-
-        log.info("Deleting course with id: " + course.getId());
-
-        CommentService.deleteCommentsByCourseId(id);
-        log.info("Deleted all comments");
-
-        CourseRoomService.deleteCourseRoomsForCourse(id);
-        log.info("Deleted all courseRooms");
-
-        SessionService.deleteSessionsByCourse(course);
-        log.info("Deleted all sessions and related questions");
-
-        courseRepository.deleteById(id);
-        log.info("Deleted course");
-    }
-
     public static void leaveCourse(int id, String token) {
         Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
 
@@ -117,6 +87,7 @@ public class CourseService {
         if (loggedInUser.getValue1().getId() == CourseService.getCourse(id).getOwner().getId()) {
             log.info("The user is the owner of the course");
             return;
+        }
 
         courseSubsRepository.delete(courseSubsRepository.getByCourse_IdAndAndAnonUser_Id(id, loggedInUser.getValue2().getId()));
         log.info("Successfully left the course.");

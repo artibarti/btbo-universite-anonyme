@@ -4,18 +4,15 @@ import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.PasswordHelper;
-import com.buildtwicebulldozeonce.universiteanonyme.Helpers.TokenHelper;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.AnonUser;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.Course;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
-import org.javatuples.Triplet;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,8 +22,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public UserDTO login(@RequestHeader HttpHeaders headers)
-    {
+    public UserDTO login(@RequestHeader HttpHeaders headers) {
         HashMap<String, String> values
                 = Functions.getValuesFromHttpHeader(headers, "username", "password");
 
@@ -39,19 +35,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public UserDTO register(@RequestHeader HttpHeaders headers)
-    {
+    public UserDTO register(@RequestHeader HttpHeaders headers) {
         HashMap<String, String> values = Functions.getValuesFromHttpHeader(
                 headers, "username", "password", "email", "firstname", "lastname");
 
-        if (UserService.checkIfEmailOrUserNameIsUsed(values.get("email"), values.get("username")) || values.get("password") == null)
-        {
+        if (UserService.checkIfEmailOrUserNameIsUsed(values.get("email"), values.get("username")) || values.get("password") == null) {
             log.info("registration failed");
             UserDTO result = new UserDTO();
             return result;
-        }
-        else
-        {
+        } else {
             log.info("registration success");
             AnonUser anonUser = AnonUser.builder()
                     .anonName(values.get("username"))
@@ -71,27 +63,23 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-    public User getUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
-    {
+    public User getUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id) {
         // TODO
         return null;
     }
 
     @RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)
-    public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
-    {
+    public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id) {
         // TODO
     }
 
     @RequestMapping(value = "/user/update", method = RequestMethod.PUT)
-    public void updateUser(@RequestBody UserDTO user, @RequestHeader HttpHeaders headers)
-    {
+    public void updateUser(@RequestBody UserDTO user, @RequestHeader HttpHeaders headers) {
         // TODO
     }
 
     @RequestMapping(value = "/user/adminroles", method = RequestMethod.GET)
-    public Set<CourseSlimDTO> getAdminRolesForUser(@RequestHeader HttpHeaders headers)
-    {
+    public Set<CourseSlimDTO> getAdminRolesForUser(@RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
 
         return UserService.getCoursesAdminedByUser(token).stream()
@@ -100,8 +88,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/subs", method = RequestMethod.GET)
-    public Set<CourseSlimDTO> getSubscriptions(@RequestHeader HttpHeaders headers)
-    {
+    public Set<CourseSlimDTO> getSubscriptions(@RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
 
         return UserService.getSubscriptionsForUser(token).stream()
@@ -110,8 +97,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/courses/subscribe", method = RequestMethod.GET)
-    public CourseSlimDTO subscribe(@RequestHeader HttpHeaders headers)
-    {
+    public CourseSlimDTO subscribe(@RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         String inviteCode = Functions.getValueFromHttpHeader(headers, "code");
 
@@ -119,19 +105,16 @@ public class UserController {
     }
 
     @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.GET)
-    public CourseSlimDTO subscribeToFreeCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers)
-    {
+    public CourseSlimDTO subscribeToFreeCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         return UserService.subscribeToFreeCourse(id, token).convertToSlimDTO();
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(@RequestHeader HttpHeaders headers)
-    {
-        String token = Functions.getValueFromHttpHeader(headers,"token");
+    public String logout(@RequestHeader HttpHeaders headers) {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
 
-        if(UserService.logoutLoggedInUserByToken(token))
-        {
+        if (UserService.logoutLoggedInUserByToken(token)) {
             log.trace("Successful logout!");
             return "Successful logout!";
         }

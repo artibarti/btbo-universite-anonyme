@@ -1,13 +1,11 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
-
-import com.buildtwicebulldozeonce.universiteanonyme.Helpers.MyGenerator;
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.IdGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import lombok.extern.java.Log;
 import org.hibernate.annotations.GenericGenerator;
 

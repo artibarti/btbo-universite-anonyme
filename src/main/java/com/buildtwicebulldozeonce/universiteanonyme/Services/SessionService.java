@@ -1,6 +1,5 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Course;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Session;
@@ -32,8 +31,8 @@ public class SessionService {
     public static Session getSession(int id) {
         return sessionRepository.findById(id).orElse(null);
     }
-    public static void createSession(Session session)
-    {
+
+    public static void createSession(Session session) {
         log.trace("Entering SessionService::createSession...");
 
         int numberOfSessions = sessionRepository.getSessionsForCourse(session.getCourse().getId()).size();
@@ -47,7 +46,7 @@ public class SessionService {
 
     public static void deleteSession(Session session) {
 
-        log.info("Cleaning up dependencies for session: %s...",session.getId());
+        log.info("Cleaning up dependencies for session: %s...", session.getId());
 
         log.info("Deleting questions related to the session");
         questionRepository.getQuestionsBySession_Id(session.getId()).forEach(QuestionService::deleteQuestion);
@@ -73,4 +72,8 @@ public class SessionService {
         return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.SessionRating);
     }
 
+    public static void changeSessionStatus(Session session, boolean status) {
+        session.setActive(status);
+        sessionRepository.save(session);
+    }
 }

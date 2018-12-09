@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO
-{
+public class UserDTO {
     String token;
     String firstName;
     String lastName;

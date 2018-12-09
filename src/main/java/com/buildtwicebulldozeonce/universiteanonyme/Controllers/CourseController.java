@@ -139,9 +139,8 @@ public class CourseController {
                 .collect(Collectors.toSet());
     }
 
-    @RequestMapping(value = "/courses/{id}/activesession",method = RequestMethod.GET)
-    public SessionSlimDTO getActiveSession(@PathVariable("id") int id,@RequestHeader HttpHeaders headers)
-    {
+    @RequestMapping(value = "/courses/{id}/activesession", method = RequestMethod.GET)
+    public SessionSlimDTO getActiveSession(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
         return CourseService.getActiveSession(CourseService.getCourse(id));
     }
 }
