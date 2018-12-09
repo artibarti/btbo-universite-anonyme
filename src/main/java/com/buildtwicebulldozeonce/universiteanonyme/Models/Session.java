@@ -4,12 +4,12 @@ import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Log
+@Slf4j
 @Data
 @Entity
 @Builder

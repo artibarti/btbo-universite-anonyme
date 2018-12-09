@@ -1,6 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Helpers;
 
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.UUID;
 
-@Log
+@Slf4j
 public class PasswordHelper {
     /**
      * Compares the given hash and a passwords hash.
@@ -39,7 +39,7 @@ public class PasswordHelper {
         try {
             digest = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
-            log.warning("Can't create SHA-256 algorithm");
+            log.warn("Can't create SHA-256 algorithm");
         }
 
         if (!randomSalt.isEmpty()) {

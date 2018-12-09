@@ -3,13 +3,13 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.QuestionSlimDTO;
 import lombok.Builder;
 import lombok.Data;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Log
+@Slf4j
 @Data
 @Entity
 @Builder

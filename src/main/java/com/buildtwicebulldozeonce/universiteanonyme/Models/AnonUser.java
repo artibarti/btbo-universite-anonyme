@@ -3,13 +3,13 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.IdGenerator;
 import lombok.Builder;
 import lombok.Data;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Log
+@Slf4j
 @Data
 @Entity
 @Builder
