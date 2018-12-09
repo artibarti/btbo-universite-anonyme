@@ -5,6 +5,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.*;
+import com.sun.jmx.snmp.Timestamp;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.javatuples.Triplet;
@@ -123,6 +124,41 @@ public class CourseService {
             courseRatingDTO.setSum(0);
 
         return courseRatingDTO;
+    }
+
+    public static void addRating(String token, int value, int courseId)
+    {
+        Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
+        Course course = getCourse(courseId);
+        Rating rating;
+
+        if(isCourseRatedByUser(loggedInUser.getValue2(), course)) {
+            rating = getRating(loggedInUser.getValue2(), course);
+            rating.setValue(value);
+            rating.setTimestamp(LocalDateTime.now());
+        }
+        else {
+            rating = Rating.builder()
+                    .value(value)
+                    .refID(courseId)
+                    .type(Rating.RatingType.CourseRating)
+                    .anonUser(loggedInUser.getValue2())
+                    .timestamp(LocalDateTime.now())
+                    .build();
+        }
+        log.trace("Course: " + course.getName() + " has been rated by: " +
+                loggedInUser.getValue2().getAnonName() + " with value: " + value);
+        ratingRepository.save(rating);
+    }
+
+    public static Rating getRating(AnonUser anonUser, Course course)
+    {
+        return RatingService.getRating(anonUser, Rating.RatingType.CourseRating, course.getId());
+    }
+
+    public static boolean isCourseRatedByUser(AnonUser anonUser, Course course)
+    {
+         return getRating(anonUser, course) != null;
     }
 
     public static List<CoursePulseDTO> getPulseForCourse(int id) {

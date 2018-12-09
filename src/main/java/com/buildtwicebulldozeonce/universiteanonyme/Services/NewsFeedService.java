@@ -8,7 +8,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentReposito
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CourseRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Log
+@Slf4j
 public class NewsFeedService {
     private static CommentRepository commentRepository;
     private static QuestionRepository questionRepository;

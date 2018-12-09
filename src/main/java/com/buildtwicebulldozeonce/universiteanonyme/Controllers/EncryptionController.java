@@ -2,12 +2,12 @@ package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
 import com.buildtwicebulldozeonce.universiteanonyme.Models.AnonUser;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
 @RestController
-@Log
+@Slf4j
 public class EncryptionController {
 
     @RequestMapping(value = "/users/{userName}/getsalt", method = RequestMethod.GET)

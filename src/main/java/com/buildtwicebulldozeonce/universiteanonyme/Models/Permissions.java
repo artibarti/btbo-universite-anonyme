@@ -2,11 +2,11 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 
-@Log
+@Slf4j
 @Data
 @Entity
 @Builder

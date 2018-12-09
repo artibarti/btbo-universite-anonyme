@@ -1,11 +1,11 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Helpers;
 
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 
 import java.util.HashMap;
 
-@Log
+@Slf4j
 public class Functions {
     public static HashMap<String, String> getValuesFromHttpHeader(HttpHeaders headers, String... keys) {
         log.info("Reading http header...");

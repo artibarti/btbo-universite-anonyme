@@ -2,12 +2,12 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Log
+@Slf4j
 @Data
 @Entity
 @NoArgsConstructor

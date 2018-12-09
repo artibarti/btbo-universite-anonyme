@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Models.AnonUser;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
 import lombok.NonNull;
@@ -17,13 +18,16 @@ public class RatingService {
         RatingService.ratingRepository = ratingRepository;
     }
 
-    public static void addRating(@NonNull Rating rating) {
+    public static void saveRating(@NonNull Rating rating) {
         ratingRepository.save(rating);
     }
 
     public static void deleteRating(Rating rating) {
         log.info("Deleting rating...");
         ratingRepository.delete(rating);
+    }
 
+    public static Rating getRating(AnonUser anonUser, Rating.RatingType ratingType, int refId) {
+        return ratingRepository.getRatingByAnonUserAndAndTypeAndRefID(anonUser, ratingType, refId);
     }
 }

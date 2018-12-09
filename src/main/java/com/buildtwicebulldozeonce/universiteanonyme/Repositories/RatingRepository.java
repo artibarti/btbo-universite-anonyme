@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Repositories;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Models.AnonUser;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -34,7 +35,7 @@ public interface RatingRepository extends CrudRepository<Rating, Integer> {
     @Query(value = newsFeedRatingsQuery, nativeQuery = true)
     Set<Rating> getNewsFeedRatingsForUser(@Param("id") int id, @Param("anonID") int anonID);
 
+    Rating getRatingByAnonUserAndAndTypeAndRefID(AnonUser anonUser, Rating.RatingType ratingType, int refId);
+
     Set<Rating> getRatingByRefIDAndType(int refID, Rating.RatingType type);
-
-
 }

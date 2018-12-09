@@ -4,12 +4,12 @@ import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseSlimDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Log
+@Slf4j
 @Data
 @Entity
 @NoArgsConstructor
