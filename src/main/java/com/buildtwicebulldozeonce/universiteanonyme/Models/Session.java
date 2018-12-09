@@ -4,6 +4,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
@@ -13,13 +14,14 @@ import java.util.Set;
 @Data
 @Entity
 @Builder
+@ToString
 public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private int counter;
     @Column(nullable = false)
     private boolean isActive;

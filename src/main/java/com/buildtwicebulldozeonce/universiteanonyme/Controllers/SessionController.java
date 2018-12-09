@@ -57,6 +57,16 @@ public class SessionController
         SessionService.createSession(session);
     }
 
+    @RequestMapping(value = "/sessions/{id}/activate", method = RequestMethod.POST)
+    public void changeSessionStatus(@PathVariable("id") int id, @RequestBody boolean status, @RequestHeader HttpHeaders headers)
+    {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        User user = UserService.getLoggedInUser(token).getValue1();
+
+        SessionService.changeSessionStatus(SessionService.getSession(id),Functions.getValueFromHttpHeader(headers,"status").equals("0"));
+
+    }
+
     @RequestMapping(value = "/sessions/delete", method = RequestMethod.DELETE)
     public void deleteSession(@RequestBody SessionSlimDTO sessionDTO, @RequestHeader HttpHeaders headers)
     {
@@ -74,12 +84,6 @@ public class SessionController
         }
 
         SessionService.deleteSession(SessionService.getSession(sessionDTO.getId()));
-    }
-
-    @RequestMapping(value = "/courses/{courseID}/sessions/{id}/update", method = RequestMethod.PUT)
-    public void updateSession(@RequestBody Session session)
-    {
-        SessionService.updateSession(session);
     }
 
     @RequestMapping(value = "/courses/{courseiID}/sessions/{id}/ratings", method = RequestMethod.GET)

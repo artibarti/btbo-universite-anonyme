@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -58,6 +55,7 @@ public class CourseService {
     }
 
     public static void addCourse(@NonNull Course course) {
+        log.trace("Course added with id: ",course.getId());
         courseRepository.save(course);
     }
 
@@ -196,5 +194,12 @@ public class CourseService {
 
     public static Set<Course> getHotCourses(int anonUserID) {
         return courseRepository.getHotCourses(anonUserID);
+    }
+
+    public static SessionSlimDTO getActiveSession(Course course) {
+
+        Optional<Session> sessionOptional = sessionRepository.getSessionsForCourse(course.getId()).stream().filter(Session::isActive).findFirst();
+
+        return sessionOptional.map(Session::convertToSlimDTO).orElse(null);
     }
 }
