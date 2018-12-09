@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Models.Course;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Session;
@@ -48,9 +49,17 @@ public class SessionService {
                 session.getCourse().getName()));
     }
 
+    public static void deleteSessionsByCourse(Course course)
+    {
+        CourseService.getSessionsForCourse(course.getId()).forEach(SessionService::deleteSession);
+        log.info("Successfully deleted every session for course => " + course.getName());
+    }
+
     public static void deleteSession(Session session)
     {
-
+        QuestionService.deleteQuestionsBySession(session);
+        sessionRepository.delete(session);
+        log.info("Successfully deleted session => " + session.getName());
     }
 
     public static void updateSession(Session session)

@@ -6,12 +6,14 @@ import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentReposito
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CourseRoomRepository;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class CourseRoomService {
 
@@ -46,6 +48,20 @@ public class CourseRoomService {
 
     public static void deleteCourseRoom(int id)
     {
+        CommentService.deleteCommentsByCourseRoomId(id);
         courseRoomRepository.deleteById(id);
+        log.info("Successfully deleted course room by id => " + id);
+    }
+
+    public static void deleteCourseRoom(CourseRoom courseRoom)
+    {
+        CommentService.deleteCommentsByCourseRoomId(courseRoom.getId());
+        courseRoomRepository.delete(courseRoom);
+        log.info("Successfully deleted course room => " + courseRoom.getName());
+    }
+
+    public static void deleteCourseRoomsForCourse(int id)
+    {
+        CourseService.getCourseRooms(id).forEach(CourseRoomService::deleteCourseRoom);
     }
 }

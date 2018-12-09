@@ -21,4 +21,8 @@ public class RatingService {
     {
         ratingRepository.save(rating);
     }
+
+    public static void deleteRatingByRefIdAndType(int id, Rating.RatingType type) {
+        ratingRepository.getRatingByRefIDAndType(id, type).forEach(ratingRepository::delete);
+    }
 }

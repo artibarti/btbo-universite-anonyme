@@ -185,24 +185,28 @@ public class UserService {
 
     public static Course subscribeToFreeCourse(int id, String token)
     {
-        Course course = courseRepository.findById(id).get();
+        Course course = courseRepository.findById(id).orElse(null);
         AnonUser anonUser = getLoggedInUser(token).getValue2();
 
-        if (course == null || course.isHidden() || anonUser == null)
-        {
-            log.info("something is wrong");
+        if (course == null) {
+            log.error(String.format("Couldn't find course by id: %s", id));
+            return null;
+        }
+        if (anonUser == null) {
+            log.warn(String.format("Couldn't find user by token: %s", token));
+            return null;
+        }
+        if (course.isHidden()) {
+            log.warn(String.format("%s tried to sign up to a hidden course without invite code! CourseId: %s", anonUser.getAnonName(), id));
             return null;
         }
 
-        else
-        {
-            CourseSubs sub = new CourseSubs();
-            sub.setCourse(course);
-            sub.setAnonUser(anonUser);
-            courseSubsRepository.save(sub);
+        CourseSubs sub = new CourseSubs();
+        sub.setCourse(course);
+        sub.setAnonUser(anonUser);
+        courseSubsRepository.save(sub);
 
-            return course;
-        }
+        return course;
     }
 
     public static boolean logoutLoggedInUserByToken(String token)
