@@ -1,9 +1,7 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Session;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.QuestionFatDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.QuestionRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
@@ -13,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,8 +40,14 @@ public class QuestionService {
         return questionRepository.findById(id).orElse(null);
     }
 
-    public static void addQuestionForSession(int id, @NonNull Question question) {
+    public static void addQuestionForSession(Session session, String question, String token) {
 
+        log.info(String.format("Adding question for user: %s with message %s",UserService.getLoggedInUser(token).getValue2().getAnonName(),question));
+        questionRepository.save(Question.builder()
+                .session(session)
+                .message(question)
+                .anonUser(UserService.getLoggedInUser(token).getValue2())
+                .timestamp(LocalDateTime.now()).build());
     }
 
     public static void deleteQuestion(Question question) {
@@ -67,6 +73,15 @@ public class QuestionService {
 
     public static Set<Comment> getCommentsForQuestion(int id) {
         return commentRepository.getCommentByTypeAndID(id, Comment.CommentType.QuestionComment);
+    }
+
+    public static QuestionFatDTO convertToFatDTO(Question question) {
+        return new QuestionFatDTO(question.getId(), question.getMessage(), question.getTimestamp(), question.getAnonUser().getAnonName());
+    }
+
+    public static Set<Question> getQuestionsForSession(Session session) {
+
+        return new HashSet<>(questionRepository.getQuestionsBySession_Id(session.getId()));
     }
 
 }

@@ -1,9 +1,12 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Helpers;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 class RandomStringGenerator {
     private static Random random = new Random();
     private static List<Character> chars;
@@ -42,7 +45,7 @@ class RandomStringGenerator {
 
     private static void generate(int length) {
         for (int i = 0; i < length; i++) {
-            stringBuilder.append((char) random.nextInt(chars.size()));
+            stringBuilder.append(chars.get(random.nextInt(chars.size())));
         }
     }
 }

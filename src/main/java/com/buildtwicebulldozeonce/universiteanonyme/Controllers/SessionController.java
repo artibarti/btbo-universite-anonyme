@@ -1,16 +1,19 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.QuestionFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.QuestionSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.QuestionService;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.SessionService;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,21 +47,39 @@ public class SessionController {
             return;
         }
 
+        log.info("Trying to create session...");
+        if (CourseService.isThereAnActiveSessionForCourse(course) && sessionDTO.isActive()) {
+            log.error(String.format("Can't create active session if there is already an active one. Active sessionid: %s session name: %s...",
+                    CourseService.getActiveSession(course).getId(),
+                    CourseService.getActiveSession(course).getName()));
+            return;
+        }
+        log.info("" + sessionDTO);
+
         Session session = Session.builder()
                 .name(sessionDTO.getName())
                 .course(course)
+                .isActive(sessionDTO.isActive())
                 .build();
 
         SessionService.createSession(session);
     }
 
-    @RequestMapping(value = "/sessions/{id}/activate", method = RequestMethod.POST)
+    @RequestMapping(value = "/sessions/{id}/changestatus", method = RequestMethod.POST)
     public void changeSessionStatus(@PathVariable("id") int id, @RequestBody boolean status, @RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
+        Session session = SessionService.getSession(id);
         User user = UserService.getLoggedInUser(token).getValue1();
 
-        SessionService.changeSessionStatus(SessionService.getSession(id), Functions.getValueFromHttpHeader(headers, "status").equals("0"));
+        if (session.getCourse().getOwner().getId() != user.getId()) {
+            log.error(String.format("%s %s can't deactivate this session: %s. (S)he is not the owner of the course!",
+                    user.getFirstName(),
+                    user.getLastName(),
+                    session.getName()));
+            return;
+        }
 
+        SessionService.changeSessionStatus(session, Functions.getValueFromHttpHeader(headers, "status").equals("0"));
     }
 
     @RequestMapping(value = "/sessions/delete", method = RequestMethod.DELETE)
@@ -81,5 +102,12 @@ public class SessionController {
     @RequestMapping(value = "/courses/{courseiID}/sessions/{id}/ratings", method = RequestMethod.GET)
     public Set<Rating> getRatingsForSession(@PathVariable("id") int id) {
         return SessionService.getRatingsForSession(id);
+    }
+
+    @RequestMapping(value = "/sessions/{id}/questions", method = RequestMethod.GET)
+    public Set<QuestionFatDTO> getQuestionsForActiveSession(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
+        Set<QuestionFatDTO> questionFatDTOS = new HashSet<>();
+        QuestionService.getQuestionsForSession(SessionService.getSession(id)).forEach(question -> questionFatDTOS.add(QuestionService.convertToFatDTO(question)));
+        return questionFatDTOS;
     }
 }

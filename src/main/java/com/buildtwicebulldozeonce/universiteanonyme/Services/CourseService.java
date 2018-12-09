@@ -183,6 +183,11 @@ public class CourseService {
         return courseRepository.getHotCourses(anonUserID);
     }
 
+    public static boolean isThereAnActiveSessionForCourse(Course course)
+    {
+        return sessionRepository.getSessionsForCourse(course.getId()).stream().anyMatch(Session::isActive);
+    }
+
     public static SessionSlimDTO getActiveSession(Course course) {
 
         Optional<Session> sessionOptional = sessionRepository.getSessionsForCourse(course.getId()).stream().filter(Session::isActive).findFirst();

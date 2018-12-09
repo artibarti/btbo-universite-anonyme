@@ -1,10 +1,13 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.QuestionService;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.SessionService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpHeaders;
 
 import java.util.Set;
 
@@ -16,9 +19,9 @@ public class QuestionController {
         return QuestionService.getQuestion(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/add", method = RequestMethod.POST)
-    public void addQuestionForSession(@PathVariable("sessionID") int sessionID, @RequestBody Question question) {
-        QuestionService.addQuestionForSession(sessionID, question);
+    @RequestMapping(value = "/sessions/{sessionID}/questions/add", method = RequestMethod.POST)
+    public void addQuestionForSession(@PathVariable("sessionID") int sessionID, @RequestBody String question, @RequestHeader HttpHeaders headers) {
+        QuestionService.addQuestionForSession(SessionService.getSession(sessionID), question, Functions.getValueFromHttpHeader(headers, "token"));
     }
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}/delete", method = RequestMethod.DELETE)

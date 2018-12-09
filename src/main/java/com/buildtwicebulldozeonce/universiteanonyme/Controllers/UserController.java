@@ -121,4 +121,15 @@ public class UserController {
         log.error("Error while logging out...");
         return "Error while logging out...";
     }
+
+    @RequestMapping(value = "/logout2", method = RequestMethod.DELETE)
+    public void logout2(@RequestHeader HttpHeaders headers) {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+
+        if (UserService.logoutLoggedInUserByToken(token)) {
+            log.trace("Successful logout!");
+            return;
+        }
+        log.error("Error while logging out...");
+    }
 }
