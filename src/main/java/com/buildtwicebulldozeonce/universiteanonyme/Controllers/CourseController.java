@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
 public class CourseController {
 
     @RequestMapping(value = "/courses/{id}", method = RequestMethod.GET)
-    public CourseFatDTO getCourse(@PathVariable("id") int id) {
+    public CourseFatDTO getCourse(@PathVariable("id") int id)
+    {
         return CourseService.getCourse(id).convertToFatDTO();
     }
 
@@ -138,7 +139,8 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/courses/hot", method = RequestMethod.GET)
-    public Set<CourseFatDTO> getHotCourses(@RequestHeader HttpHeaders headers) {
+    public Set<CourseFatDTO> getHotCourses(@RequestHeader HttpHeaders headers)
+    {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         int id = UserService.getLoggedInUser(token).getValue2().getId();
         return CourseService.getHotCourses(id).stream()
@@ -147,7 +149,18 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/courses/{id}/activesession", method = RequestMethod.GET)
-    public SessionSlimDTO getActiveSession(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
+    public SessionSlimDTO getActiveSession(@PathVariable("id") int id, @RequestHeader HttpHeaders headers)
+    {
         return CourseService.getActiveSession(CourseService.getCourse(id));
+    }
+
+    @RequestMapping(value = "/courses/{id}/owner/isme", method = RequestMethod.GET)
+    public Integer amITheOwner(@PathVariable("id") int id, @RequestHeader HttpHeaders headers)
+    {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (UserService.checkIfUserOwnsCourse(id, token))
+            return 1;
+        else
+            return 0;
     }
 }

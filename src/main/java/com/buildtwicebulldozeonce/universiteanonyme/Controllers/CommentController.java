@@ -17,11 +17,6 @@ public class CommentController {
         return CommentService.getComment(id);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{questionID}/comments/add", method = RequestMethod.POST)
-    public void addComment(@RequestBody Comment comment) {
-        CommentService.addComment(comment);
-    }
-
     @RequestMapping(value = "/comments/{id}/delete", method = RequestMethod.DELETE)
     public void deleteComment(@PathVariable("id") int id) {
         CommentService.deleteComment(CommentService.getComment(id));

@@ -63,19 +63,34 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-    public User getUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id) {
-        // TODO
+    public User getUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
+    {
         return null;
     }
 
     @RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)
-    public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id) {
-        // TODO
+    public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable("id") int id)
+    {
+
     }
 
     @RequestMapping(value = "/user/update", method = RequestMethod.PUT)
-    public void updateUser(@RequestBody UserDTO user, @RequestHeader HttpHeaders headers) {
-        // TODO
+    public UserDTO updateUser(@RequestBody UserDTO user, @RequestHeader HttpHeaders headers)
+    {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        User updated = UserService.getLoggedInUser(token).getValue1();
+
+        if (updated != null)
+        {
+            updated.setEmail(user.getEmail());
+            updated.setFirstName(user.getFirstName());
+            updated.setLastName(user.getLastName());
+
+            UserService.updateUser(updated);
+            return updated.convertToDTO();
+        }
+
+        return null;
     }
 
     @RequestMapping(value = "/user/adminroles", method = RequestMethod.GET)
@@ -101,7 +116,11 @@ public class UserController {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         String inviteCode = Functions.getValueFromHttpHeader(headers, "code");
 
-        return UserService.subscribe(inviteCode, token).convertToSlimDTO();
+        Course course = UserService.subscribe(inviteCode, token);
+        if (course == null)
+            return null;
+        else
+            return course.convertToSlimDTO();
     }
 
     @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.GET)
@@ -110,26 +129,24 @@ public class UserController {
         return UserService.subscribeToFreeCourse(id, token).convertToSlimDTO();
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(@RequestHeader HttpHeaders headers) {
-        String token = Functions.getValueFromHttpHeader(headers, "token");
-
-        if (UserService.logoutLoggedInUserByToken(token)) {
-            log.trace("Successful logout!");
-            return "Successful logout!";
-        }
-        log.error("Error while logging out...");
-        return "Error while logging out...";
-    }
-
-    @RequestMapping(value = "/logout2", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/logout", method = RequestMethod.DELETE)
     public void logout2(@RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
 
-        if (UserService.logoutLoggedInUserByToken(token)) {
+        if (UserService.logoutLoggedInUserByToken(token))
+        {
             log.trace("Successful logout!");
             return;
         }
+
         log.error("Error while logging out...");
     }
+
+    @RequestMapping(value = "/user/points", method = RequestMethod.GET)
+    public Integer getPointsForUser(@RequestHeader HttpHeaders headers)
+    {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        return UserService.getPointsForUser(token);
+    }
+
 }

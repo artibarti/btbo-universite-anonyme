@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Models;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CommentDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,8 @@ import java.util.Set;
 @Data
 @Entity
 @Builder
-public class Comment {
+public class Comment
+{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +35,23 @@ public class Comment {
     private LocalDateTime timestamp;
     public enum CommentType {CourseRoomComment, QuestionComment}
 
+
+    public CommentDTO convertToDTO()
+    {
+        CommentDTO commentDTO = new CommentDTO();
+
+        commentDTO.setId(getId());
+        commentDTO.setMessage(getMessage());
+        commentDTO.setTimestamp(getTimestamp());
+        if (getAnonUser() != null)
+        {
+            commentDTO.setName(getAnonUser().getAnonName());
+        }
+        else
+        {
+            commentDTO.setName(getUser().getFirstName() + " " + getUser().getLastName());
+        }
+
+        return commentDTO;
+    }
 }

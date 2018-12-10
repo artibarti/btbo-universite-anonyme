@@ -73,16 +73,18 @@ public class QuestionService {
         return ratingRepository.getRatingsByTypeAndID(id, Rating.RatingType.QuestionRating);
     }
 
-    public static Set<Comment> getCommentsForQuestion(int id) {
-        return commentRepository.getCommentByTypeAndID(id, Comment.CommentType.QuestionComment);
+    public static Set<Comment> getCommentsForQuestion(int id)
+    {
+        return commentRepository.getCommentByRefIDAndType(id, Comment.CommentType.QuestionComment);
     }
 
-    public static QuestionFatDTO convertToFatDTO(Question question) {
+    public static QuestionFatDTO convertToFatDTO(Question question)
+    {
         return new QuestionFatDTO(question.getId(), question.getMessage(), question.getTimestamp(), question.getAnonUser().getAnonName());
     }
 
-    public static Set<Question> getQuestionsForSession(Session session) {
-
+    public static Set<Question> getQuestionsForSession(Session session)
+    {
         return new HashSet<>(questionRepository.getQuestionsBySession_Id(session.getId()));
     }
 

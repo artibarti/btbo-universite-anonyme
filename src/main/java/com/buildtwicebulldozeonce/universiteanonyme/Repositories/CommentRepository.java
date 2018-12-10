@@ -28,6 +28,7 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
                     "AND c.user_id != :id) " +
                     "ORDER BY c.timestamp " +
                     "LIMIT 20";
+
     String commentsForCourseQuery =
             "SELECT * FROM comment c WHERE c.refid IN (" +
                     "SELECT cr.id from course_room cr " +
@@ -37,6 +38,7 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
                     "WHERE q.session_id IN (SELECT s.id FROM session s " +
                     "WHERE s.course_id = :id) " +
                     "AND c.type = \'QuestionComment\')";
+
 
     @Query("SELECT c FROM Comment as c WHERE c.refID = :id AND c.type = :type")
     Set<Comment> getCommentByTypeAndID(@Param("id") int id, @Param("type") Comment.CommentType type);

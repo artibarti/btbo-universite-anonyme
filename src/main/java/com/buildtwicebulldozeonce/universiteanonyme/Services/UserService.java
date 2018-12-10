@@ -62,9 +62,9 @@ public class UserService {
         return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue1().getId());
     }
 
-    public static void updateUser(User user) {
-        if (userRepository.existsById(user.getId()))
-            userRepository.save(user);
+    public static void updateUser(User user)
+    {
+        userRepository.save(user);
     }
 
     public static boolean isUserNameAlreadyTaken(String userName) {
@@ -219,5 +219,10 @@ public class UserService {
     public static boolean logoutLoggedInUser(Triplet<String, User, AnonUser> loggedInUser) {
         log.trace(String.format("Removing %s from loggedInUsers...", loggedInUser.getValue2().getAnonName()));
         return loggedInUsers.remove(loggedInUser);
+    }
+
+    public static Integer getPointsForUser(String token)
+    {
+        return 2356;
     }
 }

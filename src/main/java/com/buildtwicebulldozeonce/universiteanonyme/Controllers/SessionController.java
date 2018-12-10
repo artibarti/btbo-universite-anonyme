@@ -107,7 +107,7 @@ public class SessionController {
     public List<QuestionFatDTO> getQuestionsForActiveSession(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
         List<QuestionFatDTO> questionFatDTOS = new ArrayList<>();
         QuestionService.getQuestionsForSession(SessionService.getSession(id)).forEach(question -> questionFatDTOS.add(QuestionService.convertToFatDTO(question)));
-        questionFatDTOS.sort(Comparator.comparing(QuestionFatDTO::getTimestamp));
+        questionFatDTOS.sort(Comparator.comparing(QuestionFatDTO::getTimestamp).reversed());
         return questionFatDTOS;
     }
 }

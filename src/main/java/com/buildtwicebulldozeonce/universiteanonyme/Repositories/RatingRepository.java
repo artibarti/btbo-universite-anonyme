@@ -11,6 +11,7 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*")
 public interface RatingRepository extends CrudRepository<Rating, Integer> {
+
     String newsFeedRatingsQuery =
             "SELECT * FROM rating r WHERE r.refid IN ( " +
                     "(SELECT c.id from course c " +
@@ -25,7 +26,6 @@ public interface RatingRepository extends CrudRepository<Rating, Integer> {
                     "SELECT c.id FROM comment c " +
                     "WHERE c.anon_user_id = :anonID AND " +
                     "r.type = \"CommentRating\")";
-
     @Query("SELECT r FROM Rating as r WHERE r.refID = :id AND r.type = :type")
     Set<Rating> getRatingsByTypeAndID(@Param("id") int id, @Param("type") Rating.RatingType type);
 
