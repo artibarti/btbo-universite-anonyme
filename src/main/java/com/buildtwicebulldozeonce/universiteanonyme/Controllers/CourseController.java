@@ -93,6 +93,12 @@ public class CourseController {
         return CourseService.getRatingSumForCourse(id);
     }
 
+    @RequestMapping(value = "/courses/{id}/ratings/remove",method = RequestMethod.GET)
+    public void removeRating(@PathVariable("id") int courseId,@RequestHeader HttpHeaders headers) {
+        String token = Functions.getValueFromHttpHeader(headers,"token");
+        CourseService.removeRating(UserService.getLoggedInUser(token).getValue2(),courseId, Rating.RatingType.CourseRating);
+    }
+
     @RequestMapping(value = "/courses/{id}/ratings/add/{value}", method = RequestMethod.POST)
     public void addRating(@PathVariable("id") int courseId, @PathVariable("value") int value, @RequestHeader HttpHeaders headers)
     {

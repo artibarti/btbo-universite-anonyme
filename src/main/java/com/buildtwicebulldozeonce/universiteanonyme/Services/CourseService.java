@@ -160,6 +160,10 @@ public class CourseService {
          return getRating(anonUser, course) != null;
     }
 
+    public static void removeRating(AnonUser anonUser, int refId, Rating.RatingType ratingType) {
+        ratingRepository.delete(ratingRepository.getRatingByAnonUser_IdAndRefIDAndType(anonUser.getId(),refId,ratingType));
+    }
+
     public static List<CoursePulseDTO> getPulseForCourse(int id) {
         List<CoursePulseDTO> dailyPulseOnTheLast7Days = new ArrayList<>();
         LocalTime midnight = LocalTime.MIDNIGHT;
