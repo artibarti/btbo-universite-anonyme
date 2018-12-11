@@ -23,7 +23,7 @@ public class CourseController {
     @RequestMapping(value = "/courses/{id}", method = RequestMethod.GET)
     public CourseFatDTO getCourse(@PathVariable("id") int id)
     {
-        return CourseService.getCourse(id).convertToFatDTO();
+        return CourseService.convertToFatDTO(CourseService.getCourse(id));
     }
 
     @RequestMapping(value = "/courses/add", method = RequestMethod.POST)
@@ -155,9 +155,8 @@ public class CourseController {
     public Set<CourseFatDTO> getHotCourses(@RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
-        int id = UserService.getLoggedInUser(token).getValue2().getId();
-        return CourseService.getHotCourses(id).stream()
-                .map(Course::convertToFatDTO)
+        return CourseService.getHotCourses(token).stream()
+                .map(CourseService::convertToFatDTO)
                 .collect(Collectors.toSet());
     }
 

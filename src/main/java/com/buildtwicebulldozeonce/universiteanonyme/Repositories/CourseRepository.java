@@ -18,6 +18,7 @@ public interface CourseRepository extends CrudRepository<Course, Integer> {
             "SELECT * FROM course c WHERE c.hidden IS false " +
                     "AND c.id NOT IN " +
                     "(SELECT cs.course_id FROM course_subs cs WHERE cs.anon_user_id = :anonID) " +
+                    "AND c.owner_id != :userId " +
                     "LIMIT 20";
     String courseByInviteCodeQuery =
             "SELECT * FROM course c WHERE c.id = " +
@@ -30,7 +31,7 @@ public interface CourseRepository extends CrudRepository<Course, Integer> {
     Set<Course> getSubscriptionsForUser(@Param("anonID") int anonID);
 
     @Query(value = hotCoursesQuery, nativeQuery = true)
-    Set<Course> getHotCourses(@Param("anonID") int anonID);
+    Set<Course> getHotCourses(@Param("anonID") int anonID,@Param("userId") int userId);
 
     @Query(value = courseByInviteCodeQuery, nativeQuery = true)
     Course findByInviteCode(@Param("code") String code);

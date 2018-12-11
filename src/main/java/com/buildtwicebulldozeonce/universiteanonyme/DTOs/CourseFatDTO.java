@@ -14,4 +14,6 @@ public class CourseFatDTO {
     String name;
     String description;
     boolean hidden;
+    int subNumber;
+    double rating;
 }

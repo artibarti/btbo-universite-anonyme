@@ -44,9 +44,6 @@ public class Course {
         return new CourseSlimDTO(this.id, this.name, this.hidden);
     }
 
-    public CourseFatDTO convertToFatDTO() {
-        return new CourseFatDTO(this.id, this.name, this.description, this.hidden);
-    }
 }
 
 

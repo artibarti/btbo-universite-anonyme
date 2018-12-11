@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CoursePulseDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRatingDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
@@ -218,8 +219,11 @@ public class CourseService {
         inviteCodeRepository.save(inviteCode);
     }
 
-    public static Set<Course> getHotCourses(int anonUserID) {
-        return courseRepository.getHotCourses(anonUserID);
+    public static Set<Course> getHotCourses(String token) {
+        int anonUserId = UserService.getLoggedInUser(token).getValue2().getId();
+        int userId = UserService.getLoggedInUser(token).getValue1().getId();
+
+        return courseRepository.getHotCourses(anonUserId,userId);
     }
 
     public static boolean isThereAnActiveSessionForCourse(Course course)
@@ -232,5 +236,15 @@ public class CourseService {
         Optional<Session> sessionOptional = sessionRepository.getSessionsForCourse(course.getId()).stream().filter(Session::isActive).findFirst();
 
         return sessionOptional.map(Session::convertToSlimDTO).orElse(null);
+    }
+
+    public static CourseFatDTO convertToFatDTO(Course course) {
+        return new CourseFatDTO(
+                course.getId(),
+                course.getName(),
+                course.getDescription(),
+                course.isHidden(),
+                getCourseSubs(course.getId()).size(),
+                getRatingSumForCourse(course.getId()).getSum());
     }
 }
