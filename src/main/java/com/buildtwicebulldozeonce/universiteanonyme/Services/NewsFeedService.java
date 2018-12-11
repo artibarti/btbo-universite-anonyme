@@ -48,7 +48,12 @@ public class NewsFeedService {
         News news = new News();
         news.setTimestamp(comment.getTimestamp());
         news.setType(comment.getType().toString());
-        news.setAnonUserName(comment.getAnonUser().getAnonName());
+
+        if (comment.getAnonUser() != null)
+            news.setAnonUserName(comment.getAnonUser().getAnonName());
+        else
+            news.setAnonUserName(comment.getUser().getFirstName() + " " + comment.getUser().getLastName());
+
         news.setContent(comment.getMessage());
         news.setRefID(comment.getRefID());
         return news;
@@ -71,6 +76,8 @@ public class NewsFeedService {
         Set<Comment> comments = commentRepository.getNewsFeedCommentsForUser(id, anonID);
         Set<Question> questions = questionRepository.getNewsFeedQuestionsForUser(anonID);
         Set<Rating> ratings = ratingRepository.getNewsFeedRatingsForUser(id, anonID);
+
+        log.info(String.format("Number of comments for user: %s \nNumber of questions for user: %s\nNumber of Ratings for user: %s",comments.size(),questions.size(),ratings.size()));
 
         comments
                 .forEach(p -> news.add(convertCommentToNews(p)));

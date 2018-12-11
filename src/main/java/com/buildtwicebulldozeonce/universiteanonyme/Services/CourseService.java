@@ -119,7 +119,7 @@ public class CourseService {
         CourseRatingDTO courseRatingDTO = new CourseRatingDTO();
         courseRatingDTO.setNumberOfRatings(ratings.size());
         if (ratings.size() != 0)
-            courseRatingDTO.setSum(ratings.stream().mapToInt(Rating::getValue).sum() / ratings.size());
+            courseRatingDTO.setSum(ratings.stream().mapToInt(Rating::getValue).sum());
         else
             courseRatingDTO.setSum(0);
 
@@ -163,6 +163,7 @@ public class CourseService {
 
     public static void removeRating(AnonUser anonUser, int refId, Rating.RatingType ratingType) {
         ratingRepository.delete(ratingRepository.getRatingByAnonUser_IdAndRefIDAndType(anonUser.getId(),refId,ratingType));
+        log.debug(""+CourseService.getRatingsForCourse(refId).size());
     }
 
     public static List<CoursePulseDTO> getPulseForCourse(int id) {

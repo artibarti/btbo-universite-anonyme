@@ -20,9 +20,11 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
                     "AND c.anon_user_id != :anonID " +
                     "AND c.user_id != :id UNION " +
                     "SELECT q.id from question q " +
-                    "WHERE q.session_id IN (SELECT s.id FROM session s " +
-                    "WHERE s.course_id IN (SELECT cs.course_id FROM course_subs cs " +
-                    "WHERE cs.anon_user_id = :anonID)) " +
+                        "WHERE q.session_id IN (SELECT s.id FROM session s " +
+                            "WHERE s.course_id IN (SELECT cs.course_id FROM course_subs cs " +
+                            "WHERE cs.anon_user_id = :anonID)) " +
+                        "OR q.session_id IN (SELECT s.id FROM session s " +
+                            "WHERE s.course_id IN (SELECT c.id FROM course c WHERE c.owner_id = :id)) " +
                     "AND c.type = \'QuestionComment\' " +
                     "AND c.anon_user_id != :anonID " +
                     "AND c.user_id != :id) " +
