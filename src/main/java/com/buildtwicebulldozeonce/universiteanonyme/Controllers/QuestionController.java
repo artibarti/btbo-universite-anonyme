@@ -2,6 +2,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Controllers;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CommentDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CommentPostDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.QuestionFatDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,11 +52,10 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "/questions/{id}/comments", method = RequestMethod.GET)
-    public Set<CommentDTO> getCommentsForQuestion(@PathVariable("id") int id)
+    public List<CommentDTO> getCommentsForQuestion(@PathVariable("id") int id)
     {
         return QuestionService.getCommentsForQuestion(id).stream()
-                .map(Comment::convertToDTO)
-                .collect(Collectors.toSet());
+                .map(Comment::convertToDTO).sorted(Comparator.comparing(CommentDTO::getTimestamp)).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/questions/{id}/ratings/add/{value}")

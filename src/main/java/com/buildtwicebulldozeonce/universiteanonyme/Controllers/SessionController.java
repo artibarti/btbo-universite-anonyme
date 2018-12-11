@@ -64,8 +64,8 @@ public class SessionController {
         SessionService.createSession(session);
     }
 
-    @RequestMapping(value = "/sessions/{id}/changestatus", method = RequestMethod.POST)
-    public void changeSessionStatus(@PathVariable("id") int id, @RequestBody boolean status, @RequestHeader HttpHeaders headers) {
+    @RequestMapping(value = "/sessions/{id}/deactivateSession", method = RequestMethod.POST)
+    public void changeSessionStatus(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         Session session = SessionService.getSession(id);
         User user = UserService.getLoggedInUser(token).getValue1();
@@ -78,7 +78,7 @@ public class SessionController {
             return;
         }
 
-        SessionService.changeSessionStatus(session, Functions.getValueFromHttpHeader(headers, "status").equals("0"));
+        SessionService.changeSessionStatus(session, false);
     }
 
     @RequestMapping(value = "/sessions/delete", method = RequestMethod.DELETE)

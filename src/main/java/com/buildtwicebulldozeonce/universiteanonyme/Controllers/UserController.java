@@ -21,6 +21,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserController {
 
+    @RequestMapping(value = "/amILoggedIn", method = RequestMethod.GET)
+    public boolean amILoggedIn(@RequestHeader HttpHeaders headers) {
+        log.debug(""+headers);
+        String token = Functions.getValueFromHttpHeader(headers,"token");
+        if (UserService.getLoggedInUser(token) == null) {
+            log.info("User not Logged in");
+            return false;
+        }
+        log.info("User already logged in with token: "+token);
+        return true;
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public UserDTO login(@RequestHeader HttpHeaders headers) {
         HashMap<String, String> values
