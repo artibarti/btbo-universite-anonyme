@@ -38,4 +38,6 @@ public class RatingController {
 
         return "Rating saved";
     }
+
+
 }

@@ -35,4 +35,6 @@ public interface RatingRepository extends CrudRepository<Rating, Integer> {
     Rating getRatingByAnonUserAndAndTypeAndRefID(AnonUser anonUser, Rating.RatingType ratingType, int refId);
 
     Set<Rating> getRatingByRefIDAndType(int refID, Rating.RatingType type);
+
+    boolean existsByAnonUser_IdAndRefIDAndType(int anonUser_id, int refID, Rating.RatingType type);
 }

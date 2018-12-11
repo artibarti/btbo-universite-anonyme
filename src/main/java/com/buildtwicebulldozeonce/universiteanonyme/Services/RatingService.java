@@ -30,4 +30,9 @@ public class RatingService {
     public static Rating getRating(AnonUser anonUser, Rating.RatingType ratingType, int refId) {
         return ratingRepository.getRatingByAnonUserAndAndTypeAndRefID(anonUser, ratingType, refId);
     }
+
+    public static boolean alreadyRated(AnonUser anonUser, Rating.RatingType ratingType, int refId) {
+
+        return ratingRepository.existsByAnonUser_IdAndRefIDAndType(anonUser.getId(),refId, ratingType);
+    }
 }

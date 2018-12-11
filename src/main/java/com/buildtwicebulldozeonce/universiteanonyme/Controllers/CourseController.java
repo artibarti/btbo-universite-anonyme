@@ -5,6 +5,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.InviteCodeGenerator;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.RatingService;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -97,6 +98,12 @@ public class CourseController {
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         CourseService.addRating(token, value, courseId);
+    }
+
+    @RequestMapping(value = "/courses/{id}/alreadyRated",method = RequestMethod.GET)
+    public boolean isAlreadyRated(@PathVariable("id") int courseId,@RequestHeader HttpHeaders headers) {
+        String token = Functions.getValueFromHttpHeader(headers, "token");
+        return RatingService.alreadyRated(UserService.getLoggedInUser(token).getValue2(), Rating.RatingType.CourseRating,courseId);
     }
 
     @RequestMapping(value = "/courses/{id}/pulse", method = RequestMethod.GET)
