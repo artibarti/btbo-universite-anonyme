@@ -7,6 +7,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Helpers.PasswordHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.AnonUser;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Course;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.LoggedInUserService;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -25,12 +26,7 @@ public class UserController {
     public boolean amILoggedIn(@RequestHeader HttpHeaders headers) {
         log.debug(""+headers);
         String token = Functions.getValueFromHttpHeader(headers,"token");
-        if (UserService.getLoggedInUser(token) == null) {
-            log.info("User not Logged in");
-            return false;
-        }
-        log.info("User already logged in with token: "+token);
-        return true;
+        return LoggedInUserService.isUserLoggedIn(token);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -40,21 +36,25 @@ public class UserController {
 
         User user = UserService.authenticateUser(values.get("username"), values.get("password"));
 
-        if (user != null)
-            return user.convertToDTO();
-        else
-            return new UserDTO();
+        if (user != null) {
+            log.info("user not null");
+            return UserService.convertToUserDTO(user);
+        }
+        else {
+            log.info("user is null");
+            return null;
+        }
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public UserDTO register(@RequestHeader HttpHeaders headers) {
+    public boolean register(@RequestHeader HttpHeaders headers) {
         HashMap<String, String> values = Functions.getValuesFromHttpHeader(
                 headers, "username", "password", "email", "firstname", "lastname");
 
         if (UserService.checkIfEmailOrUserNameIsUsed(values.get("email"), values.get("username")) || values.get("password") == null) {
             log.info("registration failed");
             UserDTO result = new UserDTO();
-            return result;
+            return false;
         } else {
             log.info("registration success");
             AnonUser anonUser = AnonUser.builder()
@@ -70,7 +70,7 @@ public class UserController {
 
             UserService.addAnonUser(anonUser);
             UserService.addUser(user);
-            return user.convertToDTO();
+            return true;
         }
     }
 
@@ -90,7 +90,12 @@ public class UserController {
     public UserDTO updateUser(@RequestBody UserDTO user, @RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
-        User updated = UserService.getLoggedInUser(token).getValue1();
+        User updated = LoggedInUserService.getLoggedInUser(token).getUser();
+
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return null;
+        }
 
         if (updated != null)
         {
@@ -99,7 +104,7 @@ public class UserController {
             updated.setLastName(user.getLastName());
 
             UserService.updateUser(updated);
-            return updated.convertToDTO();
+            return UserService.convertToUserDTO(updated);
         }
 
         return null;
@@ -127,7 +132,10 @@ public class UserController {
     public CourseSlimDTO subscribe(@RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         String inviteCode = Functions.getValueFromHttpHeader(headers, "code");
-
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return null;
+        }
         Course course = UserService.subscribe(inviteCode, token);
         if (course == null)
             return null;
@@ -138,14 +146,21 @@ public class UserController {
     @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.GET)
     public CourseSlimDTO subscribeToFreeCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return null;
+        }
         return UserService.subscribeToFreeCourse(id, token).convertToSlimDTO();
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.DELETE)
     public void logout2(@RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            return;
+        }
 
-        if (UserService.logoutLoggedInUserByToken(token))
+        if (LoggedInUserService.logoutLoggedInUser(token))
         {
             log.trace("Successful logout!");
             return;
@@ -158,6 +173,10 @@ public class UserController {
     public Integer getPointsForUser(@RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return null;
+        }
         return UserService.getPointsForUser(token);
     }
 

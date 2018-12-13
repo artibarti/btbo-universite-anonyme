@@ -45,7 +45,7 @@ public class Comment
         commentDTO.setTimestamp(getTimestamp());
         if (getAnonUser() != null)
         {
-            commentDTO.setName(getAnonUser().getAnonName());
+            commentDTO.setName("Anonymous");
         }
         else
         {

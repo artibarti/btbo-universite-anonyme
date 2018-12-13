@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.UserDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.PasswordHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.TokenHelper;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
@@ -25,8 +26,6 @@ public class UserService {
     private static RatingRepository ratingRepository;
     private static InviteCodeRepository inviteCodeRepository;
     private static CourseSubsRepository courseSubsRepository;
-
-    private static List<Triplet<String, User, AnonUser>> loggedInUsers = new ArrayList<>();
 
     @Autowired
     public UserService(UserRepository userRepository, AnonUserRepository anonUserRepository,
@@ -59,7 +58,7 @@ public class UserService {
     }
 
     public static Set<Course> getCoursesAdminedByUser(String token) {
-        return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue1().getId());
+        return courseRepository.getCoursesAdminedByUser(LoggedInUserService.getLoggedInUser(token).getUser().getId());
     }
 
     public static void updateUser(User user)
@@ -80,10 +79,10 @@ public class UserService {
             log.warn("No AnonUser found with username: " + anonName);
             return null;
         }
-
-        if (getLoggedInUserByAnonUserId(anonUser.getId()) != null) {
+        log.info("already logged in check");
+        if (LoggedInUserService.getLoggedInUser(LoggedInUserService.getTokenForAnonUser(anonUser)) != null) {
             log.info(String.format("%s was already logged in...", anonName));
-            logoutLoggedInUser(getLoggedInUserByAnonUserId(anonUser.getId()));
+            LoggedInUserService.logoutLoggedInUser(LoggedInUserService.getTokenForAnonUser(anonUser));
         }
 
         if (!anonUser.getHashedPassword().equals(hashedPassword)) {
@@ -102,8 +101,7 @@ public class UserService {
         anonUser.setUser(user);
         user.setAnonUser(anonUser);
         String token = TokenHelper.generateToken();
-        user.setToken(token);
-        loggedInUsers.add(new Triplet<>(token, user, anonUser));
+        LoggedInUserService.addLoggedInUser(user,anonUser,token);
 
         log.info("Successfully authenticated user with username: " + anonName + " and hashedPassword: " + doubleHashedPassword);
         return user;
@@ -114,45 +112,21 @@ public class UserService {
     }
 
     public static Set<Course> getSubscriptionsForUser(String token) {
-        return courseRepository.getSubscriptionsForUser(getLoggedInUser(token).getValue2().getId());
+        return courseRepository.getSubscriptionsForUser(LoggedInUserService.getLoggedInUser(token).getAnonUser().getId());
     }
 
     public static AnonUser getAnonUserByUserName(String userName) {
         return anonUserRepository.findByAnonName(userName);
     }
 
-    public static Triplet<String, User, AnonUser> getLoggedInUser(String token) {
-        return loggedInUsers
-                .stream()
-                .filter(triplet -> triplet.getValue0().equals(token))
-                .findFirst()
-                .orElse(null);
-    }
-
-    public static Triplet<String, User, AnonUser> getLoggedInUserByUserId(int userId) {
-        return loggedInUsers
-                .stream()
-                .filter(triplet -> triplet.getValue1().getId() == userId)
-                .findFirst()
-                .orElse(null);
-    }
-
-    public static Triplet<String, User, AnonUser> getLoggedInUserByAnonUserId(int anonUserId) {
-        return loggedInUsers
-                .stream()
-                .filter(triplet -> triplet.getValue2().getId() == anonUserId)
-                .findFirst()
-                .orElse(null);
-    }
-
     public static boolean checkIfUserOwnsCourse(int id, String token) {
-        return courseRepository.getCoursesAdminedByUser(getLoggedInUser(token).getValue1().getId()).stream()
+        return courseRepository.getCoursesAdminedByUser(LoggedInUserService.getLoggedInUser(token).getUser().getId()).stream()
                 .anyMatch(p -> p.getId() == id);
     }
 
     public static Course subscribe(String code, String token) {
         Course course = courseRepository.findByInviteCode(code);
-        AnonUser anonUser = getLoggedInUser(token).getValue2();
+        AnonUser anonUser = LoggedInUserService.getLoggedInUser(token).getAnonUser();
         InviteCode inviteCode = inviteCodeRepository.findFirstByCodeAndCourse(code, course);
 
         if (inviteCode == null || course == null || anonUser == null) {
@@ -184,7 +158,7 @@ public class UserService {
 
     public static Course subscribeToFreeCourse(int id, String token) {
         Course course = courseRepository.findById(id).orElse(null);
-        AnonUser anonUser = getLoggedInUser(token).getValue2();
+        AnonUser anonUser = LoggedInUserService.getLoggedInUser(token).getAnonUser();
 
         if (course == null) {
             log.error(String.format("Couldn't find course by id: %s", id));
@@ -207,18 +181,13 @@ public class UserService {
         return course;
     }
 
-    public static boolean logoutLoggedInUserByToken(String token) {
-        Triplet<String, User, AnonUser> loggedInUser = getLoggedInUser(token);
-        if (loggedInUser == null) {
-            log.error(String.format("Could not find logged in user by token: %s", token));
-            return false;
-        }
-        return logoutLoggedInUser(loggedInUser);
+    public static UserDTO convertToUserDTO(User user,String token) {
+        return new UserDTO(token,user.getFirstName(),user.getLastName(),user.getEmail());
     }
 
-    public static boolean logoutLoggedInUser(Triplet<String, User, AnonUser> loggedInUser) {
-        log.trace(String.format("Removing %s from loggedInUsers...", loggedInUser.getValue2().getAnonName()));
-        return loggedInUsers.remove(loggedInUser);
+    public static UserDTO convertToUserDTO(User user) {
+        log.info("Converting user to DTO");
+        return new UserDTO(LoggedInUserService.getTokenForUser(user),user.getFirstName(),user.getLastName(),user.getEmail());
     }
 
     public static Integer getPointsForUser(String token)

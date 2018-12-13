@@ -82,15 +82,15 @@ public class CourseService {
     }
 
     public static void leaveCourse(int id, String token) {
-        Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
+       LoggedInUser loggedInUser = LoggedInUserService.getLoggedInUser(token);
 
-        log.info("User with id: " + loggedInUser.getValue1().getId() + " leaving course");
-        if (loggedInUser.getValue1().getId() == CourseService.getCourse(id).getOwner().getId()) {
+        log.info("User with id: " + loggedInUser.getUser().getId() + " leaving course");
+        if (loggedInUser.getUser().getId() == CourseService.getCourse(id).getOwner().getId()) {
             log.info("The user is the owner of the course");
             return;
         }
 
-        courseSubsRepository.delete(courseSubsRepository.getByCourse_IdAndAndAnonUser_Id(id, loggedInUser.getValue2().getId()));
+        courseSubsRepository.delete(courseSubsRepository.getByCourse_IdAndAndAnonUser_Id(id, loggedInUser.getAnonUser().getId()));
         log.info("Successfully left the course.");
     }
 
@@ -128,12 +128,12 @@ public class CourseService {
 
     public static void addRating(String token, int value, int courseId)
     {
-        Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
+        LoggedInUser loggedInUser = LoggedInUserService.getLoggedInUser(token);
         Course course = getCourse(courseId);
         Rating rating;
 
-        if(isCourseRatedByUser(loggedInUser.getValue2(), course)) {
-            rating = getRating(loggedInUser.getValue2(), course);
+        if(isCourseRatedByUser(loggedInUser.getAnonUser(), course)) {
+            rating = getRating(loggedInUser.getAnonUser(), course);
             rating.setValue(value);
             rating.setTimestamp(LocalDateTime.now());
         }
@@ -142,12 +142,12 @@ public class CourseService {
                     .value(value)
                     .refID(courseId)
                     .type(Rating.RatingType.CourseRating)
-                    .anonUser(loggedInUser.getValue2())
+                    .anonUser(loggedInUser.getAnonUser())
                     .timestamp(LocalDateTime.now())
                     .build();
         }
         log.trace("Course: " + course.getName() + " has been rated by: " +
-                loggedInUser.getValue2().getAnonName() + " with value: " + value);
+                loggedInUser.getAnonUser().getAnonName() + " with value: " + value);
         ratingRepository.save(rating);
     }
 
@@ -221,8 +221,8 @@ public class CourseService {
     }
 
     public static Set<Course> getHotCourses(String token) {
-        int anonUserId = UserService.getLoggedInUser(token).getValue2().getId();
-        int userId = UserService.getLoggedInUser(token).getValue1().getId();
+        int anonUserId = LoggedInUserService.getLoggedInUser(token).getAnonUser().getId();
+        int userId = LoggedInUserService.getLoggedInUser(token).getUser().getId();
 
         return courseRepository.getHotCourses(anonUserId,userId);
     }

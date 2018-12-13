@@ -1,9 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
-import com.buildtwicebulldozeonce.universiteanonyme.Models.AnonUser;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
 import lombok.NonNull;
@@ -61,20 +58,20 @@ public class CommentService {
     }
 
     public static void addRating(String token, int value, int commentId) {
-        Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
+        LoggedInUser loggedInUser = LoggedInUserService.getLoggedInUser(token);
         Comment comment = getComment(commentId);
         Rating rating;
 
-        if(isCommentRatedByUser(loggedInUser.getValue2(), comment))
+        if(isCommentRatedByUser(loggedInUser.getAnonUser(), comment))
         {
-            rating = getRating(loggedInUser.getValue2(), comment);
+            rating = getRating(loggedInUser.getAnonUser(), comment);
             rating.setValue(value);
             rating.setTimestamp(LocalDateTime.now());
         }
         else
         {
             rating = Rating.builder()
-                    .anonUser(loggedInUser.getValue2())
+                    .anonUser(loggedInUser.getAnonUser())
                     .timestamp(LocalDateTime.now())
                     .type(Rating.RatingType.CommentRating)
                     .refID(commentId)
@@ -82,7 +79,7 @@ public class CommentService {
                     .build();
         }
         log.trace("Comment: " + comment.getMessage() + " has been rated by: " +
-                loggedInUser.getValue2().getAnonName() + " with value: " + value);
+                loggedInUser.getAnonUser().getAnonName() + " with value: " + value);
         RatingService.saveRating(rating);
     }
 }

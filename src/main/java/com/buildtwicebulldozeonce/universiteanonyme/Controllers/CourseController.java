@@ -5,6 +5,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.InviteCodeGenerator;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.LoggedInUserService;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.RatingService;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,10 +31,15 @@ public class CourseController {
     public CourseSlimDTO addCourse(@RequestBody CourseFatDTO courseFatDTO, @RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
 
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return null;
+        }
+
         Course course = new Course();
         course.setName(courseFatDTO.getName());
         course.setDescription(courseFatDTO.getDescription());
-        course.setOwner(UserService.getLoggedInUser(token).getValue1());
+        course.setOwner(LoggedInUserService.getLoggedInUser(token).getUser());
         course.setHidden(courseFatDTO.isHidden());
 
         CourseService.addCourse(course);
@@ -43,6 +49,12 @@ public class CourseController {
     @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.PUT)
     public void updateCourse(@PathVariable("id") int id, @RequestBody Course course, @RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
+
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
+
         if (UserService.checkIfUserOwnsCourse(id, token)) {
             CourseService.updateCourse(course);
         }
@@ -50,8 +62,23 @@ public class CourseController {
 
     @RequestMapping(value = "/courses/{id}/delete", method = RequestMethod.DELETE)
     public void deleteCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
+        String token = Functions.getValueFromHttpHeader(headers,"token");
+
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
+
+        LoggedInUser loggedInUser = LoggedInUserService.getLoggedInUser(token);
+
         Course course = CourseService.getCourse(id);
-        CourseService.deleteCourse(course);
+
+        if (course.getOwner().getId() == loggedInUser.getUser().getId()) {
+            CourseService.deleteCourse(course);
+        } else {
+            log.info("Course not owned by the user");
+        }
+
     }
 
     @RequestMapping(value = "/courses/{id}/admins", method = RequestMethod.GET)
@@ -66,7 +93,13 @@ public class CourseController {
 
     @RequestMapping(value = "/courses/{id}/leave", method = RequestMethod.GET)
     public void leaveCourse(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
-        CourseService.leaveCourse(id, Functions.getValueFromHttpHeader(headers, "token"));
+
+        String token = Functions.getValueFromHttpHeader(headers,"token");
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
+        CourseService.leaveCourse(id, token);
     }
 
     @RequestMapping(value = "/courses/{id}/subs/sum", method = RequestMethod.GET)
@@ -96,20 +129,28 @@ public class CourseController {
     @RequestMapping(value = "/courses/{id}/ratings/remove",method = RequestMethod.GET)
     public void removeRating(@PathVariable("id") int courseId,@RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers,"token");
-        CourseService.removeRating(UserService.getLoggedInUser(token).getValue2(),courseId, Rating.RatingType.CourseRating);
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
+        CourseService.removeRating(LoggedInUserService.getLoggedInUser(token).getAnonUser(),courseId, Rating.RatingType.CourseRating);
     }
 
     @RequestMapping(value = "/courses/{id}/ratings/add/{value}", method = RequestMethod.POST)
     public void addRating(@PathVariable("id") int courseId, @PathVariable("value") int value, @RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
         CourseService.addRating(token, value, courseId);
     }
 
     @RequestMapping(value = "/courses/{id}/alreadyRated",method = RequestMethod.GET)
     public boolean isAlreadyRated(@PathVariable("id") int courseId,@RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
-        return RatingService.alreadyRated(UserService.getLoggedInUser(token).getValue2(), Rating.RatingType.CourseRating,courseId);
+        return RatingService.alreadyRated(LoggedInUserService.getLoggedInUser(token).getAnonUser(), Rating.RatingType.CourseRating,courseId);
     }
 
     @RequestMapping(value = "/courses/{id}/pulse", method = RequestMethod.GET)
@@ -155,6 +196,10 @@ public class CourseController {
     public Set<CourseFatDTO> getHotCourses(@RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return null;
+        }
         return CourseService.getHotCourses(token).stream()
                 .map(CourseService::convertToFatDTO)
                 .collect(Collectors.toSet());
@@ -170,6 +215,10 @@ public class CourseController {
     public Integer amITheOwner(@PathVariable("id") int id, @RequestHeader HttpHeaders headers)
     {
         String token = Functions.getValueFromHttpHeader(headers, "token");
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return null;
+        }
         if (UserService.checkIfUserOwnsCourse(id, token))
             return 1;
         else

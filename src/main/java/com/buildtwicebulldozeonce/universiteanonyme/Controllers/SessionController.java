@@ -5,10 +5,7 @@ import com.buildtwicebulldozeonce.universiteanonyme.DTOs.QuestionSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.SessionSlimDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.Functions;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
-import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseService;
-import com.buildtwicebulldozeonce.universiteanonyme.Services.QuestionService;
-import com.buildtwicebulldozeonce.universiteanonyme.Services.SessionService;
-import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +33,12 @@ public class SessionController {
     public void createSession(@RequestBody SessionSlimDTO sessionDTO, @RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         Course course = CourseService.getCourse(sessionDTO.getCourseId());
-        User user = UserService.getLoggedInUser(token).getValue1();
+        User user = LoggedInUserService.getLoggedInUser(token).getUser();
+
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
 
         if (course.getOwner().getId() != user.getId()) {
             log.error(String.format("%s %s can't create session for %s. (S)he is not the owner of the course!",
@@ -68,7 +70,12 @@ public class SessionController {
     public void changeSessionStatus(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         Session session = SessionService.getSession(id);
-        User user = UserService.getLoggedInUser(token).getValue1();
+        User user = LoggedInUserService.getLoggedInUser(token).getUser();
+
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
 
         if (session.getCourse().getOwner().getId() != user.getId()) {
             log.error(String.format("%s %s can't deactivate this session: %s. (S)he is not the owner of the course!",
@@ -85,7 +92,12 @@ public class SessionController {
     public void deleteSession(@RequestBody SessionSlimDTO sessionDTO, @RequestHeader HttpHeaders headers) {
         String token = Functions.getValueFromHttpHeader(headers, "token");
         Course course = CourseService.getCourse(sessionDTO.getCourseId());
-        User user = UserService.getLoggedInUser(token).getValue1();
+        User user = LoggedInUserService.getLoggedInUser(token).getUser();
+
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
 
         if (course.getOwner().getId() != user.getId()) {
             log.error(String.format("%s %s can't delete this session: %s. (S)he is not the owner of the course!",
