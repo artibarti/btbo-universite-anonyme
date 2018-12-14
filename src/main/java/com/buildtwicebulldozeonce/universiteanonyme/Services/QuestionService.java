@@ -44,11 +44,11 @@ public class QuestionService {
 
     public static void addQuestionForSession(Session session, String question, String token) {
 
-        log.info(String.format("Adding question for user: %s with message %s",UserService.getLoggedInUser(token).getValue2().getAnonName(),question));
+        log.info(String.format("Adding question for user: %s with message %s",LoggedInUserService.getLoggedInUser(token).getAnonUser().getAnonName(),question));
         questionRepository.save(Question.builder()
                 .session(session)
                 .message(question)
-                .anonUser(UserService.getLoggedInUser(token).getValue2())
+                .anonUser(LoggedInUserService.getLoggedInUser(token).getAnonUser())
                 .timestamp(LocalDateTime.now()).build());
     }
 
@@ -89,13 +89,13 @@ public class QuestionService {
     }
 
     public static void addRating(String token, int questionId, int value) {
-        Triplet<String, User, AnonUser> loggedInUser = UserService.getLoggedInUser(token);
+        LoggedInUser loggedInUser = LoggedInUserService.getLoggedInUser(token);
         Question question = getQuestion(questionId);
         Rating rating;
 
-        if(isQuestionRatedByUser(loggedInUser.getValue2(), question))
+        if(isQuestionRatedByUser(loggedInUser.getAnonUser(), question))
         {
-            rating = RatingService.getRating(loggedInUser.getValue2(), Rating.RatingType.QuestionRating, questionId);
+            rating = RatingService.getRating(loggedInUser.getAnonUser(), Rating.RatingType.QuestionRating, questionId);
             rating.setValue(value);
             rating.setTimestamp(LocalDateTime.now());
         }
@@ -105,11 +105,11 @@ public class QuestionService {
                     .refID(questionId)
                     .type(Rating.RatingType.QuestionRating)
                     .timestamp(LocalDateTime.now())
-                    .anonUser(loggedInUser.getValue2())
+                    .anonUser(loggedInUser.getAnonUser())
                     .build();
         }
         log.trace("Question: " + question.getMessage() + " has been rated by: " +
-                loggedInUser.getValue2().getAnonName() + " with value: " + value);
+                loggedInUser.getAnonUser().getAnonName() + " with value: " + value);
         RatingService.saveRating(rating);
     }
 

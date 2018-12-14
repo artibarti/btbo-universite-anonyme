@@ -3,6 +3,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Models;
 import com.buildtwicebulldozeonce.universiteanonyme.Helpers.IdGenerator;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 @Data
 @Entity
 @Builder
+@ToString
 public class AnonUser {
     @Id
     @GeneratedValue(generator = IdGenerator.generatorName)

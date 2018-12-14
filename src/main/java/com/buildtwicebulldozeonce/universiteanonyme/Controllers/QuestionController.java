@@ -8,10 +8,8 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Question;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Rating;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
-import com.buildtwicebulldozeonce.universiteanonyme.Services.CommentService;
-import com.buildtwicebulldozeonce.universiteanonyme.Services.QuestionService;
-import com.buildtwicebulldozeonce.universiteanonyme.Services.SessionService;
-import com.buildtwicebulldozeonce.universiteanonyme.Services.UserService;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +22,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
+@Slf4j
 public class QuestionController {
 
     @RequestMapping(value = "/courses/{courseID}/sessions/{sessionID}/questions/{id}", method = RequestMethod.GET)
@@ -62,6 +61,10 @@ public class QuestionController {
     public void addRating(@PathVariable("id") int questionId, @PathVariable("value") int value, @RequestBody HttpHeaders httpHeader)
     {
         String token = Functions.getValueFromHttpHeader(httpHeader, "token");
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
         QuestionService.addRating(token, questionId, value);
     }
 
@@ -69,6 +72,11 @@ public class QuestionController {
     public void addComment(@PathVariable("id") int questionId, @RequestBody CommentPostDTO commentPostDTO, @RequestHeader HttpHeaders httpHeader)
     {
         String token = Functions.getValueFromHttpHeader(httpHeader, "token");
+
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return;
+        }
 
         Comment comment = Comment.builder()
                 .message(commentPostDTO.getMessage())
@@ -78,9 +86,9 @@ public class QuestionController {
                 .build();
 
         if (commentPostDTO.isAnon())
-            comment.setAnonUser(UserService.getLoggedInUser(token).getValue2());
+            comment.setAnonUser(LoggedInUserService.getLoggedInUser(token).getAnonUser());
         else
-            comment.setUser(UserService.getLoggedInUser(token).getValue1());
+            comment.setUser(LoggedInUserService.getLoggedInUser(token).getUser());
 
         CommentService.addComment(comment);
     }
