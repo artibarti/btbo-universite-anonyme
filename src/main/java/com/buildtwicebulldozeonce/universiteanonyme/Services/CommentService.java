@@ -92,6 +92,7 @@ public class CommentService {
                 comment.getId(),
                 comment.getMessage(),
                 CommentService.isCommentRatedByUser(anonUser,comment),
+                CommentService.getRatingsForComment(comment.getId()).size(),
                 comment.getAnonUser() != null ? "Anonymous" : comment.getUser().getFirstName() + " " + comment.getUser().getLastName(),
                 comment.getTimestamp());
     }

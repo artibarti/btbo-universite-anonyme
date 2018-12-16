@@ -40,7 +40,7 @@ public class CourseRoomController {
         CourseRoomService.updateCourseRoom(courseRoom);
     }
 
-    @RequestMapping(value = "/courses/{courseID}/courserooms/{id}/comments", method = RequestMethod.GET)
+    @RequestMapping(value = "/courserooms/{id}/comments", method = RequestMethod.GET)
     public List<CourseRoomCommentDTO> getCommentsForCourseRoom(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
         List<Comment> temp = CourseRoomService.getCommentsForCourseRoom(id);
         String token = Functions.getValueFromHttpHeader(headers,"token");

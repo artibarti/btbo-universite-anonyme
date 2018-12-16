@@ -1,6 +1,7 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
 import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRoomCommentDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRoomDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CourseRoomRepository;
@@ -48,6 +49,11 @@ public class CourseRoomService {
 
         log.info("Deleting courseroom...");
         courseRoomRepository.delete(courseRoom);
+    }
+
+    public static CourseRoomDTO convertToCurseRoomDTO(CourseRoom courseRoom)
+    {
+        return new CourseRoomDTO(courseRoom.getId(),courseRoom.getName());
     }
 
 
