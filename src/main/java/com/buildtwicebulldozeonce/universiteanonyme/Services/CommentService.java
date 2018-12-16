@@ -1,5 +1,6 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRoomCommentDTO;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.RatingRepository;
@@ -81,5 +82,17 @@ public class CommentService {
         log.trace("Comment: " + comment.getMessage() + " has been rated by: " +
                 loggedInUser.getAnonUser().getAnonName() + " with value: " + value);
         RatingService.saveRating(rating);
+    }
+
+    public static CourseRoomCommentDTO convertToCourseRoomCommentDTO(Comment comment, String token)
+    {
+        AnonUser anonUser = LoggedInUserService.getLoggedInUser(token).getAnonUser();
+
+        return new CourseRoomCommentDTO(
+                comment.getId(),
+                comment.getMessage(),
+                CommentService.isCommentRatedByUser(anonUser,comment),
+                comment.getAnonUser() != null ? "Anonymous" : comment.getUser().getFirstName() + " " + comment.getUser().getLastName(),
+                comment.getTimestamp());
     }
 }

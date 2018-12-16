@@ -1,7 +1,7 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Services;
 
-import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
-import com.buildtwicebulldozeonce.universiteanonyme.Models.CourseRoom;
+import com.buildtwicebulldozeonce.universiteanonyme.DTOs.CourseRoomCommentDTO;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.*;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CommentRepository;
 import com.buildtwicebulldozeonce.universiteanonyme.Repositories.CourseRoomRepository;
 import lombok.NonNull;
@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -32,7 +33,7 @@ public class CourseRoomService {
         courseRoomRepository.save(courseRoom);
     }
 
-    public static Set<Comment> getCommentsForCourseRoom(int id) {
+    public static List<Comment> getCommentsForCourseRoom(int id) {
         return commentRepository.getCommentByTypeAndID(id, Comment.CommentType.CourseRoomComment);
     }
 
@@ -47,4 +48,6 @@ public class CourseRoomService {
         log.info("Deleting courseroom...");
         courseRoomRepository.delete(courseRoom);
     }
+
+
 }
