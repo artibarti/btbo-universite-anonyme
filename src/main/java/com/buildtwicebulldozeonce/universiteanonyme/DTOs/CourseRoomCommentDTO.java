@@ -12,6 +12,7 @@ public class CourseRoomCommentDTO {
     int id;
     String message;
     boolean alreadyRatedByUser;
+    int rating;
     String name;
     LocalDateTime timeStamp;
 

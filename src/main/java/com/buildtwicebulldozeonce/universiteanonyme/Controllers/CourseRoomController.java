@@ -6,6 +6,8 @@ import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.CourseRoom;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CommentService;
 import com.buildtwicebulldozeonce.universiteanonyme.Services.CourseRoomService;
+import com.buildtwicebulldozeonce.universiteanonyme.Services.LoggedInUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*")
 @RestController
+@Slf4j
 public class CourseRoomController {
     @RequestMapping(value = "/courses/{courseID}/courserooms/{id}", method = RequestMethod.GET)
     public CourseRoom getCourseRoom(@PathVariable("id") int id) {
@@ -23,8 +26,8 @@ public class CourseRoomController {
     }
 
     @RequestMapping(value = "/courses/{courseID}/courserooms/add", method = RequestMethod.POST)
-    public void addCourseRoom(@RequestBody CourseRoom courseRoom) {
-        CourseRoomService.addCourseRoom(courseRoom);
+    public void addCourseRoom(@PathVariable("courseID") int courseID,@RequestBody String courseRoomName) {
+        CourseRoomService.addCourseRoom(courseID,courseRoomName);
     }
 
     @RequestMapping(value = "/courses/{courseID}/courserooms/{id}/delete", method = RequestMethod.DELETE)
@@ -41,6 +44,12 @@ public class CourseRoomController {
     public List<CourseRoomCommentDTO> getCommentsForCourseRoom(@PathVariable("id") int id, @RequestHeader HttpHeaders headers) {
         List<Comment> temp = CourseRoomService.getCommentsForCourseRoom(id);
         String token = Functions.getValueFromHttpHeader(headers,"token");
+
+        if (!LoggedInUserService.isUserLoggedIn(token)) {
+            log.info("User was not logged in");
+            return null;
+        }
+
 
         List<CourseRoomCommentDTO> result = new ArrayList<>();
 

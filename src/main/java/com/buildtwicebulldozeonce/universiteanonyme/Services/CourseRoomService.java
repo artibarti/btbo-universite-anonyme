@@ -29,8 +29,9 @@ public class CourseRoomService {
         return courseRoomRepository.findById(id).orElse(null);
     }
 
-    public static void addCourseRoom(@NonNull CourseRoom courseRoom) {
-        courseRoomRepository.save(courseRoom);
+    public static void addCourseRoom(int refId,String courseRoomName) {
+
+        courseRoomRepository.save(CourseRoom.builder().name(courseRoomName).course(CourseService.getCourse(refId)).build());
     }
 
     public static List<Comment> getCommentsForCourseRoom(int id) {
