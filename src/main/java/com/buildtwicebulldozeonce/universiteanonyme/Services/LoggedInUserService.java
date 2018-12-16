@@ -3,6 +3,7 @@ package com.buildtwicebulldozeonce.universiteanonyme.Services;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.AnonUser;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.LoggedInUser;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
+import jdk.vm.ci.meta.Local;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -14,15 +15,14 @@ public class LoggedInUserService {
     private static final List<LoggedInUser> loggedInUsers = new ArrayList<>();
 
     private static void checkUsersTimeStamps() {
-        Iterator<LoggedInUser> loggedInUserIterator = loggedInUsers.iterator();
-        while (loggedInUserIterator.hasNext())
-        {
-            if (loggedInUserIterator.next().getValidUntil().isBefore(LocalDateTime.now())) {
-                loggedInUserIterator.remove();
-            } else {
-                log.info(""+loggedInUserIterator.next().getUser().getId());
+
+        for (int i = 0; i < loggedInUsers.size(); i++) {
+            if (loggedInUsers.get(i).getValidUntil().isBefore(LocalDateTime.now())) {
+                loggedInUsers.remove(i);
+                i--;
             }
         }
+
     }
 
     public static void addLoggedInUser(User user, AnonUser anonUser, String token) {
