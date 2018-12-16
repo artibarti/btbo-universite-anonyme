@@ -1,6 +1,8 @@
 package com.buildtwicebulldozeonce.universiteanonyme.Repositories;
 
+import com.buildtwicebulldozeonce.universiteanonyme.Models.AnonUser;
 import com.buildtwicebulldozeonce.universiteanonyme.Models.Comment;
+import com.buildtwicebulldozeonce.universiteanonyme.Models.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -18,14 +20,18 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
                     "WHERE cr.course_id IN (SELECT cs.course_id FROM course_subs cs " +
                     "WHERE cs.anon_user_id = :anonID) " +
                     "AND c.type = \'CourseRoomComment\' " +
-                    "AND c.anon_user_id != :anonID " +
-                    "AND c.user_id != :id UNION " +
+                    "AND (( c.anon_user_id IS NOT NULL AND c.anon_user_id != :anonID) " +
+                    "OR ( c.user_id IS NOT NULL AND c.user_id != :id )) UNION " +
+                    "SELECT cr.id FROM course_room cr " +
+                    "WHERE cr.course_id IN (SELECT c.id FROM course c WHERE c.owner_id = :id) " +
+                    "AND (( c.anon_user_id IS NOT NULL AND c.anon_user_id != :anonID) " +
+                    "OR ( c.user_id IS NOT NULL AND c.user_id != :id )) UNION " +
                     "SELECT q.id from question q " +
-                        "WHERE q.session_id IN (SELECT s.id FROM session s " +
-                            "WHERE s.course_id IN (SELECT cs.course_id FROM course_subs cs " +
-                            "WHERE cs.anon_user_id = :anonID)) " +
-                        "OR q.session_id IN (SELECT s.id FROM session s " +
-                            "WHERE s.course_id IN (SELECT c.id FROM course c WHERE c.owner_id = :id)) " +
+                    "WHERE q.session_id IN (SELECT s.id FROM session s " +
+                    "WHERE s.course_id IN (SELECT cs.course_id FROM course_subs cs " +
+                    "WHERE cs.anon_user_id = :anonID)) " +
+                    "OR q.session_id IN (SELECT s.id FROM session s " +
+                    "WHERE s.course_id IN (SELECT c.id FROM course c WHERE c.owner_id = :id)) " +
                     "AND c.type = \'QuestionComment\' " +
                     "AND c.anon_user_id != :anonID " +
                     "AND c.user_id != :id) " +
@@ -53,4 +59,6 @@ public interface CommentRepository extends CrudRepository<Comment, Integer> {
     Set<Comment> getCommentsForCourse(@Param("id") int id);
 
     Set<Comment> getCommentByRefIDAndType(int refID, Comment.CommentType type);
+
+    Set<Comment> getCommentsByUserOrAnonUser(User user, AnonUser anonUser);
 }

@@ -26,12 +26,16 @@ public class UserService {
     private static RatingRepository ratingRepository;
     private static InviteCodeRepository inviteCodeRepository;
     private static CourseSubsRepository courseSubsRepository;
+    private static CommentRepository commentRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, AnonUserRepository anonUserRepository,
-                       CourseRepository courseRepository, RatingRepository ratingRepository,
+    public UserService(UserRepository userRepository,
+                       AnonUserRepository anonUserRepository,
+                       CourseRepository courseRepository,
+                       RatingRepository ratingRepository,
                        InviteCodeRepository inviteCodeRepository,
-                       CourseSubsRepository courseSubsRepository) {
+                       CourseSubsRepository courseSubsRepository,
+                       CommentRepository commentRepository) {
 
         UserService.userRepository = userRepository;
         UserService.anonUserRepository = anonUserRepository;
@@ -39,6 +43,7 @@ public class UserService {
         UserService.ratingRepository = ratingRepository;
         UserService.inviteCodeRepository = inviteCodeRepository;
         UserService.courseSubsRepository = courseSubsRepository;
+        UserService.commentRepository = commentRepository;
     }
 
     public static User getUser(int id) {
@@ -192,6 +197,22 @@ public class UserService {
 
     public static Integer getPointsForUser(String token)
     {
-        return 2356;
+        LoggedInUser loggedInUser = LoggedInUserService.getLoggedInUser(token);
+
+        Set<Comment> comments = commentRepository.getCommentsByUserOrAnonUser(loggedInUser.getUser(),loggedInUser.getAnonUser());
+
+        int result = 0;
+
+        for (Comment comment:comments) {
+            result += ratingRepository.getRatingsByTypeAndID(comment.getId(), Rating.RatingType.CommentRating).size();
+        }
+
+        Set<Course> courses = courseRepository.getCoursesAdminedByUser(loggedInUser.getUser().getId());
+
+        for (Course course: courses) {
+            result += ratingRepository.getRatingsByTypeAndID(course.getId(), Rating.RatingType.CourseRating).size();
+        }
+
+        return result;
     }
 }

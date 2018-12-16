@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -167,8 +168,10 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/courses/{courseID}/invitecodes", method = RequestMethod.GET)
-    public Set<InviteCode> getAllInviteCodesForCourse(@RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID) {
-        return CourseService.getAllInviteCodesForCourse(courseID, Functions.getValueFromHttpHeader(headers, "token"));
+    public String getAllInviteCodesForCourse(@RequestHeader HttpHeaders headers, @PathVariable("courseID") int courseID) {
+        Iterator<InviteCode> tmp = CourseService.getAllInviteCodesForCourse(courseID, Functions.getValueFromHttpHeader(headers, "token")).iterator();
+        return tmp.hasNext() ? tmp.next().getCode() : "";
+
     }
 
     @RequestMapping(value = "/courses/{courseID}/invitecodes/generate", method = RequestMethod.POST)

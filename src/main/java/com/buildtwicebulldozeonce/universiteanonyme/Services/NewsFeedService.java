@@ -50,7 +50,7 @@ public class NewsFeedService {
         news.setType(comment.getType().toString());
 
         if (comment.getAnonUser() != null)
-            news.setAnonUserName(comment.getAnonUser().getAnonName());
+            news.setAnonUserName("Anonymous");
         else
             news.setAnonUserName(comment.getUser().getFirstName() + " " + comment.getUser().getLastName());
 
