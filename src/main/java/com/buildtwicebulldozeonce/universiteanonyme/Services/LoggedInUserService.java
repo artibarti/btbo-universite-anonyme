@@ -25,7 +25,7 @@ public class LoggedInUserService {
     }
 
     public static void addLoggedInUser(User user, AnonUser anonUser, String token) {
-        loggedInUsers.add(new LoggedInUser(user,anonUser,token,LocalDateTime.now().plusMinutes(1)));
+        loggedInUsers.add(new LoggedInUser(user,anonUser,token,LocalDateTime.now().plusMinutes(30)));
     }
 
     public static void removeLoggedInUser(String token) {
@@ -40,7 +40,7 @@ public class LoggedInUserService {
     public static void extendTokenTime(String token) {
         loggedInUsers.stream()
                 .filter(loggedInUser -> loggedInUser.getToken().equals(token))
-                .forEach(loggedInUser -> loggedInUser.setValidUntil(LocalDateTime.now().plusMinutes(1)));
+                .forEach(loggedInUser -> loggedInUser.setValidUntil(LocalDateTime.now().plusMinutes(30)));
     }
 
     public static LoggedInUser getLoggedInUser(String token) {
